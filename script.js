@@ -45,12 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Web Speech API (SpeechRecognition)
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'hi-IN'; // Hindi default, fallback handled in UI logic
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = 'hi-IN'; // Default to Hindi
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          console.log("User said:", transcript);
+          // Send to backend for AI processing (to be implemented)
+        };
+        function startListening() {
+          recognition.start();
+        }
 
         micButton.addEventListener('click', () => {
             showPage('voice-input-page');
@@ -182,3 +189,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial page load
     showPage('home-page');
 });
+
+// Text-to-Speech (TTS) with dialect selection
+function speak(text, lang = 'hi-IN') {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  speechSynthesis.speak(utterance);
+}
+
+// Dynamic Form Generation
+function generateForm(fields) {
+  const form = document.createElement('form');
+  fields.forEach(f => {
+    const label = document.createElement('label');
+    label.textContent = f.label;
+    const input = document.createElement('input');
+    input.name = f.name;
+    form.appendChild(label);
+    form.appendChild(input);
+  });
+  document.getElementById('formContainer').appendChild(form);
+}
+
+// Dynamic To-Do List with Audio Readout
+function showToDoList(tasks) {
+  const container = document.getElementById('todoList');
+  container.innerHTML = '';
+  tasks.forEach((task, i) => {
+    const item = document.createElement('li');
+    item.textContent = task;
+    container.appendChild(item);
+  });
+  speak("Here are your next steps.");
+}
+
+// Backend Service Call
+async function queryAI(text) {
+  const response = await fetch('/api/ai/diagnose', {
+    method: 'POST',
+    body: JSON.stringify({ query: text }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+  const data = await response.json();
+  return data;
+}
