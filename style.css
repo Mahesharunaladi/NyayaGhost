@@ -1,76 +1,79 @@
 
-* {
-    box-sizing: border-box;
+body {
     margin: 0;
-    padding: 0;
-}
-
-html, body {
-    height: 100%;
     font-family: 'Google Sans', sans-serif;
-    background-color: #1A2A44;          /* Navy */
+    background-color: #1A2A44; /* Navy */
     color: #FFFFFF;
-    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-/* -------------------------------------------------
-   APP CONTAINER (phone-like on mobile, full-width on desktop)
-   ------------------------------------------------- */
 #app {
     width: 100%;
-    max-width: 400px;                   /* Phone width on small screens */
+    max-width: 100%; /* Remove phone-sized constraint */
     min-height: 100vh;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,.5);
-    background-color: #1A2A44;
+    height: auto;
+    box-shadow: none;
 }
 
-/* -------------------------------------------------
-   PAGE BASE
-   ------------------------------------------------- */
+/* Base styles for all screens */
 .page {
+    padding: 1rem;
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    transition: transform .5s ease-in-out;
-    transform: translateX(100%);
+    box-sizing: border-box;
+    transition: transform 0.5s ease-in-out;
+    transform: translateX(100%); /* Hidden by default */
     background-color: #1A2A44;
 }
-.page.active { transform: translateX(0); }
 
-/* -------------------------------------------------
-   HOME PAGE
-   ------------------------------------------------- */
+.page.active {
+    transform: translateX(0%); /* Visible */
+}
+
+/* Home Page */
 #home-page h1 {
-    font-family: 'Kruti Dev 010', sans-serif;
+    font-family: 'Kruti Dev 010', sans-serif; /* Hindi font */
     font-size: 2.5em;
     text-align: center;
     margin-bottom: 30px;
 }
-.ghost-animation { width: 150px; height: 150px; margin-bottom: 20px; }
+
+.ghost-animation {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+}
 
 #mic-button {
-    background: #FF6B35;               /* Saffron */
+    background-color: #FF6B35; /* Saffron */
     border: none;
     border-radius: 50%;
     width: 120px;
     height: 120px;
     font-size: 3em;
-    color: #FFF;
+    color: #FFFFFF;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    transition: background .3s;
+    transition: background-color 0.3s ease;
 }
-#mic-button:active { background: #e05a2b; }
+
+#mic-button:active {
+    background-color: #e05a2b;
+}
 
 .language-toggle {
     position: absolute;
@@ -78,48 +81,56 @@ html, body {
     display: flex;
     gap: 10px;
 }
+
 .language-toggle button {
-    background: #4CAF50;               /* Green */
-    color: #FFF;
+    background-color: #4CAF50; /* Green */
+    color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
     font-size: 1em;
-    transition: background .3s;
+    transition: background-color 0.3s ease;
 }
-.language-toggle button:hover { background: #45a049; }
 
-/* -------------------------------------------------
-   VOICE INPUT PAGE
-   ------------------------------------------------- */
+.language-toggle button:hover {
+    background-color: #45a049;
+}
+
+/* Voice Input Page */
 #voice-input-page h2 {
     font-family: 'Kruti Dev 010', sans-serif;
     font-size: 2em;
     margin-bottom: 50px;
 }
+
 .waveform {
     width: 80%;
     height: 100px;
-    background: rgba(255,255,255,.2);
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 50px;
     margin-bottom: 30px;
+    /* Placeholder for actual waveform animation */
 }
-#voice-output { font-size: 1.2em; text-align: center; padding: 0 20px; }
 
-/* -------------------------------------------------
-   AADHAAR SCAN PAGE
-   ------------------------------------------------- */
+#voice-output {
+    font-size: 1.2em;
+    text-align: center;
+    padding: 0 20px;
+}
+
+/* Aadhaar Scan Page */
 #aadhaar-scan-page video {
     width: 90%;
     max-height: 300px;
-    background: #000;
+    background-color: black;
     border-radius: 10px;
     margin-bottom: 20px;
 }
+
 #aadhaar-scan-page button {
-    background: #FF6B35;
-    color: #FFF;
+    background-color: #FF6B35;
+    color: white;
     border: none;
     padding: 12px 25px;
     border-radius: 25px;
@@ -127,122 +138,222 @@ html, body {
     cursor: pointer;
     margin-bottom: 20px;
 }
-#aadhaar-details { font-size: 1.1em; text-align: center; }
 
-/* -------------------------------------------------
-   CASE FILING PAGE
-   ------------------------------------------------- */
+#aadhaar-details {
+    font-size: 1.1em;
+    text-align: center;
+}
+
+/* Case Filing Page */
 .case-cards {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 100%;
     max-width: 300px;
-    margin-bottom: 30px;
+    margin-top: 20px;
 }
-.case-cards .card {
-    background: rgba(255,255,255,.1);
-    border-radius: 10px;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.2);
-}
-.case-cards .card img { width: 40px; height: 40px; }
-.case-cards .card h3 { margin: 0; font-size: 1.1em; }
 
-.sms-preview {
-    background: rgba(255,255,255,.15);
+.case-card {
+    background-color: #2C3E50; /* Dark Blue */
     padding: 15px;
     border-radius: 10px;
-    width: 90%;
-    max-width: 300px;
+    text-align: left;
 }
-.sms-preview h4 { margin-top: 0; color: #FF6B35; }
 
-/* -------------------------------------------------
-   STATUS TRACKER PAGE
-   ------------------------------------------------- */
+.case-card h3 {
+    margin-top: 0;
+    font-size: 1.3em;
+    color: #FFD700; /* Gold */
+}
+
+.case-card p {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* Right Finder Page */
 .timeline {
     position: relative;
-    width: 80%;
-    max-width: 300px;
-    padding: 20px 0;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
 }
+
 .timeline::before {
     content: '';
     position: absolute;
-    left: 50%;
     width: 2px;
-    height: 100%;
-    background: #FF6B35;
-    transform: translateX(-50%);
-}
-.timeline-item {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-    position: relative;
-}
-.timeline-item:nth-child(odd)  { flex-direction: row-reverse; }
-
-.timeline-dot {
-    width: 20px;
-    height: 20px;
-    background: #4CAF50;
-    border-radius: 50%;
-    position: absolute;
-    left: 50%;
+    background-color: #FF6B35;
     top: 0;
-    transform: translateX(-50%);
-    z-index: 1;
-    border: 2px solid #1A2A44;
+    bottom: 0;
+    left: 50%;
+    margin-left: -1px;
 }
-.timeline-content {
-    background: rgba(255,255,255,.1);
-    padding: 10px 15px;
-    border-radius: 8px;
-    width: calc(50% - 30px);
+
+.timeline-item {
+    padding: 10px 0;
+    position: relative;
+    width: 50%;
+}
+
+.timeline-item:nth-child(odd) {
+    left: 0;
+    padding-right: 30px;
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) {
+    left: 50%;
+    padding-left: 30px;
+    text-align: left;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: -8px;
+    background-color: #FFD700;
+    border: 2px solid #FF6B35;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.timeline-item:nth-child(even)::after {
+    left: -8px;
+}
+
+.timeline-item h3 {
+    font-size: 1.2em;
+    color: #FFD700;
+    margin-bottom: 5px;
+}
+
+.timeline-item p {
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+/* General Utilities */
+.hidden {
+    display: none;
+}
+
+.text-center {
     text-align: center;
 }
-.timeline-item:nth-child(odd)  .timeline-content { margin-right: 30px; }
-.timeline-item:nth-child(even) .timeline-content { margin-left:  30px; }
 
-.timeline-item.final .timeline-dot { background: #FF6B35; }
-.timeline-item.final h3 { font-family: 'Kruti Dev 010', sans-serif; color: #FF6B35; }
-
-/* -------------------------------------------------
-   RESPONSIVE – MOBILE (≤ 360px)
-   ------------------------------------------------- */
-@media (max-width: 360px) {
-    #home-page h1      { font-size: 2em; }
-    #mic-button        { width: 100px; height: 100px; font-size: 2.5em; }
-    .language-toggle button { padding: 8px 15px; font-size: .9em; }
-    #voice-input-page h2 { font-size: 1.8em; }
-    #aadhaar-scan-page video { width: 95%; }
-    .case-cards .card h3 { font-size: 1em; }
-    .timeline-content { width: calc(50% - 20px); padding: 8px 10px; }
+.mt-4 {
+    margin-top: 1.5rem;
 }
 
-/* -------------------------------------------------
-   RESPONSIVE – DESKTOP (≥ 768px)
-   ------------------------------------------------- */
-@media (min-width: 768px) {
-    #app {
-        max-width: 1200px;               /* Wider container */
-        border-radius: 12px;
-        box-shadow: 0 4px 24px rgba(0,0,0,.1);
-    }
-    .container { padding: 2rem 4rem; }
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
 
-    .grid-layout {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .page {
+        padding: 15px;
     }
+
+    #home-page h1 {
+        font-size: 2em;
+    }
+
     .ghost-animation {
-        width: 300px;
-        height: auto;
+        width: 120px;
+        height: 120px;
     }
+
+    #mic-button {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5em;
+    }
+
+    .language-toggle {
+        bottom: 15px;
+    }
+
+    #voice-input-page h2 {
+        font-size: 1.5em;
+    }
+
+    .case-cards {
+        max-width: 90%;
+    }
+
+    .timeline {
+        max-width: 90%;
+    }
+
+    .timeline::before {
+        left: 6px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 30px;
+        padding-right: 0;
+        text-align: left;
+    }
+
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+
+    .timeline-item::after,
+    .timeline-item:nth-child(even)::after {
+        left: 0;
+        margin-left: -8px;
+    }
+}
+
+/* Mobile-first breakpoints */
+@media (min-width: 361px) and (max-width: 767px) {
+    .ghost-animation {
+        width: 200px;
+        height: 200px;
+    }
+    .case-cards {
+        max-width: 500px;
+    }
+    .timeline {
+        max-width: 500px;
+    }
+}
+
+@media (min-width: 768px) {
+    .page {
+        padding: 2rem 4rem;
+    }
+    .grid-layout {
+        grid-template-columns: 1fr 1fr;
+    }
+    #home-page h1 {
+        font-size: 3em;
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid-layout {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+}
+
+/* Flexible typography */
+body {
+    font-size: clamp(14px, 2vw, 16px);
+}
+
+h1, h2, h3 {
+    font-size: clamp(1.5em, 4vw, 3em);
 }
