@@ -65,17 +65,77 @@ document.addEventListener('DOMContentLoaded', () => {
             recognition.start();
         });
 
+        // Text-to-Speech (TTS) with dialect selection
+        function speak(text, lang = 'hi-IN') {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = lang;
+          speechSynthesis.speak(utterance);
+        }
+        
+        // Ghost Filing Engine - Handles case submission
+        function ghostFilingEngine(caseData) {
+          // Future: Validate data, encrypt, and file with authorities
+          console.log('Filing case:', caseData);
+          return { success: true, caseId: 'NYAYA-' + Date.now() };
+        }
+        
+        // RightFinder Engine - Identifies legal rights
+        function rightFinderEngine(userQuery) {
+          // Future: Integrate legal database to match query with rights
+          const sampleRights = { 'MGNREGA पेमेंट डिले': 'मजदूरी का 15 दिनों के अंदर भुगतान होना चाहिए' };
+          return sampleRights[userQuery] || 'संबंधित अधिकार नहीं मिला';
+        }
+        
+        // Dynamic Form Generation
+        function generateForm(fields) {
+          const form = document.createElement('form');
+          fields.forEach(f => {
+            const label = document.createElement('label');
+            label.textContent = f.label;
+            const input = document.createElement('input');
+            input.name = f.name;
+            form.appendChild(label);
+            form.appendChild(input);
+          });
+          document.getElementById('formContainer').appendChild(form);
+        }
+        
+        // Dynamic To-Do List with Audio Readout
+        function showToDoList(tasks) {
+          const container = document.getElementById('todoList');
+          container.innerHTML = '';
+          tasks.forEach((task, i) => {
+            const item = document.createElement('li');
+            item.textContent = task;
+            container.appendChild(item);
+          });
+          speak("Here are your next steps.");
+        }
+        
+        // Backend Service Call
+        async function queryAI(text) {
+          const response = await fetch('/api/ai/diagnose', {
+            method: 'POST',
+            body: JSON.stringify({ query: text }),
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await response.json();
+          return data;
+        }
+        
+        // Update speech recognition to use RightFinder
         recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            voiceOutput.textContent = transcript;
-            // Simulate processing and showing issue
-            setTimeout(() => {
-                voiceOutput.textContent = 'MGNREGA पेमेंट डिले';
-                // In a real app, this would trigger navigation to Case Filing or further actions
-                setTimeout(() => showPage('case-filing-page'), 2000);
-            }, 3000);
+          const transcript = event.results[0][0].transcript;
+          voiceOutput.textContent = transcript;
+          // Use RightFinder to identify rights
+          const right = rightFinderEngine(transcript);
+          setTimeout(() => {
+            voiceOutput.textContent = `पाया गया अधिकार: ${right}`;
+            // Simulate case filing
+            const caseId = ghostFilingEngine({ query: transcript, right: right });
+            setTimeout(() => showPage('case-filing-page'), 2000);
+          }, 3000);
         };
-
         recognition.onerror = (event) => {
             console.error('Speech recognition error', event.error);
             voiceOutput.textContent = 'कुछ गलती हुई, फिर से कोशिश करें।';
@@ -189,47 +249,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial page load
     showPage('home-page');
 });
-
-// Text-to-Speech (TTS) with dialect selection
-function speak(text, lang = 'hi-IN') {
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = lang;
-  speechSynthesis.speak(utterance);
-}
-
-// Dynamic Form Generation
-function generateForm(fields) {
-  const form = document.createElement('form');
-  fields.forEach(f => {
-    const label = document.createElement('label');
-    label.textContent = f.label;
-    const input = document.createElement('input');
-    input.name = f.name;
-    form.appendChild(label);
-    form.appendChild(input);
-  });
-  document.getElementById('formContainer').appendChild(form);
-}
-
-// Dynamic To-Do List with Audio Readout
-function showToDoList(tasks) {
-  const container = document.getElementById('todoList');
-  container.innerHTML = '';
-  tasks.forEach((task, i) => {
-    const item = document.createElement('li');
-    item.textContent = task;
-    container.appendChild(item);
-  });
-  speak("Here are your next steps.");
-}
-
-// Backend Service Call
-async function queryAI(text) {
-  const response = await fetch('/api/ai/diagnose', {
-    method: 'POST',
-    body: JSON.stringify({ query: text }),
-    headers: { 'Content-Type': 'application/json' }
-  });
-  const data = await response.json();
-  return data;
-}
