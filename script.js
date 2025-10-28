@@ -80,10 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // RightFinder Engine - Identifies legal rights
-        function rightFinderEngine(userQuery) {
-          // Future: Integrate legal database to match query with rights
-          const sampleRights = { 'MGNREGA पेमेंट डिले': 'मजदूरी का 15 दिनों के अंदर भुगतान होना चाहिए' };
-          return sampleRights[userQuery] || 'संबंधित अधिकार नहीं मिला';
+        // Update RightFinder to use backend
+        async function rightFinderEngine(userQuery) {
+          const response = await fetch('http://localhost:3000/api/rightfinder', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: userQuery })
+          });
+          const data = await response.json();
+          return data.right;
+        }
+        
+        // Update Ghost Filing to use backend
+        async function ghostFilingEngine(caseData) {
+          const response = await fetch('http://localhost:3000/api/ghostfiling', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(caseData)
+          });
+          return await response.json();
         }
         
         // Dynamic Form Generation
