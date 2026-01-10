@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NyayaGhost</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header style="text-align: center; padding: 1rem 0; border-bottom: 1px solid #eee;">
+    <h1>NyayaGhost</h1>
+    <p>Legal Assistance Platform</p>
+  </header>
+  <div class="container">
+    <div id="app">
+        <!-- Home (Welcome) Page -->
+        <section id="home-page" class="page active">
+            <div class="ghost-animation"></div>
+            <h1>बोलो, क्या परेशानी है?</h1>
+            <button id="mic-button">🎤</button>
+            <div class="language-toggle">
+                <button data-lang="bhojpuri">Bhojpuri</button>
+                <button data-lang="hindi" class="active">हिंदी</button>
+                <button data-lang="english">English</button>
+            </div>
+        </section>
+
+        <!-- Voice Input Page -->
+        <section id="voice-input-page" class="page">
+            <div class="waveform"></div>
+            <h2>सुन रहा हूँ…</h2>
+            <p id="voice-output"></p>
+        </section>
+
+        <!-- Aadhaar Scan Page -->
+        <section id="aadhaar-scan-page" class="page">
+            <video id="webcam-feed" autoplay></video>
+            <canvas id="aadhaar-canvas" style="display:none;"></canvas>
+            <button id="capture-aadhaar">Scan Aadhaar</button>
+            <div id="aadhaar-details"></div>
+        </section>
+
+        <!-- Case Filing Page -->
+        <section id="case-filing-page" class="page">
+            <div class="case-cards">
+                <div class="card">
+                    <div class="card-icon">⚖️</div>
+                    <h3>FIR Filed: BR-2025-7890</h3>
+                </div>
+                <div class="card">
+                    <div class="card-icon">✉️</div>
+                    <h3>Legal Notice Sent</h3>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🍚</div>
+                    <h3>Ration Approved</h3>
+                </div>
+            </div>
+            <p>JusticeScore™: +50 points</p>
+            <div class="sms-preview">
+                <h4>SMS Preview:</h4>
+                <p>Your FIR has been filed. Ref: BR-2025-7890. NyayaGhost.</p>
+            </div>
+        </section>
+
+        <!-- Status Tracker Page -->
+        <section id="status-tracker-page" class="page">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Day 1: Filed</h3>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Day 7: RTI</h3>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Day 15: Lok Adalat</h3>
+                    </div>
+                </div>
+                <div class="timeline-item final">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>इंसाफ हो गया! 🎉</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

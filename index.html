@@ -3,35 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NyayaGhost</title>
+    <title>Nyaya Mitra - Your AI-Powered Legal Friend</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans&display=swap" rel="stylesheet">
-    <style>
-        @font-face {
-            font-family: 'Kruti Dev 010';
-            src: url('assets/hindi.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header style="text-align: center; padding: 1rem 0; border-bottom: 1px solid #eee;">
-    <h1>NyayaGhost</h1>
-    <p>Legal Assistance Platform</p>
+  <header>
+    <h1>🧡 Nyaya Mitra</h1>
+    <p>Your AI-powered Legal Friend • Justice for All</p>
   </header>
   <div class="container">
     <div id="app">
         <!-- Home (Welcome) Page -->
         <section id="home-page" class="page active">
+            <span class="section-tag">🧡 Justice for All</span>
+            
+            <h1>
+                Make <span class="highlight">'Justice for All'</span> a Reality
+            </h1>
+            
+            <p style="font-size: 1.125rem; color: var(--text-light); max-width: 700px; margin: 0 auto 2rem;">
+                Nyaya Mitra is a literacy-free, voice-first AI that actively diagnoses needs 
+                and connects citizens to their guaranteed rights and benefits. Join us in bridging the justice gap.
+            </p>
+            
             <div class="ghost-animation"></div>
-            <h1>बोलो, क्या परेशानी है?</h1>
+            
             <button id="mic-button">🎤</button>
+            
+            <p style="font-size: 1rem; color: var(--text-light); margin: 1rem 0;">
+                बोलो, क्या परेशानी है? (Speak, what's the problem?)
+            </p>
+            
+            <div class="cta-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                <button class="btn-primary">
+                    Experience Nyaya Mitra →
+                </button>
+                <button class="btn-secondary">
+                    Partner With Us
+                </button>
+            </div>
+            
             <div class="language-toggle">
                 <button data-lang="bhojpuri">Bhojpuri</button>
-                <button data-lang="hindi">हिंदी</button>
+                <button data-lang="hindi" class="active">हिंदी</button>
                 <button data-lang="english">English</button>
+            </div>
+            
+            <div class="stats-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; padding: 3rem 0; max-width: 1000px; margin: 0 auto;">
+                <div class="stat-box" style="text-align: center;">
+                    <div class="stat-number" style="font-size: 2.5rem; font-weight: 800; color: var(--primary-orange); margin-bottom: 0.5rem;">80Cr+</div>
+                    <div class="stat-label" style="font-size: 1rem; color: var(--text-light); font-weight: 500;">Citizens Underserved</div>
+                </div>
+                <div class="stat-box" style="text-align: center;">
+                    <div class="stat-number" style="font-size: 2.5rem; font-weight: 800; color: var(--primary-orange); margin-bottom: 0.5rem;">&lt;10%</div>
+                    <div class="stat-label" style="font-size: 1rem; color: var(--text-light); font-weight: 500;">Know Free Legal Aid</div>
+                </div>
+                <div class="stat-box" style="text-align: center;">
+                    <div class="stat-number" style="font-size: 2.5rem; font-weight: 800; color: var(--primary-orange); margin-bottom: 0.5rem;">99+</div>
+                    <div class="stat-label" style="font-size: 1rem; color: var(--text-light); font-weight: 500;">Languages Supported</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section id="problem-section" class="info-section">
+            <span class="section-tag">📊 The Reality</span>
+            <h2>India's <span class="highlight">Justice Gap</span></h2>
+            <p class="section-subtitle">80 crore Indians don't know free legal aid exists</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🚫</div>
+                    <h3>80 Crore Unaware</h3>
+                    <p>Citizens don't know about their rights to free legal aid, ration cards, pensions, and more</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📚</div>
+                    <h3>Literacy Barrier</h3>
+                    <p>26.1% are illiterate (2011 census). Digital interfaces exclude hundreds of millions</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🗣️</div>
+                    <h3>Language Divide</h3>
+                    <p>121 languages spoken, but most government services only in Hindi/English</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Complex Process</h3>
+                    <p>Citizens lose wages waiting in government offices. Average case takes 5+ years</p>
+                </div>
+            </div>
+
+            <div class="crisis-stat">
+                <div class="crisis-number">4.5 Crore</div>
+                <div class="crisis-label">Pending cases in Indian courts (as of 2024)</div>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section id="solution-section" class="info-section" style="background: linear-gradient(135deg, var(--primary-orange) 0%, #ff6b35 100%); color: white;">
+            <span class="section-tag" style="background: rgba(255,255,255,0.2); color: white;">💡 Our Solution</span>
+            <h2 style="color: white;">How <span class="highlight" style="color: #fff9f5;">Nyaya Mitra</span> Works</h2>
+            <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">Voice-first AI that actively diagnoses legal needs</p>
+            
+            <div class="solution-steps">
+                <div class="solution-step">
+                    <div class="step-number">1</div>
+                    <h3>Speak Naturally</h3>
+                    <p>Tell us your problem in ANY language - Hindi, Bhojpuri, Tamil, Telugu, or 99+ more dialects</p>
+                </div>
+                <div class="solution-step">
+                    <div class="step-number">2</div>
+                    <h3>AI Diagnosis</h3>
+                    <p>Our GPT-4 powered engine identifies your legal rights, government schemes, and actionable steps</p>
+                </div>
+                <div class="solution-step">
+                    <div class="step-number">3</div>
+                    <h3>Instant Action</h3>
+                    <p>File FIR, send legal notice, apply for benefits - all via voice. Get SMS updates in your language</p>
+                </div>
+                <div class="solution-step">
+                    <div class="step-number">4</div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your case with automated RTI, escalations to Lok Adalat, and timely reminders</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personas Section -->
+        <section id="personas-section" class="info-section">
+            <span class="section-tag">👥 Who We Serve</span>
+            <h2>Real People, <span class="highlight">Real Impact</span></h2>
+            
+            <div class="personas-grid">
+                <div class="persona-card">
+                    <div class="persona-emoji">👩‍🌾</div>
+                    <h3>Sita - Daily Wage Worker</h3>
+                    <p class="persona-location">📍 Bihar</p>
+                    <div class="persona-problem">
+                        <strong>Problem:</strong> Unpaid wages for 3 months. Doesn't know where to complain.
+                    </div>
+                    <div class="persona-solution">
+                        <strong>Nyaya Mitra Impact:</strong>
+                        <ul>
+                            <li>✅ Filed labor complaint via voice (Bhojpuri)</li>
+                            <li>✅ Legal notice sent to employer</li>
+                            <li>✅ Wages recovered in 14 days</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-emoji">🧓</div>
+                    <h3>Ramesh - Senior Citizen</h3>
+                    <p class="persona-location">📍 Uttar Pradesh</p>
+                    <div class="persona-problem">
+                        <strong>Problem:</strong> Denied pension. Can't read forms or navigate bureaucracy.
+                    </div>
+                    <div class="persona-solution">
+                        <strong>Nyaya Mitra Impact:</strong>
+                        <ul>
+                            <li>✅ Applied for pension via voice (Hindi)</li>
+                            <li>✅ Scanned Aadhaar with phone camera</li>
+                            <li>✅ Pension approved, ₹12,000/year benefit</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="persona-card">
+                    <div class="persona-emoji">👨‍🌾</div>
+                    <h3>Kumar - Farmer</h3>
+                    <p class="persona-location">📍 Tamil Nadu</p>
+                    <div class="persona-problem">
+                        <strong>Problem:</strong> Land dispute with neighbor. Can't afford lawyer.
+                    </div>
+                    <div class="persona-solution">
+                        <strong>Nyaya Mitra Impact:</strong>
+                        <ul>
+                            <li>✅ Free legal aid assigned (Tamil)</li>
+                            <li>✅ Case filed in Lok Adalat</li>
+                            <li>✅ Dispute resolved in 45 days</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section -->
+        <section id="impact-section" class="info-section" style="background: var(--bg-cream);">
+            <span class="section-tag">🎯 Our Impact</span>
+            <h2><span class="highlight">Measuring</span> What Matters</h2>
+            
+            <div class="impact-metrics">
+                <div class="impact-category">
+                    <h3>⚡ Speed Metrics</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Voice query → Legal diagnosis</span>
+                        <span class="metric-value">&lt;60 seconds</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">FIR filing time</span>
+                        <span class="metric-value">&lt;5 minutes</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Average case resolution</span>
+                        <span class="metric-value">30-60 days</span>
+                    </div>
+                </div>
+
+                <div class="impact-category">
+                    <h3>🎯 Accuracy Metrics</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Legal rights identification</span>
+                        <span class="metric-value">95%+</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Multi-language accuracy</span>
+                        <span class="metric-value">92%+ (99+ languages)</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Document OCR accuracy</span>
+                        <span class="metric-value">90%+</span>
+                    </div>
+                </div>
+
+                <div class="impact-category">
+                    <h3>💰 Economic Impact</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Cost per case</span>
+                        <span class="metric-value">₹50 vs ₹50,000</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Wages saved (no office visits)</span>
+                        <span class="metric-value">₹500-1,000/case</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Benefits unlocked per user</span>
+                        <span class="metric-value">₹12,000-50,000/year</span>
+                    </div>
+                </div>
+
+                <div class="impact-category">
+                    <h3>🌍 Social Impact</h3>
+                    <div class="metric-item">
+                        <span class="metric-label">Target reach by 2026</span>
+                        <span class="metric-value">10 million users</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Women empowerment cases</span>
+                        <span class="metric-value">40%+ of users</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Cases prevented (early intervention)</span>
+                        <span class="metric-value">30%+ reduction</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap-section" class="info-section">
+            <span class="section-tag">🗺️ The Journey</span>
+            <h2>Building the <span class="highlight">Future of Justice</span></h2>
+            
+            <div class="roadmap-timeline">
+                <div class="roadmap-phase">
+                    <div class="phase-badge">Phase 1 - NOW</div>
+                    <h3>Voice-First MVP</h3>
+                    <ul>
+                        <li>✅ 99+ Indian languages & dialects</li>
+                        <li>✅ FIR filing, legal notices, government forms</li>
+                        <li>✅ Aadhaar scanning via phone camera</li>
+                        <li>✅ SMS updates in user's language</li>
+                        <li>✅ RightFinder™ AI (100+ rights mapped)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <div class="phase-badge">Phase 2 - Q2 2026</div>
+                    <h3>Proactive Outreach</h3>
+                    <ul>
+                        <li>🔄 JusticeScore™ gamification</li>
+                        <li>🔄 WhatsApp/IVR integration</li>
+                        <li>🔄 Partner with NGOs, Gram Panchayats</li>
+                        <li>🔄 Offline kiosks in rural areas</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <div class="phase-badge">Phase 3 - 2027</div>
+                    <h3>Ecosystem Integration</h3>
+                    <ul>
+                        <li>⏳ e-Courts API integration (real-time case status)</li>
+                        <li>⏳ Legal aid board partnerships (auto-assign lawyers)</li>
+                        <li>⏳ Bank account opening, insurance claims</li>
+                        <li>⏳ Preventive AI (predict legal issues before they escalate)</li>
+                    </ul>
+                </div>
+
+                <div class="roadmap-phase">
+                    <div class="phase-badge">Vision - 2030</div>
+                    <h3>Global Justice Platform</h3>
+                    <ul>
+                        <li>⏳ 100 million+ users across India</li>
+                        <li>⏳ Expand to Bangladesh, Pakistan, Nepal, Africa</li>
+                        <li>⏳ UN Sustainable Development Goal 16 partner</li>
+                        <li>⏳ "Justice for All" - truly realized</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="cta-section" class="info-section" style="background: linear-gradient(135deg, #FF8C42 0%, #ff6b35 100%); color: white; text-align: center;">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem;">
+                Join the <span class="highlight" style="color: #fff9f5;">Justice Revolution</span>
+            </h2>
+            <p style="font-size: 1.25rem; color: rgba(255,255,255,0.9); max-width: 700px; margin: 0 auto 2rem;">
+                Whether you're a citizen needing help, an NGO partner, or an investor who believes in justice for all - let's build this together.
+            </p>
+            
+            <div class="cta-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                <button class="btn-primary" style="background: white; color: var(--primary-orange);">
+                    🎤 Try Nyaya Mitra Now
+                </button>
+                <button class="btn-secondary" style="border-color: white; color: white;">
+                    🤝 Partner With Us
+                </button>
+                <button class="btn-secondary" style="border-color: white; color: white;">
+                    💰 Invest in Justice
+                </button>
+            </div>
+
+            <div class="contact-info" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                <p style="color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">
+                    📧 Contact: justice@nyayamitra.org
+                </p>
+                <p style="color: rgba(255,255,255,0.9);">
+                    Made with 🧡 for 1.4 billion Indians
+                </p>
             </div>
         </section>
 
@@ -54,16 +367,16 @@
         <section id="case-filing-page" class="page">
             <div class="case-cards">
                 <div class="card">
-                    <img src="assets/law-icon-1.png" alt="Law Icon">
-                    <h3>FIR Filed: BR-2025-7890 ⚖️</h3>
+                    <div class="card-icon">⚖️</div>
+                    <h3>FIR Filed: BR-2025-7890</h3>
                 </div>
                 <div class="card">
-                    <img src="assets/law-icon-2.png" alt="Law Icon">
-                    <h3>Legal Notice Sent ✉️</h3>
+                    <div class="card-icon">✉️</div>
+                    <h3>Legal Notice Sent</h3>
                 </div>
                 <div class="card">
-                    <img src="assets/law-icon-3.png" alt="Law Icon">
-                    <h3>Ration Approved 🍚</h3>
+                    <div class="card-icon">🍚</div>
+                    <h3>Ration Approved</h3>
                 </div>
             </div>
             <p>JusticeScore™: +50 points</p>
@@ -104,8 +417,9 @@
         </section>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.4/dist/tesseract.min.js"></script>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

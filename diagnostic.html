@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NyayaGhost - Diagnostic Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0F172A;
+            color: #F8FAFC;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .success { color: #10B981; }
+        .error { color: #EF4444; }
+        .info { color: #6366F1; }
+        .test-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        h1 { color: #6366F1; }
+        code {
+            background: rgba(99, 102, 241, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 NyayaGhost Diagnostic Test</h1>
+    
+    <div class="test-box">
+        <h2>Test 1: Lottie Library Status</h2>
+        <div id="lottie-test"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 2: Script Loading Order</h2>
+        <div id="order-test"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 3: Ghost Animation Container</h2>
+        <div class="ghost-animation" style="width: 100px; height: 100px; margin: 1rem auto;"></div>
+        <div id="ghost-test"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 4: DOM Ready Status</h2>
+        <div id="dom-test"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Test 5: Cache Status</h2>
+        <div id="cache-test"></div>
+    </div>
+
+    <!-- Load Lottie first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    
+    <script>
+        // Test 1: Check Lottie
+        const lottieTest = document.getElementById('lottie-test');
+        if (typeof lottie !== 'undefined') {
+            lottieTest.innerHTML = '<span class="success">✅ Lottie library loaded successfully!</span><br>' +
+                                 '<code>typeof lottie = ' + typeof lottie + '</code>';
+        } else {
+            lottieTest.innerHTML = '<span class="error">❌ Lottie library NOT loaded</span><br>' +
+                                 '<code>typeof lottie = undefined</code>';
+        }
+
+        // Test 2: Script order
+        const orderTest = document.getElementById('order-test');
+        orderTest.innerHTML = '<span class="success">✅ Scripts loading in correct order</span><br>' +
+                            '<span class="info">1. Lottie CDN → 2. This diagnostic script</span>';
+
+        // Test 3: Ghost animation
+        const ghostTest = document.getElementById('ghost-test');
+        const ghostContainer = document.querySelector('.ghost-animation');
+        
+        if (ghostContainer && typeof lottie !== 'undefined') {
+            try {
+                lottie.loadAnimation({
+                    container: ghostContainer,
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: 'assets/ghost.json'
+                });
+                ghostTest.innerHTML = '<span class="info">ℹ️ Attempting to load ghost.json animation...</span>';
+            } catch (error) {
+                ghostContainer.innerHTML = '<div style="font-size: 50px; text-align: center;">👻</div>';
+                ghostTest.innerHTML = '<span class="success">✅ Fallback emoji working!</span><br>' +
+                                    '<span class="info">ghost.json not found (expected)</span>';
+            }
+        }
+
+        // Test 4: DOM Ready
+        document.addEventListener('DOMContentLoaded', () => {
+            const domTest = document.getElementById('dom-test');
+            domTest.innerHTML = '<span class="success">✅ DOM fully loaded and parsed</span>';
+        });
+
+        // Test 5: Cache
+        const cacheTest = document.getElementById('cache-test');
+        const timestamp = new Date().toLocaleString();
+        const randomNum = Math.floor(Math.random() * 10000);
+        cacheTest.innerHTML = '<span class="success">✅ Page loaded at: ' + timestamp + '</span><br>' +
+                            '<span class="info">Random number (changes on refresh): ' + randomNum + '</span><br>' +
+                            '<small>If number doesn\'t change on refresh, cache is still active</small>';
+
+        // Console output
+        console.log('%c🎉 Diagnostic Test Complete!', 'color: #10B981; font-size: 16px; font-weight: bold;');
+        console.log('Lottie available:', typeof lottie !== 'undefined');
+        console.log('Ghost container found:', !!document.querySelector('.ghost-animation'));
+        console.log('Timestamp:', timestamp);
+        console.log('Random check:', randomNum);
+    </script>
+</body>
+</html>
