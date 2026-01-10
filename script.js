@@ -113,8 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         recognition.onstart = () => {
             console.log('🎤 Speech recognition ACTIVE - Listening now...');
+            const listeningText = {
+                hindi: '🎤 सुन रहा हूँ... बोलिए...',
+                english: '🎤 Listening... Speak now...',
+                kannada: '🎤 ಕೇಳುತ್ತಿದ್ದೇನೆ... ಈಗ ಮಾತನಾಡಿ...',
+                bhojpuri: '🎤 सुन रहल बानी... बोलीं...',
+                tamil: '🎤 கேட்கிறேன்... பேசுங்கள்...',
+                telugu: '🎤 వింటున్నాను... మాట్లాడండి...'
+            };
             if (voiceOutput) {
-                voiceOutput.textContent = '🎤 सुन रहा हूँ... बोलिए... (Listening... Speak now...)';
+                voiceOutput.textContent = listeningText[currentLanguage] || listeningText.hindi;
             }
         };
 
@@ -337,16 +345,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.classList.add('active');
                 
                 // Update speech recognition language
-                if (currentLanguage === 'hindi') {
-                    recognition.lang = 'hi-IN';
-                } else if (currentLanguage === 'english') {
-                    recognition.lang = 'en-US';
-                } else if (currentLanguage === 'bhojpuri') {
-                    // Fallback to Hindi for Bhojpuri
-                    recognition.lang = 'hi-IN';
-                    console.warn('Bhojpuri speech recognition using Hindi as fallback');
-                }
-                console.log(`Language set to ${currentLanguage}, Speech recognition: ${recognition.lang}`);
+                const languageMap = {
+                    'hindi': 'hi-IN',
+                    'english': 'en-US',
+                    'kannada': 'kn-IN',
+                    'bhojpuri': 'hi-IN', // Fallback to Hindi
+                    'tamil': 'ta-IN',
+                    'telugu': 'te-IN'
+                };
+                
+                recognition.lang = languageMap[currentLanguage] || 'hi-IN';
+                
+                console.log(`✅ Language changed to ${currentLanguage}, Speech recognition: ${recognition.lang}`);
+                
+                // Update instructions text based on language
+                updateInstructions(currentLanguage);
             });
         });
 
@@ -366,6 +379,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add a test button click listener outside speech recognition check
     if (micButton && !recognition) {
         console.log('⚠️ Microphone button exists but Speech Recognition not available');
+    }
+
+    // Function to update UI text based on selected language
+    function updateInstructions(lang) {
+        const instructions = {
+            hindi: {
+                button: '👆 बटन दबाएं और बोलें',
+                subtitle: 'अपनी समस्या बताएं'
+            },
+            english: {
+                button: '👆 Press button and speak',
+                subtitle: 'Tell us your problem'
+            },
+            kannada: {
+                button: '👆 ಗುಂಡಿಯನ್ನು ಒತ್ತಿ ಮತ್ತು ಮಾತನಾಡಿ',
+                subtitle: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ'
+            },
+            bhojpuri: {
+                button: '👆 बटन दबाईं आ बोलीं',
+                subtitle: 'अपना परेशानी बताईं'
+            },
+            tamil: {
+                button: '👆 பட்டனை அழுத்தி பேசுங்கள்',
+                subtitle: 'உங்கள் பிரச்சனையைச் சொல்லுங்கள்'
+            },
+            telugu: {
+                button: '👆 బటన్‌ను నొక్కి మాట్లాడండి',
+                subtitle: 'మీ సమస్యను చెప్పండి'
+            }
+        };
+
+        const text = instructions[lang] || instructions.hindi;
+        const instructionsEl = document.getElementById('mic-instructions');
+        if (instructionsEl) {
+            instructionsEl.innerHTML = `
+                <p style="font-size: 1.5rem; font-weight: 700; color: var(--primary-orange); margin-bottom: 0.5rem;">
+                    ${text.button}
+                </p>
+                <p style="font-size: 1.25rem; color: var(--text-light);">
+                    ${text.subtitle}
+                </p>
+            `;
+        }
     }
 
     // Aadhaar Scan (Webcam + Tesseract.js)
