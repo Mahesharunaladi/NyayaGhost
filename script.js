@@ -50,11 +50,57 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.continuous = false;
         recognition.interimResults = false;
 
-        recognition.onresult = (event) => {
+        recognition.onresult = async (event) => {
           const transcript = event.results[0][0].transcript;
           console.log("User said:", transcript);
-          // Send to backend for AI processing (to be implemented)
+          voiceOutput.textContent = transcript;
+          
+          try {
+              // Send to backend for AI processing
+              const response = await fetch('http://localhost:3000/api/rightfinder', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ 
+                      query: transcript,
+                      language: currentLanguage
+                  })
+              });
+              
+              const data = await response.json();
+              console.log('RightFinder response:', data);
+              
+              if (data.matches && data.matches.length > 0) {
+                  const topMatch = data.matches[0];
+                  
+                  // Display the found right
+                  voiceOutput.innerHTML = `
+                      <strong>${topMatch.title}</strong><br>
+                      ${topMatch.description}<br><br>
+                      <strong>उपाय:</strong><br>
+                      ${topMatch.remedies ? topMatch.remedies.join('<br>') : 'जानकारी उपलब्ध नहीं'}
+                  `;
+                  
+                  // Speak the result
+                  speak(topMatch.description, currentLanguage === 'english' ? 'en-US' : 'hi-IN');
+                  
+                  // Auto-proceed to case filing after 5 seconds
+                  setTimeout(() => {
+                      // Store data for case filing
+                      sessionStorage.setItem('currentQuery', transcript);
+                      sessionStorage.setItem('currentRight', JSON.stringify(topMatch));
+                      showPage('case-filing-page');
+                  }, 5000);
+              } else {
+                  voiceOutput.textContent = 'संबंधित अधिकार नहीं मिला। कृपया दोबारा कोशिश करें।';
+                  setTimeout(() => showPage('home-page'), 3000);
+              }
+          } catch (error) {
+              console.error('Error fetching rights:', error);
+              voiceOutput.textContent = 'सर्वर से कनेक्ट नहीं हो पाया। कृपया दोबारा कोशिश करें।';
+              setTimeout(() => showPage('home-page'), 3000);
+          }
         };
+        
         function startListening() {
           recognition.start();
         }
@@ -73,14 +119,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Ghost Filing Engine - Handles case submission
-        function ghostFilingEngine(caseData) {
-          // Future: Validate data, encrypt, and file with authorities
-          console.log('Filing case:', caseData);
-          return { success: true, caseId: 'NYAYA-' + Date.now() };
+        async function ghostFilingEngine(caseData) {
+          try {
+              const response = await fetch('http://localhost:3000/api/ghostfiling', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(caseData)
+              });
+              const data = await response.json();
+              console.log('Case filed:', data);
+              return data;
+          } catch (error) {
+              console.error('Filing error:', error);
+              return { success: false, error: 'Network error' };
+          }
         }
         
-        // RightFinder Engine - Identifies legal rights
-        // Update RightFinder to use backend
+        // RightFinder Engine - Already integrated above
         async function rightFinderEngine(userQuery) {
           const response = await fetch('http://localhost:3000/api/rightfinder', {
             method: 'POST',
@@ -88,17 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ query: userQuery })
           });
           const data = await response.json();
-          return data.right;
-        }
-        
-        // Update Ghost Filing to use backend
-        async function ghostFilingEngine(caseData) {
-          const response = await fetch('http://localhost:3000/api/ghostfiling', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(caseData)
-          });
-          return await response.json();
+          return data.matches;
         }
         
         // Dynamic Form Generation
@@ -129,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Backend Service Call
         async function queryAI(text) {
-          const response = await fetch('/api/ai/diagnose', {
+          const response = await fetch('http://localhost:3000/api/rightfinder', {
             method: 'POST',
             body: JSON.stringify({ query: text }),
             headers: { 'Content-Type': 'application/json' }
@@ -138,19 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
           return data;
         }
         
-        // Update speech recognition to use RightFinder
-        recognition.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          voiceOutput.textContent = transcript;
-          // Use RightFinder to identify rights
-          const right = rightFinderEngine(transcript);
-          setTimeout(() => {
-            voiceOutput.textContent = `पाया गया अधिकार: ${right}`;
-            // Simulate case filing
-            const caseId = ghostFilingEngine({ query: transcript, right: right });
-            setTimeout(() => showPage('case-filing-page'), 2000);
-          }, 3000);
-        };
+        // Update speech recognition result handler is already done above
+        
         recognition.onerror = (event) => {
             console.error('Speech recognition error', event.error);
             voiceOutput.textContent = 'कुछ गलती हुई, फिर से कोशिश करें।';
