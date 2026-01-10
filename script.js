@@ -108,58 +108,111 @@ document.addEventListener('DOMContentLoaded', () => {
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = 'hi-IN'; // Hindi default
-        recognition.continuous = false;
-        recognition.interimResults = false;
+        recognition.continuous = true; // Keep listening
+        recognition.interimResults = true; // Show what you're saying in real-time
 
-        recognition.onresult = async (event) => {
-          const transcript = event.results[0][0].transcript;
-          console.log("User said:", transcript);
-          voiceOutput.textContent = transcript;
+        recognition.onstart = () => {
+            console.log('🎤 Speech recognition ACTIVE - Listening now...');
+            if (voiceOutput) {
+                voiceOutput.textContent = '🎤 सुन रहा हूँ... बोलिए... (Listening... Speak now...)';
+            }
+        };
+
+        recognition.onresult = (event) => {
+          console.log('📝 Got speech result!', event.results.length, 'results');
           
-          try {
-              // Send to backend for AI processing
-              const response = await fetch('http://localhost:3000/api/rightfinder', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ 
-                      query: transcript,
-                      language: currentLanguage
-                  })
-              });
-              
-              const data = await response.json();
-              console.log('RightFinder response:', data);
-              
-              if (data.matches && data.matches.length > 0) {
-                  const topMatch = data.matches[0];
-                  
-                  // Display the found right
-                  voiceOutput.innerHTML = `
-                      <strong>${topMatch.title}</strong><br>
-                      ${topMatch.description}<br><br>
-                      <strong>उपाय:</strong><br>
-                      ${topMatch.remedies ? topMatch.remedies.join('<br>') : 'जानकारी उपलब्ध नहीं'}
-                  `;
-                  
-                  // Speak the result
-                  speak(topMatch.description, currentLanguage === 'english' ? 'en-US' : 'hi-IN');
-                  
-                  // Auto-proceed to case filing after 5 seconds
-                  setTimeout(() => {
-                      // Store data for case filing
-                      sessionStorage.setItem('currentQuery', transcript);
-                      sessionStorage.setItem('currentRight', JSON.stringify(topMatch));
-                      showPage('case-filing-page');
-                  }, 5000);
+          let interimTranscript = '';
+          let finalTranscript = '';
+          
+          // Process all results
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0].transcript;
+              if (event.results[i].isFinal) {
+                  finalTranscript += transcript;
+                  console.log('✅ FINAL:', finalTranscript);
               } else {
-                  voiceOutput.textContent = 'संबंधित अधिकार नहीं मिला। कृपया दोबारा कोशिश करें।';
-                  setTimeout(() => showPage('home-page'), 3000);
+                  interimTranscript += transcript;
+                  console.log('⏳ INTERIM:', interimTranscript);
               }
-          } catch (error) {
-              console.error('Error fetching rights:', error);
-              voiceOutput.textContent = 'सर्वर से कनेक्ट नहीं हो पाया। कृपया दोबारा कोशिश करें।';
-              setTimeout(() => showPage('home-page'), 3000);
           }
+          
+          // Show interim results while speaking
+          if (interimTranscript && voiceOutput) {
+              voiceOutput.innerHTML = `
+                  <p style="color: var(--text-light); font-style: italic;">सुन रहा हूँ...</p>
+                  <p style="font-size: 1.5rem; color: var(--primary-orange); margin-top: 1rem;">"${interimTranscript}"</p>
+              `;
+          }
+          
+          // Process final result
+          if (finalTranscript && voiceOutput) {
+              recognition.stop(); // Stop after getting final result
+              console.log('🛑 Stopped recognition, processing:', finalTranscript);
+              
+              voiceOutput.innerHTML = `
+                  <div style="padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                      <h3 style="color: var(--primary-orange); margin-bottom: 1rem;">📝 आपने कहा (You said):</h3>
+                      <p style="font-size: 1.5rem; font-weight: 600; line-height: 1.6; color: var(--text-dark);">"${finalTranscript}"</p>
+                      <p style="margin-top: 2rem; color: var(--text-light);">✅ Speech recognized successfully!</p>
+                  </div>
+              `;
+              
+              // Try to connect to backend
+              setTimeout(async () => {
+                  try {
+                      const response = await fetch('http://localhost:3000/api/rightfinder', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ 
+                              query: finalTranscript,
+                              language: currentLanguage
+                          })
+                      });
+                      
+                      const data = await response.json();
+                      console.log('🎯 RightFinder response:', data);
+                      
+                      if (data.matches && data.matches.length > 0) {
+                          const topMatch = data.matches[0];
+                          voiceOutput.innerHTML += `
+                              <div style="padding: 2rem; background: var(--bg-light-orange); border-radius: 12px; margin-top: 2rem;">
+                                  <h3 style="color: var(--primary-orange);">✅ ${topMatch.title}</h3>
+                                  <p style="margin: 1rem 0;">${topMatch.description}</p>
+                              </div>
+                          `;
+                      }
+                  } catch (error) {
+                      console.log('⚠️ Backend offline (expected) - Speech recognition still works!');
+                      voiceOutput.innerHTML += `
+                          <div style="padding: 1.5rem; background: var(--bg-light-orange); border-radius: 8px; margin-top: 2rem;">
+                              <p style="color: var(--text-dark);"><strong>💡 Note:</strong> Backend server is offline. Start it with:</p>
+                              <code style="display: block; background: white; padding: 0.75rem; margin-top: 0.5rem; border-radius: 4px; font-family: monospace;">npm start</code>
+                          </div>
+                      `;
+                  }
+              }, 500);
+          }
+        };
+        
+        recognition.onerror = (event) => {
+            console.error('❌ Speech recognition error:', event.error);
+            if (voiceOutput) {
+                voiceOutput.innerHTML = `
+                    <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px;">
+                        <p style="color: #DC2626; font-weight: 600;">❌ Error: ${event.error}</p>
+                        <p style="color: #991B1B; margin-top: 0.5rem;">
+                            ${event.error === 'no-speech' ? 'कोई आवाज़ नहीं सुनाई दी। फिर से कोशिश करें।' : 
+                              event.error === 'not-allowed' ? 'Microphone permission denied. Please allow microphone access.' :
+                              'कुछ गलती हुई। फिर से कोशिश करें।'}
+                        </p>
+                    </div>
+                `;
+            }
+            setTimeout(() => showPage('home-page'), 2000);
+        };
+
+        recognition.onend = () => {
+            console.log('🛑 Speech recognition ended');
         };
         
         function startListening() {

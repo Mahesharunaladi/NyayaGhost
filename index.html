@@ -16,40 +16,107 @@
   </header>
   <div class="container">
     <div id="app">
-        <!-- Home (Welcome) Page -->
+        <!-- Home (Welcome) Page - SIMPLE FOR ILLITERATE USERS -->
         <section id="home-page" class="page active">
-            <span class="section-tag">🧡 Justice for All</span>
             
-            <h1>
-                Make <span class="highlight">'Justice for All'</span> a Reality
-            </h1>
-            
-            <p style="font-size: 1.125rem; color: var(--text-light); max-width: 700px; margin: 0 auto 2rem;">
-                Nyaya Mitra is a literacy-free, voice-first AI that actively diagnoses needs 
-                and connects citizens to their guaranteed rights and benefits. Join us in bridging the justice gap.
-            </p>
-            
-            <div class="ghost-animation"></div>
-            
-            <button id="mic-button">🎤</button>
-            
-            <p style="font-size: 1rem; color: var(--text-light); margin: 1rem 0;">
-                बोलो, क्या परेशानी है? (Speak, what's the problem?)
-            </p>
-            
-            <div class="cta-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
-                <button class="btn-primary">
-                    Experience Nyaya Mitra →
-                </button>
-                <button class="btn-secondary">
-                    Partner With Us
-                </button>
+            <!-- Big Visual Instructions -->
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <div style="font-size: 5rem; margin-bottom: 1rem;">👨‍⚖️</div>
+                <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">
+                    <span style="color: var(--primary-orange);">न्याय मित्र</span>
+                </h1>
+                <p style="font-size: 1.5rem; color: var(--text-dark); font-weight: 600;">
+                    आपका कानूनी दोस्त
+                </p>
             </div>
-            
-            <div class="language-toggle">
-                <button data-lang="bhojpuri">Bhojpuri</button>
-                <button data-lang="hindi" class="active">हिंदी</button>
-                <button data-lang="english">English</button>
+
+            <!-- BIG Language Selection with Icons -->
+            <div style="margin-bottom: 3rem;">
+                <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-dark);">
+                    🗣️ अपनी भाषा चुनें (Choose Your Language):
+                </p>
+                <div class="language-toggle" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; max-width: 800px; margin: 0 auto;">
+                    <button data-lang="hindi" class="active" style="padding: 1.5rem; font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">🇮🇳</span>
+                        <span>हिंदी</span>
+                    </button>
+                    <button data-lang="english" style="padding: 1.5rem; font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">🇬🇧</span>
+                        <span>English</span>
+                    </button>
+                    <button data-lang="kannada" style="padding: 1.5rem; font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">🌾</span>
+                        <span>ಕನ್ನಡ</span>
+                    </button>
+                    <button data-lang="bhojpuri" style="padding: 1.5rem; font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">🌾</span>
+                        <span>भोजपुरी</span>
+                    </button>
+                    <button data-lang="tamil" style="padding: 1.5rem; font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">📜</span>
+                        <span>தமிழ்</span>
+                    </button>
+                    <button data-lang="telugu" style="padding: 1.5rem; font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">📖</span>
+                        <span>తెలుగు</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- HUGE Microphone Button with Visual Feedback -->
+            <div style="margin: 3rem 0;">
+                <button id="mic-button" style="width: 200px; height: 200px; font-size: 6rem; border-radius: 50%; background: linear-gradient(135deg, var(--primary-orange), #ff6b35); color: white; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(255, 140, 66, 0.3); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    🎤
+                </button>
+                
+                <div id="mic-instructions" style="margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 1.5rem; font-weight: 700; color: var(--primary-orange); margin-bottom: 1rem;">
+                        👆 बटन दबाएं और बोलें
+                    </p>
+                    <p style="font-size: 1.25rem; color: var(--text-light); line-height: 1.6;">
+                        Press the button and speak<br>
+                        ಗುಂಡಿಯನ್ನು ಒತ್ತಿ ಮತ್ತು ಮಾತನಾಡಿ
+                    </p>
+                </div>
+            </div>
+
+            <!-- Visual Examples - What you can ask -->
+            <div style="max-width: 900px; margin: 3rem auto; text-align: left;">
+                <h2 style="font-size: 1.75rem; font-weight: 700; text-align: center; margin-bottom: 2rem; color: var(--text-dark);">
+                    💬 आप क्या बोल सकते हैं? (What can you say?)
+                </h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div class="example-card">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">💰</div>
+                        <p style="font-weight: 600; color: var(--text-dark);">वेतन नहीं मिला</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Salary not paid<br>ಸಂಬಳ ಸಿಕ್ಕಿಲ್ಲ</p>
+                    </div>
+                    <div class="example-card">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🏡</div>
+                        <p style="font-weight: 600; color: var(--text-dark);">जमीन का झगड़ा</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Land dispute<br>ಭೂ ವಿವಾದ</p>
+                    </div>
+                    <div class="example-card">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">👮</div>
+                        <p style="font-weight: 600; color: var(--text-dark);">पुलिस शिकायत</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Police complaint<br>ಪೊಲೀಸ್ ದೂರು</p>
+                    </div>
+                    <div class="example-card">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🍚</div>
+                        <p style="font-weight: 600; color: var(--text-dark);">राशन कार्ड चाहिए</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Need ration card<br>ಪಡಿತರ ಕಾರ್ಡ್ ಬೇಕು</p>
+                    </div>
+                    <div class="example-card">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🧓</div>
+                        <p style="font-weight: 600; color: var(--text-dark);">पेंशन चाहिए</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Need pension<br>ಪಿಂಚಣಿ ಬೇಕು</p>
+                    </div>
+                    <div class="example-card">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">👩‍⚖️</div>
+                        <p style="font-weight: 600; color: var(--text-dark);">मुफ्त वकील चाहिए</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Need free lawyer<br>ಉಚಿತ ವಕೀಲ ಬೇಕು</p>
+                    </div>
+                </div>
             </div>
             
             <div class="stats-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; padding: 3rem 0; max-width: 1000px; margin: 0 auto;">
