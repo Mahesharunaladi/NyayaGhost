@@ -261,18 +261,18 @@
 </head>
 <body>
     <header>
-        <h1 id="header-title">🧡 Nyaya Mitra - न्याय मित्र</h1>
+        <h1>🧡 Nyaya Mitra - न्याय मित्र</h1>
     </header>
 
     <div class="container">
         <div class="main-title">
             <div class="emoji">👨‍⚖️</div>
-            <h2 id="main-heading">न्याय मित्र</h2>
-            <p id="main-subtitle">आपका कानूनी दोस्त</p>
+            <h2>न्याय मित्र</h2>
+            <p>आपका कानूनी दोस्त</p>
         </div>
 
         <div class="language-section">
-            <h3 id="lang-heading">🗣️ अपनी भाषा चुनें (Choose Your Language):</h3>
+            <h3>🗣️ अपनी भाषा चुनें (Choose Your Language):</h3>
             <div class="language-grid">
                 <button class="lang-button active" data-lang="hindi">
                     <span class="flag">🇮🇳</span>
@@ -312,15 +312,44 @@
         <div id="voice-output"></div>
 
         <div class="examples">
-            <h2 id="examples-heading">💬 आप क्या बोल सकते हैं? (What can you say?)</h2>
-            <div class="example-grid" id="example-grid">
-                <!-- Examples will be dynamically loaded -->
+            <h2>💬 आप क्या बोल सकते हैं? (What can you say?)</h2>
+            <div class="example-grid">
+                <div class="example-card">
+                    <div class="icon">💰</div>
+                    <div class="title">वेतन नहीं मिला</div>
+                    <div class="subtitle">Salary not paid<br>ಸಂಬಳ ಸಿಕ್ಕಿಲ್ಲ</div>
+                </div>
+                <div class="example-card">
+                    <div class="icon">🏡</div>
+                    <div class="title">जमीन का झगड़ा</div>
+                    <div class="subtitle">Land dispute<br>ಭೂ ವಿವಾದ</div>
+                </div>
+                <div class="example-card">
+                    <div class="icon">👮</div>
+                    <div class="title">पुलिस शिकायत</div>
+                    <div class="subtitle">Police complaint<br>ಪೊಲೀಸ್ ದೂರು</div>
+                </div>
+                <div class="example-card">
+                    <div class="icon">🍚</div>
+                    <div class="title">राशन कार्ड चाहिए</div>
+                    <div class="subtitle">Need ration card<br>ಪಡಿತರ ಕಾರ್ಡ್ ಬೇಕು</div>
+                </div>
+                <div class="example-card">
+                    <div class="icon">🧓</div>
+                    <div class="title">पेंशन चाहिए</div>
+                    <div class="subtitle">Need pension<br>ಪಿಂಚಣಿ ಬೇಕು</div>
+                </div>
+                <div class="example-card">
+                    <div class="icon">👩‍⚖️</div>
+                    <div class="title">मुफ्त वकील चाहिए</div>
+                    <div class="subtitle">Need free lawyer<br>ಉಚಿತ ವಕೀಲ ಬೇಕು</div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        console.log('🚀 Nyaya Mitra - Multilingual Version Loaded');
+        console.log('🚀 Nyaya Mitra - Simple Version Loaded');
 
         let currentLanguage = 'hindi';
         let recognition;
@@ -334,171 +363,41 @@
             'telugu': 'te-IN'
         };
 
-        // Complete translations for all UI elements
-        const translations = {
+        const instructions = {
             hindi: {
-                headerTitle: '🧡 Nyaya Mitra - न्याय मित्र',
-                mainHeading: 'न्याय मित्र',
-                mainSubtitle: 'आपका कानूनी दोस्त',
-                langHeading: '🗣️ अपनी भाषा चुनें:',
-                buttonText: '👆 बटन दबाएं और बोलें',
-                subtitle: 'अपनी समस्या बताएं',
-                examplesHeading: '💬 आप क्या बोल सकते हैं?',
-                listening: '🎤 सुन रहा हूँ... बोलिए...',
-                youSaid: '📝 आपने कहा:',
-                recognized: '✅ आपकी आवाज़ पहचान ली गई!',
-                tryAgain: '🔄 फिर से कोशिश करें',
-                examples: [
-                    { icon: '💰', title: 'वेतन नहीं मिला' },
-                    { icon: '🏡', title: 'जमीन का झगड़ा' },
-                    { icon: '👮', title: 'पुलिस शिकायत' },
-                    { icon: '🍚', title: 'राशन कार्ड चाहिए' },
-                    { icon: '🧓', title: 'पेंशन चाहिए' },
-                    { icon: '👩‍⚖️', title: 'मुफ्त वकील चाहिए' }
-                ]
+                button: '👆 बटन दबाएं और बोलें',
+                subtitle: 'अपनी समस्या बताएं'
             },
             english: {
-                headerTitle: '🧡 Nyaya Mitra - Your Legal Friend',
-                mainHeading: 'Nyaya Mitra',
-                mainSubtitle: 'Your Legal Friend',
-                langHeading: '🗣️ Choose Your Language:',
-                buttonText: '👆 Press button and speak',
-                subtitle: 'Tell us your problem',
-                examplesHeading: '💬 What can you say?',
-                listening: '🎤 Listening... Speak now...',
-                youSaid: '📝 You said:',
-                recognized: '✅ Speech recognized successfully!',
-                tryAgain: '🔄 Try Again',
-                examples: [
-                    { icon: '💰', title: 'Salary not paid' },
-                    { icon: '🏡', title: 'Land dispute' },
-                    { icon: '👮', title: 'Police complaint' },
-                    { icon: '🍚', title: 'Need ration card' },
-                    { icon: '🧓', title: 'Need pension' },
-                    { icon: '👩‍⚖️', title: 'Need free lawyer' }
-                ]
+                button: '👆 Press button and speak',
+                subtitle: 'Tell us your problem'
             },
             kannada: {
-                headerTitle: '🧡 ನ್ಯಾಯ ಮಿತ್ರ - ನಿಮ್ಮ ಕಾನೂನು ಸ್ನೇಹಿತ',
-                mainHeading: 'ನ್ಯಾಯ ಮಿತ್ರ',
-                mainSubtitle: 'ನಿಮ್ಮ ಕಾನೂನು ಸ್ನೇಹಿತ',
-                langHeading: '🗣️ ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆರಿಸಿ:',
-                buttonText: '👆 ಗುಂಡಿಯನ್ನು ಒತ್ತಿ ಮತ್ತು ಮಾತನಾಡಿ',
-                subtitle: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ',
-                examplesHeading: '💬 ನೀವು ಏನು ಹೇಳಬಹುದು?',
-                listening: '🎤 ಕೇಳುತ್ತಿದ್ದೇನೆ... ಈಗ ಮಾತನಾಡಿ...',
-                youSaid: '📝 ನೀವು ಹೇಳಿದ್ದು:',
-                recognized: '✅ ಧ್ವನಿ ಗುರುತಿಸಲಾಗಿದೆ!',
-                tryAgain: '🔄 ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ',
-                examples: [
-                    { icon: '💰', title: 'ಸಂಬಳ ಸಿಕ್ಕಿಲ್ಲ' },
-                    { icon: '🏡', title: 'ಭೂ ವಿವಾದ' },
-                    { icon: '👮', title: 'ಪೊಲೀಸ್ ದೂರು' },
-                    { icon: '🍚', title: 'ಪಡಿತರ ಕಾರ್ಡ್ ಬೇಕು' },
-                    { icon: '🧓', title: 'ಪಿಂಚಣಿ ಬೇಕು' },
-                    { icon: '👩‍⚖️', title: 'ಉಚಿತ ವಕೀಲ ಬೇಕು' }
-                ]
+                button: '👆 ಗುಂಡಿಯನ್ನು ಒತ್ತಿ ಮತ್ತು ಮಾತನಾಡಿ',
+                subtitle: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ'
             },
             bhojpuri: {
-                headerTitle: '🧡 न्याय मित्र - राउर कानूनी साथी',
-                mainHeading: 'न्याय मित्र',
-                mainSubtitle: 'राउर कानूनी साथी',
-                langHeading: '🗣️ अपना भाषा चुनीं:',
-                buttonText: '👆 बटन दबाईं आ बोलीं',
-                subtitle: 'अपना परेशानी बताईं',
-                examplesHeading: '💬 का बोल सकत बानी?',
-                listening: '🎤 सुन रहल बानी... बोलीं...',
-                youSaid: '📝 राउर कहनाम:',
-                recognized: '✅ आवाज़ पहचान लिहल गइल!',
-                tryAgain: '🔄 फिर से कोशिश करीं',
-                examples: [
-                    { icon: '💰', title: 'तनखा ना मिलल' },
-                    { icon: '🏡', title: 'जमीन के झगड़ा' },
-                    { icon: '👮', title: 'पुलिस के शिकायत' },
-                    { icon: '🍚', title: 'राशन कार्ड चाहीं' },
-                    { icon: '🧓', title: 'पेंशन चाहीं' },
-                    { icon: '👩‍⚖️', title: 'मुफ्त वकील चाहीं' }
-                ]
+                button: '👆 बटन दबाईं आ बोलीं',
+                subtitle: 'अपना परेशानी बताईं'
             },
             tamil: {
-                headerTitle: '🧡 நியாய மித்ரா - உங்கள் சட்ட நண்பர்',
-                mainHeading: 'நியாய மித்ரா',
-                mainSubtitle: 'உங்கள் சட்ட நண்பர்',
-                langHeading: '🗣️ உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்:',
-                buttonText: '👆 பட்டனை அழுத்தி பேசுங்கள்',
-                subtitle: 'உங்கள் பிரச்சனையைச் சொல்லுங்கள்',
-                examplesHeading: '💬 நீங்கள் என்ன சொல்லலாம்?',
-                listening: '🎤 கேட்கிறேன்... பேசுங்கள்...',
-                youSaid: '📝 நீங்கள் சொன்னது:',
-                recognized: '✅ பேச்சு அங்கீகரிக்கப்பட்டது!',
-                tryAgain: '🔄 மீண்டும் முயற்சிக்கவும்',
-                examples: [
-                    { icon: '💰', title: 'சம்பளம் கிடைக்கவில்லை' },
-                    { icon: '🏡', title: 'நில தகராறு' },
-                    { icon: '👮', title: 'காவல் புகார்' },
-                    { icon: '🍚', title: 'ரேஷன் கார்டு தேவை' },
-                    { icon: '🧓', title: 'ஓய்வூதியம் தேவை' },
-                    { icon: '👩‍⚖️', title: 'இலவச வழக்கறிஞர் தேவை' }
-                ]
+                button: '👆 பட்டனை அழுத்தி பேசுங்கள்',
+                subtitle: 'உங்கள் பிரச்சனையைச் சொல்லுங்கள்'
             },
             telugu: {
-                headerTitle: '🧡 న్యాయ మిత్ర - మీ న్యాయ మిత్రుడు',
-                mainHeading: 'న్యాయ మిత్ర',
-                mainSubtitle: 'మీ న్యాయ మిత్రుడు',
-                langHeading: '🗣️ మీ భాషను ఎంచుకోండి:',
-                buttonText: '👆 బటన్‌ను నొక్కి మాట్లాడండి',
-                subtitle: 'మీ సమస్యను చెప్పండి',
-                examplesHeading: '💬 మీరు ఏమి చెప్పగలరు?',
-                listening: '🎤 వింటున్నాను... మాట్లాడండి...',
-                youSaid: '📝 మీరు చెప్పినది:',
-                recognized: '✅ ప్రసంగం గుర్తించబడింది!',
-                tryAgain: '🔄 మళ్ళీ ప్రయత్నించండి',
-                examples: [
-                    { icon: '💰', title: 'జీతం రాలేదు' },
-                    { icon: '🏡', title: 'భూమి వివాదం' },
-                    { icon: '👮', title: 'పోలీసు ఫిర్యాదు' },
-                    { icon: '�', title: 'రేషన్ కార్డు కావాలి' },
-                    { icon: '🧓', title: 'పెన్షన్ కావాలి' },
-                    { icon: '👩‍⚖️', title: 'ఉచిత న్యాయవాది కావాలి' }
-                ]
+                button: '👆 బటన్‌ను నొక్కి మాట్లాడండి',
+                subtitle: 'మీ సమస్యను చెప్పండి'
             }
         };
 
-        // Function to update ALL UI text based on selected language
-        function updateUILanguage(lang) {
-            const t = translations[lang];
-            
-            // Update all text elements
-            document.getElementById('header-title').textContent = t.headerTitle;
-            document.getElementById('main-heading').textContent = t.mainHeading;
-            document.getElementById('main-subtitle').textContent = t.mainSubtitle;
-            document.getElementById('lang-heading').textContent = t.langHeading;
-            document.getElementById('examples-heading').textContent = t.examplesHeading;
-            
-            // Update instructions
-            document.getElementById('instructions').innerHTML = `
-                <p class="instruction-main">${t.buttonText}</p>
-                <p class="instruction-sub">${t.subtitle}</p>
-            `;
-            
-            // Update examples
-            const exampleGrid = document.getElementById('example-grid');
-            exampleGrid.innerHTML = '';
-            t.examples.forEach(ex => {
-                const card = document.createElement('div');
-                card.className = 'example-card';
-                card.innerHTML = `
-                    <div class="icon">${ex.icon}</div>
-                    <div class="title">${ex.title}</div>
-                `;
-                exampleGrid.appendChild(card);
-            });
-            
-            console.log(`✅ UI updated to ${lang}`);
-        }
-
-        // Initialize with Hindi
-        updateUILanguage('hindi');
+        const listeningText = {
+            hindi: '🎤 सुन रहा हूँ... बोलिए...',
+            english: '🎤 Listening... Speak now...',
+            kannada: '🎤 ಕೇಳುತ್ತಿದ್ದೇನೆ... ಈಗ ಮಾತನಾಡಿ...',
+            bhojpuri: '🎤 सुन रहल बानी... बोलीं...',
+            tamil: '🎤 கேட்கிறேன்... பேசுங்கள்...',
+            telugu: '🎤 వింటున్నాను... మాట్లాడండి...'
+        };
 
         // Language buttons
         const langButtons = document.querySelectorAll('.lang-button');
@@ -510,8 +409,12 @@
                 langButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 
-                // Update ALL UI text
-                updateUILanguage(currentLanguage);
+                // Update instructions
+                const text = instructions[currentLanguage];
+                document.getElementById('instructions').innerHTML = `
+                    <p class="instruction-main">${text.button}</p>
+                    <p class="instruction-sub">${text.subtitle}</p>
+                `;
                 
                 // Update recognition language
                 if (recognition) {
@@ -531,9 +434,8 @@
             recognition.onstart = () => {
                 console.log('🎤 Started listening');
                 const voiceOutput = document.getElementById('voice-output');
-                const t = translations[currentLanguage];
                 voiceOutput.classList.add('active');
-                voiceOutput.innerHTML = `<p style="font-size: 1.5rem; color: #FF8C42;">${t.listening}</p>`;
+                voiceOutput.innerHTML = `<p style="font-size: 1.5rem; color: #FF8C42;">${listeningText[currentLanguage]}</p>`;
             };
 
             recognition.onresult = (event) => {
@@ -550,11 +452,10 @@
                 }
 
                 const voiceOutput = document.getElementById('voice-output');
-                const t = translations[currentLanguage];
 
                 if (interimTranscript) {
                     voiceOutput.innerHTML = `
-                        <p style="color: #6B7280; font-style: italic;">${t.listening.replace('🎤 ', '')}</p>
+                        <p style="color: #6B7280; font-style: italic;">सुन रहा हूँ...</p>
                         <p style="font-size: 1.5rem; color: #FF8C42; margin-top: 1rem;">"${interimTranscript}"</p>
                     `;
                 }
@@ -564,10 +465,10 @@
                     console.log('✅ Final:', finalTranscript);
                     voiceOutput.innerHTML = `
                         <div style="padding: 2rem; background: white; border-radius: 12px;">
-                            <h3 style="color: #FF8C42; margin-bottom: 1rem;">${t.youSaid}</h3>
+                            <h3 style="color: #FF8C42; margin-bottom: 1rem;">📝 आपने कहा (You said):</h3>
                             <p style="font-size: 1.5rem; font-weight: 600; line-height: 1.6; color: #2E3440;">"${finalTranscript}"</p>
-                            <p style="margin-top: 2rem; color: #10B981;">${t.recognized}</p>
-                            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">${t.tryAgain}</button>
+                            <p style="margin-top: 2rem; color: #10B981;">✅ Speech recognized successfully!</p>
+                            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">🔄 Try Again</button>
                         </div>
                     `;
                 }
@@ -576,12 +477,16 @@
             recognition.onerror = (event) => {
                 console.error('❌ Error:', event.error);
                 const voiceOutput = document.getElementById('voice-output');
-                const t = translations[currentLanguage];
                 voiceOutput.classList.add('active');
                 voiceOutput.innerHTML = `
                     <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px;">
                         <p style="color: #DC2626; font-weight: 600;">❌ Error: ${event.error}</p>
-                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #DC2626; color: white; border: none; border-radius: 8px; cursor: pointer;">${t.tryAgain}</button>
+                        <p style="color: #991B1B; margin-top: 0.5rem;">
+                            ${event.error === 'no-speech' ? 'कोई आवाज़ नहीं सुनाई दी। फिर से कोशिश करें।' : 
+                              event.error === 'not-allowed' ? 'Microphone permission denied. Please allow microphone access.' :
+                              'कुछ गलती हुई। फिर से कोशिश करें।'}
+                        </p>
+                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #DC2626; color: white; border: none; border-radius: 8px; cursor: pointer;">🔄 Retry</button>
                     </div>
                 `;
             };
@@ -606,8 +511,7 @@
             console.error('❌ Speech Recognition not supported');
             document.getElementById('mic-button').disabled = true;
             document.getElementById('mic-button').style.opacity = '0.5';
-            const t = translations[currentLanguage];
-            document.getElementById('instructions').innerHTML = `<p style="color: #DC2626;">Speech Recognition not supported in this browser. Please use Chrome, Edge, or Safari.</p>`;
+            document.getElementById('instructions').innerHTML = '<p style="color: #DC2626;">Speech Recognition not supported in this browser. Please use Chrome, Edge, or Safari.</p>';
         }
     </script>
 </body>
