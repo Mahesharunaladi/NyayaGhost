@@ -255,6 +255,15 @@ async function generateLegalAdvice(query, language, analysis) {
   
   if (geminiKey && geminiKey !== 'your_gemini_key_here') {
     try {
+      const languageNames = {
+        hindi: 'Hindi (हिंदी)',
+        english: 'English',
+        kannada: 'Kannada (ಕನ್ನಡ)',
+        bhojpuri: 'Bhojpuri (भोजपुरी)',
+        tamil: 'Tamil (தமிழ்)',
+        telugu: 'Telugu (తెలుగు)'
+      };
+      
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiKey}`,
         {
@@ -263,7 +272,7 @@ async function generateLegalAdvice(query, language, analysis) {
           body: JSON.stringify({
             contents: [{
               parts: [{
-                text: `You are a legal advisor for Indian citizens. Respond in ${language === 'hindi' ? 'Hindi' : language === 'english' ? 'English' : language}.
+                text: `You are a legal advisor for Indian citizens. Respond ONLY in ${languageNames[language] || 'Hindi'}.
                 
 User's problem: ${query}
 
@@ -275,7 +284,7 @@ Provide:
 3. Rights the person has
 4. Where to seek help
 
-Keep response simple and actionable for common people.`
+IMPORTANT: Write the entire response in ${languageNames[language] || 'Hindi'}. Keep response simple and actionable for common people.`
               }]
             }],
             generationConfig: {
@@ -300,11 +309,11 @@ Keep response simple and actionable for common people.`
   }
   
   // Fallback to rule-based advice
-  return getFallbackAdvice(query, analysis);
+  return getFallbackAdvice(query, analysis, language);
 }
 
 // Fallback advice when AI is not available
-function getFallbackAdvice(query, analysis = {}) {
+function getFallbackAdvice(query, analysis = {}, language = 'hindi') {
   const { issueType, ipcSection, needsPoliceComplaint, relevantPortal } = analysis;
   
   let advice = {
@@ -314,70 +323,157 @@ function getFallbackAdvice(query, analysis = {}) {
     helpResources: []
   };
   
-  // Generate advice based on issue type
-  switch (issueType) {
-    case 'theft':
-      advice.text = 'चोरी के मामले में आपको तुरंत पुलिस में शिकायत दर्ज करानी चाहिए।';
-      advice.steps = [
-        '1. नजदीकी पुलिस स्टेशन जाएं',
-        '2. FIR दर्ज कराएं (IPC धारा 379)',
-        '3. चोरी की गई वस्तुओं की सूची बनाएं',
-        '4. FIR की कॉपी जरूर लें'
-      ];
-      advice.rights = ['आपको FIR दर्ज कराने का अधिकार है', 'पुलिस मना नहीं कर सकती'];
-      break;
-      
-    case 'assault':
-      advice.text = 'मारपीट के मामले में मेडिकल जांच करवाएं और पुलिस में शिकायत दर्ज करें।';
-      advice.steps = [
-        '1. तुरंत अस्पताल जाएं और MLC (Medico-Legal Case) बनवाएं',
-        '2. पुलिस में FIR दर्ज करें (IPC धारा 323)',
-        '3. घायलों की तस्वीरें रखें',
-        '4. गवाहों के नाम-पते लिखें'
-      ];
-      advice.rights = ['चोट लगने पर मुफ्त इलाज का अधिकार', 'FIR दर्ज कराने का अधिकार'];
-      break;
-      
-    case 'ration_card':
-      advice.text = 'राशन कार्ड बनवाने के लिए आप ऑनलाइन या ऑफलाइन आवेदन कर सकते हैं।';
-      advice.steps = [
-        '1. अपने राज्य के Food & Supply विभाग की वेबसाइट पर जाएं',
-        '2. Required documents: आधार, पते का प्रमाण, आय प्रमाण',
-        '3. Application form भरें',
-        '4. 30 दिन में कार्ड मिल जाएगा'
-      ];
-      break;
-      
-    case 'pension':
-      advice.text = 'पेंशन योजनाओं के लिए Block Development Office में आवेदन करें।';
-      advice.steps = [
-        '1. अपनी उम्र और श्रेणी के अनुसार योजना चुनें',
-        '2. BDO office में आवेदन फॉर्म जमा करें',
-        '3. Documents: आधार, बैंक पासबुक, आय प्रमाण',
-        '4. Status track करें: nsap.nic.in'
-      ];
-      break;
-      
-    case 'mgnrega':
-      advice.text = 'MGNREGA के तहत आपको 15 दिन में मजदूरी पाने का अधिकार है।';
-      advice.steps = [
-        '1. Block Development Officer को लिखित शिकायत दें',
-        '2. MGNREGA portal पर complaint दर्ज करें',
-        '3. Delayed payment पर 0.05% daily interest मिलेगा',
-        '4. NALSA से मुफ्त कानूनी मदद लें'
-      ];
-      advice.rights = ['15 दिन में payment का अधिकार', 'Delay पर interest का अधिकार'];
-      break;
-      
-    default:
-      advice.text = 'आपकी समस्या के लिए कानूनी सहायता उपलब्ध है।';
-      advice.steps = [
-        '1. NALSA helpline पर call करें: 15100',
-        '2. District Legal Services Authority में जाएं',
-        '3. मुफ्त वकील की मदद लें',
-        '4. Online complaint: nalsa.gov.in'
-      ];
-  }
+  // Language-specific advice templates
+  const adviceTemplates = {
+    hindi: {
+      theft: {
+        text: 'चोरी के मामले में आपको तुरंत पुलिस में शिकायत दर्ज करानी चाहिए।',
+        steps: [
+          '1. नजदीकी पुलिस स्टेशन जाएं',
+          '2. FIR दर्ज कराएं (IPC धारा 379)',
+          '3. चोरी की गई वस्तुओं की सूची बनाएं',
+          '4. FIR की कॉपी जरूर लें'
+        ],
+        rights: ['आपको FIR दर्ज कराने का अधिकार है', 'पुलिस मना नहीं कर सकती']
+      },
+      assault: {
+        text: 'मारपीट के मामले में मेडिकल जांच करवाएं और पुलिस में शिकायत दर्ज करें।',
+        steps: [
+          '1. तुरंत अस्पताल जाएं और MLC (Medico-Legal Case) बनवाएं',
+          '2. पुलिस में FIR दर्ज करें (IPC धारा 323)',
+          '3. घायलों की तस्वीरें रखें',
+          '4. गवाहों के नाम-पते लिखें'
+        ],
+        rights: ['चोट लगने पर मुफ्त इलाज का अधिकार', 'FIR दर्ज कराने का अधिकार']
+      },
+      ration_card: {
+        text: 'राशन कार्ड बनवाने के लिए आप ऑनलाइन या ऑफलाइन आवेदन कर सकते हैं।',
+        steps: [
+          '1. अपने राज्य के Food & Supply विभाग की वेबसाइट पर जाएं',
+          '2. Required documents: आधार, पते का प्रमाण, आय प्रमाण',
+          '3. Application form भरें',
+          '4. 30 दिन में कार्ड मिल जाएगा'
+        ]
+      },
+      pension: {
+        text: 'पेंशन योजनाओं के लिए Block Development Office में आवेदन करें।',
+        steps: [
+          '1. अपनी उम्र और श्रेणी के अनुसार योजना चुनें',
+          '2. BDO office में आवेदन फॉर्म जमा करें',
+          '3. Documents: आधार, बैंक पासबुक, आय प्रमाण',
+          '4. Status track करें: nsap.nic.in'
+        ]
+      },
+      mgnrega: {
+        text: 'MGNREGA के तहत आपको 15 दिन में मजदूरी पाने का अधिकार है।',
+        steps: [
+          '1. Block Development Officer को लिखित शिकायत दें',
+          '2. MGNREGA portal पर complaint दर्ज करें',
+          '3. Delayed payment पर 0.05% daily interest मिलेगा',
+          '4. NALSA से मुफ्त कानूनी मदद लें'
+        ],
+        rights: ['15 दिन में payment का अधिकार', 'Delay पर interest का अधिकार']
+      },
+      default: {
+        text: 'आपकी समस्या के लिए कानूनी सहायता उपलब्ध है।',
+        steps: [
+          '1. NALSA helpline पर call करें: 15100',
+          '2. District Legal Services Authority में जाएं',
+          '3. मुफ्त वकील की मदद लें',
+          '4. Online complaint: nalsa.gov.in'
+        ]
+      }
+    },
+    kannada: {
+      theft: {
+        text: 'ಕಳ್ಳತನದ ಪ್ರಕರಣದಲ್ಲಿ ನೀವು ತಕ್ಷಣವೇ ಪೊಲೀಸರಲ್ಲಿ ದೂರು ದಾಖಲಿಸಬೇಕು।',
+        steps: [
+          '1. ಹತ್ತಿರದ ಪೊಲೀಸ್ ಠಾಣೆಗೆ ಹೋಗಿ',
+          '2. FIR ದಾಖಲಿಸಿ (IPC ವಿಭಾಗ 379)',
+          '3. ಕದ್ದ ವಸ್ತುಗಳ ಪಟ್ಟಿ ಮಾಡಿ',
+          '4. FIR ನಕಲು ತೆಗೆದುಕೊಳ್ಳಿ'
+        ],
+        rights: ['FIR ದಾಖಲಿಸುವ ಹಕ್ಕು ನಿಮಗಿದೆ', 'ಪೊಲೀಸರು ನಿರಾಕರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ']
+      },
+      assault: {
+        text: 'ಹೊಡೆದಾಟದ ಪ್ರಕರಣದಲ್ಲಿ ವೈದ್ಯಕೀಯ ತಪಾಸಣೆ ಮಾಡಿಸಿ ಮತ್ತು ಪೊಲೀಸರಲ್ಲಿ ದೂರು ದಾಖಲಿಸಿ।',
+        steps: [
+          '1. ತಕ್ಷಣವೇ ಆಸ್ಪತ್ರೆಗೆ ಹೋಗಿ MLC ಮಾಡಿಸಿ',
+          '2. ಪೊಲೀಸರಲ್ಲಿ FIR ದಾಖಲಿಸಿ (IPC ವಿಭಾಗ 323)',
+          '3. ಗಾಯಗಳ ಫೋಟೋ ತೆಗೆಯಿರಿ',
+          '4. ಸಾಕ್ಷಿದಾರರ ವಿವರಗಳನ್ನು ಬರೆಯಿರಿ'
+        ],
+        rights: ['ಗಾಯಕ್ಕೆ ಉಚಿತ ಚಿಕಿತ್ಸೆಯ ಹಕ್ಕು', 'FIR ದಾಖಲಿಸುವ ಹಕ್ಕು']
+      },
+      ration_card: {
+        text: 'ರೇಷನ್ ಕಾರ್ಡ್ ಮಾಡಿಸಲು ಆನ್‌ಲೈನ್ ಅಥವಾ ಆಫ್‌ಲೈನ್ ಅರ್ಜಿ ಸಲ್ಲಿಸಬಹುದು।',
+        steps: [
+          '1. ನಿಮ್ಮ ರಾಜ್ಯದ Food & Supply ವಿಭಾಗದ ವೆಬ್‌ಸೈಟ್‌ಗೆ ಹೋಗಿ',
+          '2. ಬೇಕಾದ ದಾಖಲೆಗಳು: ಆಧಾರ್, ವಿಳಾಸ ಪುರಾವೆ, ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ',
+          '3. ಅರ್ಜಿ ಫಾರಂ ಭರ್ತಿ ಮಾಡಿ',
+          '4. 30 ದಿನಗಳಲ್ಲಿ ಕಾರ್ಡ್ ಸಿಗುತ್ತದೆ'
+        ]
+      },
+      default: {
+        text: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಗೆ ಕಾನೂನು ಸಹಾಯ ಲಭ್ಯವಿದೆ।',
+        steps: [
+          '1. NALSA ಹೆಲ್ಪ್‌ಲೈನ್‌ಗೆ ಕರೆ ಮಾಡಿ: 15100',
+          '2. District Legal Services Authority ಗೆ ಭೇಟಿ ನೀಡಿ',
+          '3. ಉಚಿತ ವಕೀಲರ ಸಹಾಯ ಪಡೆಯಿರಿ',
+          '4. ಆನ್‌ಲೈನ್ ದೂರು: nalsa.gov.in'
+        ]
+      }
+    },
+    english: {
+      theft: {
+        text: 'In case of theft, you should immediately file a police complaint.',
+        steps: [
+          '1. Go to nearest police station',
+          '2. File an FIR (IPC Section 379)',
+          '3. Make a list of stolen items',
+          '4. Take a copy of the FIR'
+        ],
+        rights: ['You have the right to file an FIR', 'Police cannot refuse']
+      },
+      assault: {
+        text: 'In case of assault, get medical examination and file a police complaint.',
+        steps: [
+          '1. Go to hospital immediately and get MLC done',
+          '2. File FIR at police station (IPC Section 323)',
+          '3. Take photos of injuries',
+          '4. Note down witness details'
+        ],
+        rights: ['Right to free medical treatment for injuries', 'Right to file FIR']
+      },
+      ration_card: {
+        text: 'You can apply for a ration card online or offline.',
+        steps: [
+          '1. Visit your state Food & Supply department website',
+          '2. Required documents: Aadhaar, address proof, income certificate',
+          '3. Fill application form',
+          '4. Card will be issued within 30 days'
+        ]
+      },
+      default: {
+        text: 'Legal assistance is available for your problem.',
+        steps: [
+          '1. Call NALSA helpline: 15100',
+          '2. Visit District Legal Services Authority',
+          '3. Get free lawyer assistance',
+          '4. File online complaint: nalsa.gov.in'
+        ]
+      }
+    }
+  };
+  
+  // Determine language from frontend parameter
+  const lang = language || 'hindi';
+  const templates = adviceTemplates[lang] || adviceTemplates.hindi;
+  const template = templates[issueType] || templates.default;
+  
+  advice.text = template.text;
+  advice.steps = template.steps;
+  advice.rights = template.rights || [];
   
   // Add common help resources
   advice.helpResources = [

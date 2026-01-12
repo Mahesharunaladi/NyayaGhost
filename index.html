@@ -473,6 +473,10 @@
                 youSaid: '📝 మీరు చెప్పినది:',
                 recognized: '✅ ప్రసంగం గుర్తించబడింది!',
                 tryAgain: '🔄 మళ్ళీ ప్రయత్నించండి',
+                loading: '⚖️ న్యాయ సలహా తయారు చేయబడుతోంది...',
+                errorTitle: '❌ సర్వర్‌కు కనెక్ట్ చేయడం సాధ్యం కాలేదు',
+                errorMessage: 'సర్వర్ రన్నింగ్ లో ఉందా అని నిర్ధారించుకోండి.',
+                errorFallback: 'ప్రస్తుతానికి ఈ హెల్ప్‌లైన్ నంబర్‌లను సంప్రదించండి:',
                 examples: [
                     { icon: '💰', title: 'జీతం రాలేదు' },
                     { icon: '🏡', title: 'భూమి వివాదం' },
@@ -586,14 +590,15 @@
                     recognition.stop();
                     console.log('✅ Final:', finalTranscript);
                     
-                    // Show loading state
+                    // Show loading state with current language
+                    const t = translations[currentLanguage];
                     voiceOutput.innerHTML = `
                         <div style="padding: 2rem; background: white; border-radius: 12px; text-align: center;">
                             <div style="font-size: 3rem; margin-bottom: 1rem;">⚖️</div>
                             <h3 style="color: #FF8C42; margin-bottom: 1rem;">${t.youSaid}</h3>
                             <p style="font-size: 1.5rem; font-weight: 600; line-height: 1.6; color: #2E3440; margin-bottom: 2rem;">"${finalTranscript}"</p>
                             <div style="font-size: 2rem;">🔍</div>
-                            <p style="color: #6B7280; margin-top: 1rem;">कानूनी सलाह तैयार कर रहे हैं...</p>
+                            <p style="color: #6B7280; margin-top: 1rem;">${t.loading}</p>
                         </div>
                     `;
                     
@@ -796,11 +801,12 @@
                 
             } catch (error) {
                 console.error('Error fetching legal advice:', error);
+                const t = translations[currentLanguage];
                 voiceOutput.innerHTML = `
                     <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px;">
-                        <h3 style="color: #DC2626; margin-bottom: 1rem;">❌ सर्वर से कनेक्ट नहीं हो पा रहा</h3>
-                        <p style="color: #2E3440; margin-bottom: 1rem;">कृपया सुनिश्चित करें कि सर्वर चल रहा है।</p>
-                        <p style="color: #6B7280; margin-bottom: 1.5rem;">अभी के लिए इन हेल्पलाइन नंबरों पर संपर्क करें:</p>
+                        <h3 style="color: #DC2626; margin-bottom: 1rem;">${t.errorTitle}</h3>
+                        <p style="color: #2E3440; margin-bottom: 1rem;">${t.errorMessage}</p>
+                        <p style="color: #6B7280; margin-bottom: 1.5rem;">${t.errorFallback}</p>
                         <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
                             <p><strong>NALSA Helpline:</strong> 15100</p>
                             <p><strong>Women Helpline:</strong> 181</p>
