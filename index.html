@@ -325,6 +325,328 @@
         let currentLanguage = 'hindi';
         let recognition;
 
+        // Legal Information Database for each topic
+        const legalInfoDB = {
+            salary: {
+                hindi: {
+                    title: '💰 वेतन नहीं मिलने पर',
+                    act: 'भुगतान मजदूरी अधिनियम, 1936 (Payment of Wages Act, 1936)',
+                    sections: [
+                        'धारा 3: नियोक्ता को समय पर वेतन देना अनिवार्य',
+                        'धारा 5: वेतन भुगतान की समय सीमा - 7 दिन (1000 से कम कर्मचारी) या 10 दिन',
+                        'धारा 15: शिकायत दर्ज करने का अधिकार'
+                    ],
+                    rights: [
+                        'समय पर पूरा वेतन पाने का अधिकार',
+                        'वेतन में अनुचित कटौती के खिलाफ शिकायत',
+                        'श्रम विभाग में शिकायत दर्ज करें',
+                        'लेबर कमिश्नर से संपर्क करें'
+                    ],
+                    portal: 'https://labour.gov.in',
+                    helpline: '1800-11-1016'
+                },
+                kannada: {
+                    title: '💰 ಸಂಬಳ ಸಿಗದಿದ್ದಾಗ',
+                    act: 'ವೇತನ ಪಾವತಿ ಕಾಯ್ದೆ, 1936 (Payment of Wages Act, 1936)',
+                    sections: [
+                        'ವಿಭಾಗ 3: ಉದ್ಯೋಗದಾತರು ಸಮಯಕ್ಕೆ ವೇತನ ನೀಡಬೇಕು',
+                        'ವಿಭಾಗ 5: ವೇತನ ಪಾವತಿ ಸಮಯ - 7 ದಿನಗಳು (1000 ಕಡಿಮೆ ಉದ್ಯೋಗಿಗಳು) ಅಥವಾ 10 ದಿನಗಳು',
+                        'ವಿಭಾಗ 15: ದೂರು ದಾಖಲಿಸುವ ಹಕ್ಕು'
+                    ],
+                    rights: [
+                        'ಸಮಯಕ್ಕೆ ಸಂಪೂರ್ಣ ವೇತನ ಪಡೆಯುವ ಹಕ್ಕು',
+                        'ಅನ್ಯಾಯದ ಕಡಿತದ ವಿರುದ್ಧ ದೂರು',
+                        'ಕಾರ್ಮಿಕ ಇಲಾಖೆಯಲ್ಲಿ ದೂರು ದಾಖಲಿಸಿ',
+                        'ಕಾರ್ಮಿಕ ಆಯುಕ್ತರನ್ನು ಸಂಪರ್ಕಿಸಿ'
+                    ],
+                    portal: 'https://labour.gov.in',
+                    helpline: '1800-11-1016'
+                },
+                english: {
+                    title: '💰 Salary Not Received',
+                    act: 'Payment of Wages Act, 1936',
+                    sections: [
+                        'Section 3: Employer must pay wages on time',
+                        'Section 5: Timeline for wage payment - 7 days (<1000 employees) or 10 days',
+                        'Section 15: Right to file complaint'
+                    ],
+                    rights: [
+                        'Right to receive full wages on time',
+                        'Complaint against unfair deductions',
+                        'File complaint with Labour Department',
+                        'Contact Labour Commissioner'
+                    ],
+                    portal: 'https://labour.gov.in',
+                    helpline: '1800-11-1016'
+                }
+            },
+            land: {
+                hindi: {
+                    title: '🏡 जमीन विवाद',
+                    act: 'भूमि अधिग्रहण अधिनियम, 2013 और संपत्ति कानून',
+                    sections: [
+                        'धारा 420 IPC: धोखाधड़ी से संपत्ति हड़पना',
+                        'धारा 447 IPC: आपराधिक अतिचार',
+                        'सिविल प्रक्रिया संहिता: संपत्ति विवाद के लिए'
+                    ],
+                    rights: [
+                        'अपनी संपत्ति पर कानूनी अधिकार',
+                        'अवैध कब्जे के खिलाफ FIR',
+                        'सिविल कोर्ट में मुकदमा',
+                        'राजस्व विभाग में शिकायत'
+                    ],
+                    portal: 'https://dolr.gov.in',
+                    helpline: '1800-180-6763'
+                },
+                kannada: {
+                    title: '🏡 ಭೂ ವಿವಾದ',
+                    act: 'ಭೂ ಸ್ವಾಧೀನ ಕಾಯ್ದೆ, 2013 ಮತ್ತು ಆಸ್ತಿ ಕಾನೂನು',
+                    sections: [
+                        'ವಿಭಾಗ 420 IPC: ವಂಚನೆಯಿಂದ ಆಸ್ತಿ ಕಸಿದುಕೊಳ್ಳುವುದು',
+                        'ವಿಭಾಗ 447 IPC: ಕ್ರಿಮಿನಲ್ ಅತಿಕ್ರಮಣ',
+                        'ಸಿವಿಲ್ ಪ್ರಕ್ರಿಯೆ ಸಂಹಿತೆ: ಆಸ್ತಿ ವಿವಾದಕ್ಕಾಗಿ'
+                    ],
+                    rights: [
+                        'ನಿಮ್ಮ ಆಸ್ತಿಯ ಮೇಲೆ ಕಾನೂನು ಹಕ್ಕು',
+                        'ಅಕ್ರಮ ಆಕ್ರಮಣದ ವಿರುದ್ಧ FIR',
+                        'ಸಿವಿಲ್ ನ್ಯಾಯಾಲಯದಲ್ಲಿ ಮೊಕದ್ದಮೆ',
+                        'ಕಂದಾಯ ಇಲಾಖೆಯಲ್ಲಿ ದೂರು'
+                    ],
+                    portal: 'https://dolr.gov.in',
+                    helpline: '1800-180-6763'
+                },
+                english: {
+                    title: '🏡 Land Dispute',
+                    act: 'Land Acquisition Act, 2013 and Property Law',
+                    sections: [
+                        'Section 420 IPC: Cheating and property fraud',
+                        'Section 447 IPC: Criminal trespass',
+                        'Civil Procedure Code: For property disputes'
+                    ],
+                    rights: [
+                        'Legal right over your property',
+                        'FIR against illegal occupation',
+                        'Civil court lawsuit',
+                        'Complaint to Revenue Department'
+                    ],
+                    portal: 'https://dolr.gov.in',
+                    helpline: '1800-180-6763'
+                }
+            },
+            police: {
+                hindi: {
+                    title: '👮 पुलिस शिकायत',
+                    act: 'भारतीय दंड संहिता (IPC) और आपराधिक प्रक्रिया संहिता (CrPC)',
+                    sections: [
+                        'धारा 154 CrPC: FIR दर्ज करने का अधिकार',
+                        'धारा 166A IPC: पुलिस द्वारा FIR न लिखना अपराध',
+                        'धारा 41 CrPC: गिरफ्तारी के नियम'
+                    ],
+                    rights: [
+                        'मुफ्त में FIR दर्ज करने का अधिकार',
+                        'FIR की कॉपी पाने का अधिकार',
+                        'पुलिस द्वारा प्रताड़ना के खिलाफ शिकायत',
+                        'वरिष्ठ अधिकारी से संपर्क करें'
+                    ],
+                    portal: 'https://www.mha.gov.in',
+                    helpline: '100 (पुलिस), 1091 (महिला हेल्पलाइन)'
+                },
+                kannada: {
+                    title: '👮 ಪೊಲೀಸ್ ದೂರು',
+                    act: 'ಭಾರತೀಯ ದಂಡ ಸಂಹಿತೆ (IPC) ಮತ್ತು ಕ್ರಿಮಿನಲ್ ಪ್ರಕ್ರಿಯೆ ಸಂಹಿತೆ (CrPC)',
+                    sections: [
+                        'ವಿಭಾಗ 154 CrPC: FIR ದಾಖಲಿಸುವ ಹಕ್ಕು',
+                        'ವಿಭಾಗ 166A IPC: ಪೊಲೀಸ್ FIR ಬರೆಯದಿರುವುದು ಅಪರಾಧ',
+                        'ವಿಭಾಗ 41 CrPC: ಬಂಧನ ನಿಯಮಗಳು'
+                    ],
+                    rights: [
+                        'ಉಚಿತವಾಗಿ FIR ದಾಖಲಿಸುವ ಹಕ್ಕು',
+                        'FIR ನಕಲು ಪಡೆಯುವ ಹಕ್ಕು',
+                        'ಪೊಲೀಸ್ ದೌರ್ಜನ್ಯದ ವಿರುದ್ಧ ದೂರು',
+                        'ಹಿರಿಯ ಅಧಿಕಾರಿಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ'
+                    ],
+                    portal: 'https://www.mha.gov.in',
+                    helpline: '100 (ಪೊಲೀಸ್), 1091 (ಮಹಿಳಾ ಹೆಲ್ಪ್‌ಲೈನ್)'
+                },
+                english: {
+                    title: '👮 Police Complaint',
+                    act: 'Indian Penal Code (IPC) and Criminal Procedure Code (CrPC)',
+                    sections: [
+                        'Section 154 CrPC: Right to file FIR',
+                        'Section 166A IPC: Police refusing FIR is a crime',
+                        'Section 41 CrPC: Arrest rules'
+                    ],
+                    rights: [
+                        'Right to file FIR for free',
+                        'Right to get FIR copy',
+                        'Complaint against police torture',
+                        'Contact senior officers'
+                    ],
+                    portal: 'https://www.mha.gov.in',
+                    helpline: '100 (Police), 1091 (Women Helpline)'
+                }
+            },
+            ration: {
+                hindi: {
+                    title: '🍚 राशन कार्ड',
+                    act: 'राष्ट्रीय खाद्य सुरक्षा अधिनियम, 2013 (NFSA)',
+                    sections: [
+                        'धारा 3: सब्सिडी वाले खाद्यान्न का अधिकार',
+                        'धारा 12: राशन कार्ड के लिए आवेदन',
+                        'धारा 14: शिकायत निवारण तंत्र'
+                    ],
+                    rights: [
+                        'सस्ते राशन पाने का अधिकार',
+                        'राशन कार्ड के लिए आवेदन',
+                        'राशन की दुकान पर शिकायत',
+                        'खाद्य एवं आपूर्ति विभाग में शिकायत'
+                    ],
+                    portal: 'https://nfsa.gov.in',
+                    helpline: '1800-11-1122'
+                },
+                kannada: {
+                    title: '🍚 ಪಡಿತರ ಕಾರ್ಡ್',
+                    act: 'ರಾಷ್ಟ್ರೀಯ ಆಹಾರ ಭದ್ರತಾ ಕಾಯ್ದೆ, 2013 (NFSA)',
+                    sections: [
+                        'ವಿಭಾಗ 3: ಸಬ್ಸಿಡಿ ಆಹಾರ ಧಾನ್ಯದ ಹಕ್ಕು',
+                        'ವಿಭಾಗ 12: ಪಡಿತರ ಕಾರ್ಡ್‌ಗಾಗಿ ಅರ್ಜಿ',
+                        'ವಿಭಾಗ 14: ದೂರು ಪರಿಹಾರ ಕಾರ್ಯವಿಧಾನ'
+                    ],
+                    rights: [
+                        'ಅಗ್ಗದ ಪಡಿತರ ಪಡೆಯುವ ಹಕ್ಕು',
+                        'ಪಡಿತರ ಕಾರ್ಡ್‌ಗಾಗಿ ಅರ್ಜಿ',
+                        'ಪಡಿತರ ಅಂಗಡಿಯಲ್ಲಿ ದೂರು',
+                        'ಆಹಾರ ಮತ್ತು ಪೂರೈಕೆ ಇಲಾಖೆಯಲ್ಲಿ ದೂರು'
+                    ],
+                    portal: 'https://nfsa.gov.in',
+                    helpline: '1800-11-1122'
+                },
+                english: {
+                    title: '🍚 Ration Card',
+                    act: 'National Food Security Act, 2013 (NFSA)',
+                    sections: [
+                        'Section 3: Right to subsidized food grains',
+                        'Section 12: Application for ration card',
+                        'Section 14: Grievance redressal mechanism'
+                    ],
+                    rights: [
+                        'Right to get cheap ration',
+                        'Apply for ration card',
+                        'Complaint at ration shop',
+                        'Complaint to Food & Supply Department'
+                    ],
+                    portal: 'https://nfsa.gov.in',
+                    helpline: '1800-11-1122'
+                }
+            },
+            pension: {
+                hindi: {
+                    title: '🧓 पेंशन',
+                    act: 'राष्ट्रीय सामाजिक सहायता कार्यक्रम (NSAP)',
+                    sections: [
+                        'वृद्धावस्था पेंशन: 60+ वर्ष के लिए',
+                        'विधवा पेंशन: 40+ वर्ष की विधवाओं के लिए',
+                        'विकलांगता पेंशन: 80% विकलांगता के लिए'
+                    ],
+                    rights: [
+                        'मासिक पेंशन पाने का अधिकार',
+                        'ऑनलाइन/ऑफलाइन आवेदन',
+                        'समाज कल्याण विभाग में शिकायत',
+                        'पेंशन में देरी पर शिकायत'
+                    ],
+                    portal: 'https://nsap.nic.in',
+                    helpline: '1800-11-0333'
+                },
+                kannada: {
+                    title: '🧓 ಪಿಂಚಣಿ',
+                    act: 'ರಾಷ್ಟ್ರೀಯ ಸಾಮಾಜಿಕ ಸಹಾಯ ಕಾರ್ಯಕ್ರಮ (NSAP)',
+                    sections: [
+                        'ವೃದ್ಧಾಪ್ಯ ಪಿಂಚಣಿ: 60+ ವರ್ಷಕ್ಕೆ',
+                        'ವಿಧವೆ ಪಿಂಚಣಿ: 40+ ವರ್ಷದ ವಿಧವೆಯರಿಗೆ',
+                        'ವಿಕಲಾಂಗ ಪಿಂಚಣಿ: 80% ವಿಕಲಾಂಗತೆಗೆ'
+                    ],
+                    rights: [
+                        'ಮಾಸಿಕ ಪಿಂಚಣಿ ಪಡೆಯುವ ಹಕ್ಕು',
+                        'ಆನ್‌ಲೈನ್/ಆಫ್‌ಲೈನ್ ಅರ್ಜಿ',
+                        'ಸಮಾಜ ಕಲ್ಯಾಣ ಇಲಾಖೆಯಲ್ಲಿ ದೂರು',
+                        'ಪಿಂಚಣಿ ವಿಳಂಬದ ಬಗ್ಗೆ ದೂರು'
+                    ],
+                    portal: 'https://nsap.nic.in',
+                    helpline: '1800-11-0333'
+                },
+                english: {
+                    title: '🧓 Pension',
+                    act: 'National Social Assistance Programme (NSAP)',
+                    sections: [
+                        'Old Age Pension: For 60+ years',
+                        'Widow Pension: For widows 40+ years',
+                        'Disability Pension: For 80% disability'
+                    ],
+                    rights: [
+                        'Right to receive monthly pension',
+                        'Online/Offline application',
+                        'Complaint to Social Welfare Department',
+                        'Complaint about pension delay'
+                    ],
+                    portal: 'https://nsap.nic.in',
+                    helpline: '1800-11-0333'
+                }
+            },
+            lawyer: {
+                hindi: {
+                    title: '👩‍⚖️ मुफ्त कानूनी सहायता',
+                    act: 'कानूनी सेवा प्राधिकरण अधिनियम, 1987 (NALSA)',
+                    sections: [
+                        'धारा 12: मुफ्त कानूनी सहायता का अधिकार',
+                        'पात्रता: गरीब, महिला, बच्चे, SC/ST, विकलांग',
+                        'सभी स्तरों की अदालतों में मुफ्त वकील'
+                    ],
+                    rights: [
+                        'मुफ्त कानूनी सलाह पाने का अधिकार',
+                        'कोर्ट में मुफ्त वकील',
+                        'जिला कानूनी सेवा प्राधिकरण से संपर्क',
+                        'NALSA हेल्पलाइन: 15100'
+                    ],
+                    portal: 'https://nalsa.gov.in',
+                    helpline: '15100'
+                },
+                kannada: {
+                    title: '👩‍⚖️ ಉಚಿತ ಕಾನೂನು ಸಹಾಯ',
+                    act: 'ಕಾನೂನು ಸೇವಾ ಪ್ರಾಧಿಕಾರ ಕಾಯ್ದೆ, 1987 (NALSA)',
+                    sections: [
+                        'ವಿಭಾಗ 12: ಉಚಿತ ಕಾನೂನು ಸಹಾಯದ ಹಕ್ಕು',
+                        'ಅರ್ಹತೆ: ಬಡವರು, ಮಹಿಳೆಯರು, ಮಕ್ಕಳು, SC/ST, ವಿಕಲಾಂಗರು',
+                        'ಎಲ್ಲಾ ಮಟ್ಟದ ನ್ಯಾಯಾಲಯಗಳಲ್ಲಿ ಉಚಿತ ವಕೀಲ'
+                    ],
+                    rights: [
+                        'ಉಚಿತ ಕಾನೂನು ಸಲಹೆ ಪಡೆಯುವ ಹಕ್ಕು',
+                        'ನ್ಯಾಯಾಲಯದಲ್ಲಿ ಉಚಿತ ವಕೀಲ',
+                        'ಜಿಲ್ಲಾ ಕಾನೂನು ಸೇವಾ ಪ್ರಾಧಿಕಾರವನ್ನು ಸಂಪರ್ಕಿಸಿ',
+                        'NALSA ಹೆಲ್ಪ್‌ಲೈನ್: 15100'
+                    ],
+                    portal: 'https://nalsa.gov.in',
+                    helpline: '15100'
+                },
+                english: {
+                    title: '👩‍⚖️ Free Legal Aid',
+                    act: 'Legal Services Authorities Act, 1987 (NALSA)',
+                    sections: [
+                        'Section 12: Right to free legal aid',
+                        'Eligibility: Poor, Women, Children, SC/ST, Disabled',
+                        'Free lawyer in all level courts'
+                    ],
+                    rights: [
+                        'Right to get free legal advice',
+                        'Free lawyer in court',
+                        'Contact District Legal Services Authority',
+                        'NALSA Helpline: 15100'
+                    ],
+                    portal: 'https://nalsa.gov.in',
+                    helpline: '15100'
+                }
+            }
+        };
+
         const languageMap = {
             'hindi': 'hi-IN',
             'english': 'en-US',
@@ -556,17 +878,81 @@
             // Update examples
             const exampleGrid = document.getElementById('example-grid');
             exampleGrid.innerHTML = '';
-            t.examples.forEach(ex => {
+            const topicKeys = ['salary', 'land', 'police', 'ration', 'pension', 'lawyer'];
+            t.examples.forEach((ex, index) => {
                 const card = document.createElement('div');
                 card.className = 'example-card';
+                card.style.cursor = 'pointer';
                 card.innerHTML = `
                     <div class="icon">${ex.icon}</div>
                     <div class="title">${ex.title}</div>
                 `;
+                card.addEventListener('click', () => {
+                    showLegalInfo(topicKeys[index]);
+                });
                 exampleGrid.appendChild(card);
             });
             
             console.log(`✅ UI updated to ${lang}`);
+        }
+
+        // Function to display legal information page
+        function showLegalInfo(topic) {
+            const voiceOutput = document.getElementById('voice-output');
+            const langKey = currentLanguage === 'bhojpuri' ? 'hindi' : 
+                           (currentLanguage === 'tamil' || currentLanguage === 'telugu') ? 'english' : 
+                           currentLanguage;
+            const info = legalInfoDB[topic][langKey];
+            
+            let infoHTML = `
+                <div style="padding: 2rem; background: white; border-radius: 12px; max-width: 900px; margin: 0 auto;">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h2 style="color: #FF8C42; margin-bottom: 1rem;">${info.title}</h2>
+                    </div>
+                    
+                    <div style="background: #EFF6FF; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #3B82F6;">
+                        <h3 style="color: #3B82F6; margin-bottom: 1rem;">⚖️ ${langKey === 'hindi' ? 'लागू कानून' : langKey === 'kannada' ? 'ಅನ್ವಯವಾಗುವ ಕಾನೂನು' : 'Applicable Law'}</h3>
+                        <p style="font-size: 1.1rem; font-weight: 600; color: #2E3440; line-height: 1.8;">${info.act}</p>
+                    </div>
+                    
+                    <div style="background: #FFF4ED; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #FF8C42;">
+                        <h3 style="color: #FF8C42; margin-bottom: 1rem;">📋 ${langKey === 'hindi' ? 'मुख्य धाराएं' : langKey === 'kannada' ? 'ಮುಖ್ಯ ವಿಭಾಗಗಳು' : 'Key Sections'}</h3>
+                        <div style="text-align: left;">
+            `;
+            info.sections.forEach(section => {
+                infoHTML += `<p style="margin: 0.75rem 0; color: #2E3440; line-height: 1.8;">• ${section}</p>`;
+            });
+            infoHTML += `
+                        </div>
+                    </div>
+                    
+                    <div style="background: #F0FDF4; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #10B981;">
+                        <h3 style="color: #10B981; margin-bottom: 1rem;">⚡ ${langKey === 'hindi' ? 'आपके अधिकार और कदम' : langKey === 'kannada' ? 'ನಿಮ್ಮ ಹಕ್ಕುಗಳು ಮತ್ತು ಕ್ರಮಗಳು' : 'Your Rights & Steps'}</h3>
+                        <div style="text-align: left;">
+            `;
+            info.rights.forEach(right => {
+                infoHTML += `<p style="margin: 0.75rem 0; color: #2E3440; line-height: 1.8;">✓ ${right}</p>`;
+            });
+            infoHTML += `
+                        </div>
+                    </div>
+                    
+                    <div style="background: #FEF3C7; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #F59E0B;">
+                        <h3 style="color: #F59E0B; margin-bottom: 1rem;">🌐 ${langKey === 'hindi' ? 'पोर्टल और हेल्पलाइन' : langKey === 'kannada' ? 'ಪೋರ್ಟಲ್ ಮತ್ತು ಹೆಲ್ಪ್‌ಲೈನ್' : 'Portal & Helpline'}</h3>
+                        <p style="margin: 0.5rem 0;"><strong>${langKey === 'hindi' ? 'वेबसाइट' : langKey === 'kannada' ? 'ವೆಬ್‌ಸೈಟ್' : 'Website'}:</strong> <a href="${info.portal}" target="_blank" style="color: #3B82F6;">${info.portal}</a></p>
+                        <p style="margin: 0.5rem 0;"><strong>${langKey === 'hindi' ? 'हेल्पलाइन' : langKey === 'kannada' ? 'ಹೆಲ್ಪ್‌ಲೈನ್' : 'Helpline'}:</strong> <a href="tel:${info.helpline.replace(/[^0-9]/g, '')}" style="color: #10B981; font-size: 1.2rem; font-weight: 700;">${info.helpline}</a></p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button onclick="location.reload()" style="padding: 0.75rem 2rem; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1rem; font-weight: 600;">
+                            ${langKey === 'hindi' ? '🏠 होम पर वापस जाएं' : langKey === 'kannada' ? '🏠 ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ' : '🏠 Back to Home'}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            voiceOutput.innerHTML = infoHTML;
+            voiceOutput.scrollIntoView({ behavior: 'smooth' });
         }
 
         // Initialize with Hindi
