@@ -685,7 +685,7 @@
                     <div style="padding: 2rem; background: white; border-radius: 12px; max-width: 900px; margin: 0 auto;">
                         <div style="text-align: center; margin-bottom: 2rem;">
                             <div style="font-size: 4rem; margin-bottom: 1rem;">⚖️</div>
-                            <h2 style="color: #FF8C42; margin-bottom: 1rem;">आपकी कानूनी सलाह</h2>
+                            <h2 style="color: #FF8C42; margin-bottom: 1rem;">${t.legalAdvice || 'Legal Advice'}</h2>
                             <p style="font-size: 1.2rem; color: #2E3440; font-weight: 600;">"${query}"</p>
                         </div>
                 `;
@@ -694,10 +694,10 @@
                 if (data.analysis.ipcSection) {
                     adviceHTML += `
                         <div style="background: #FFF4ED; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #FF8C42;">
-                            <h3 style="color: #FF8C42; margin-bottom: 0.5rem;">📋 लागू कानूनी धारा (IPC Section)</h3>
-                            <p style="font-size: 1.3rem; font-weight: 700; color: #2E3440; margin: 0.5rem 0;">IPC धारा ${data.analysis.ipcSection.section}</p>
+                            <h3 style="color: #FF8C42; margin-bottom: 0.5rem;">📋 ${t.ipcSection || 'IPC Section'}</h3>
+                            <p style="font-size: 1.3rem; font-weight: 700; color: #2E3440; margin: 0.5rem 0;">IPC ${t.section || 'Section'} ${data.analysis.ipcSection.section}</p>
                             <p style="color: #6B7280; margin: 0.5rem 0;">${data.analysis.ipcSection.description}</p>
-                            <p style="color: #DC2626; font-weight: 600; margin-top: 0.5rem;">सजा: ${data.analysis.ipcSection.punishment}</p>
+                            <p style="color: #DC2626; font-weight: 600; margin-top: 0.5rem;">${t.punishment || 'Punishment'}: ${data.analysis.ipcSection.punishment}</p>
                             ${data.analysis.ipcSection.act ? `<p style="font-size: 0.9rem; color: #6B7280; margin-top: 0.5rem;">📖 ${data.analysis.ipcSection.act}</p>` : ''}
                         </div>
                     `;
@@ -707,11 +707,11 @@
                 if (data.analysis.relevantAct) {
                     adviceHTML += `
                         <div style="background: #EFF6FF; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #3B82F6;">
-                            <h3 style="color: #3B82F6; margin-bottom: 0.5rem;">⚖️ संबंधित कानून (Applicable Law)</h3>
+                            <h3 style="color: #3B82F6; margin-bottom: 0.5rem;">⚖️ ${t.applicableLaw || 'Applicable Law'}</h3>
                             <p style="font-size: 1.2rem; font-weight: 700; color: #2E3440; margin: 0.5rem 0;">${data.analysis.relevantAct.name}</p>
-                            <p style="font-size: 1.1rem; color: #1E40AF; margin: 0.5rem 0;">धारा ${data.analysis.relevantAct.section}</p>
+                            <p style="font-size: 1.1rem; color: #1E40AF; margin: 0.5rem 0;">${t.section || 'Section'} ${data.analysis.relevantAct.section}</p>
                             ${data.analysis.relevantAct.description ? `<p style="color: #6B7280; margin: 0.5rem 0;">${data.analysis.relevantAct.description}</p>` : ''}
-                            ${data.analysis.relevantAct.reference ? `<a href="${data.analysis.relevantAct.reference}" target="_blank" style="display: inline-block; margin-top: 0.5rem; color: #3B82F6; text-decoration: underline;">📄 पूरा कानून पढ़ें →</a>` : ''}
+                            ${data.analysis.relevantAct.reference ? `<a href="${data.analysis.relevantAct.reference}" target="_blank" style="display: inline-block; margin-top: 0.5rem; color: #3B82F6; text-decoration: underline;">📄 ${t.readFullLaw || 'Read Full Law'} →</a>` : ''}
                         </div>
                     `;
                 }
@@ -720,7 +720,7 @@
                 if (data.advice.text) {
                     adviceHTML += `
                         <div style="background: #F0FDF4; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #10B981;">
-                            <h3 style="color: #10B981; margin-bottom: 1rem;">💡 कानूनी सलाह</h3>
+                            <h3 style="color: #10B981; margin-bottom: 1rem;">💡 ${t.legalAdvice || 'Legal Advice'}</h3>
                             <p style="font-size: 1.1rem; line-height: 1.8; color: #2E3440;">${data.advice.text}</p>
                         </div>
                     `;
@@ -730,7 +730,7 @@
                 if (data.advice.steps && data.advice.steps.length > 0) {
                     adviceHTML += `
                         <div style="background: #EFF6FF; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #3B82F6;">
-                            <h3 style="color: #3B82F6; margin-bottom: 1rem;">📝 आपको क्या करना चाहिए</h3>
+                            <h3 style="color: #3B82F6; margin-bottom: 1rem;">📝 ${t.whatToDo || 'What to Do'}</h3>
                             <div style="text-align: left;">
                     `;
                     data.advice.steps.forEach(step => {
@@ -743,7 +743,7 @@
                 if (data.advice.rights && data.advice.rights.length > 0) {
                     adviceHTML += `
                         <div style="background: #FEF3C7; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #F59E0B;">
-                            <h3 style="color: #F59E0B; margin-bottom: 1rem;">⚡ आपके अधिकार</h3>
+                            <h3 style="color: #F59E0B; margin-bottom: 1rem;">⚡ ${t.yourRights || 'Your Rights'}</h3>
                             <div style="text-align: left;">
                     `;
                     data.advice.rights.forEach(right => {
