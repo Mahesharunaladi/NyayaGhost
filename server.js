@@ -5,18 +5,170 @@ const path = require('path');
 
 const app = express();
 
-// IPC Sections Database
+// Indian Laws API Configuration
+const INDIAN_LAWS_API = 'https://api.indiankanoon.org';
+
+// Function to fetch real legal sections from Indian Laws API
+async function fetchLegalSection(actName, sectionNumber) {
+  try {
+    // Indian Kanoon API search
+    const searchQuery = `${actName} section ${sectionNumber}`;
+    const response = await fetch(`https://api.indiankanoon.org/search/?formInput=${encodeURIComponent(searchQuery)}&pagenum=0`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      return data.docs ? data.docs[0] : null;
+    }
+  } catch (error) {
+    console.error('Error fetching from Indian Laws API:', error);
+  }
+  return null;
+}
+
+// IPC Sections Database (with API integration capability)
 const ipcSections = {
-  assault: { section: '323', description: 'साधारण चोट पहुंचाना', punishment: '1 साल तक की सजा' },
-  theft: { section: '379', description: 'चोरी', punishment: '3 साल तक की सजा' },
-  rape: { section: '376', description: 'बलात्कार', punishment: '7 साल से लेकर उम्रकैद' },
-  murder: { section: '302', description: 'हत्या', punishment: 'उम्रकैद या मौत की सजा' },
-  dowry: { section: '498A', description: 'दहेज उत्पीड़न', punishment: '3 साल तक की सजा' },
-  domestic_violence: { section: '498A', description: 'घरेलू हिंसा', punishment: '3 साल तक की सजा' },
-  cheating: { section: '420', description: 'धोखाधड़ी', punishment: '7 साल तक की सजा' },
-  kidnapping: { section: '363', description: 'अपहरण', punishment: '7 साल तक की सजा' },
-  harassment: { section: '354', description: 'छेड़छाड़', punishment: '2 साल तक की सजा' },
-  defamation: { section: '500', description: 'मानहानि', punishment: '2 साल तक की सजा' }
+  assault: { 
+    section: '323', 
+    description: 'साधारण चोट पहुंचाना', 
+    punishment: '1 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  theft: { 
+    section: '379', 
+    description: 'चोरी', 
+    punishment: '3 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  rape: { 
+    section: '376', 
+    description: 'बलात्कार', 
+    punishment: '7 साल से लेकर उम्रकैद',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  murder: { 
+    section: '302', 
+    description: 'हत्या', 
+    punishment: 'उम्रकैद या मौत की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  dowry: { 
+    section: '498A', 
+    description: 'दहेज उत्पीड़न', 
+    punishment: '3 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  domestic_violence: { 
+    section: '498A', 
+    description: 'घरेलू हिंसा', 
+    punishment: '3 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  cheating: { 
+    section: '420', 
+    description: 'धोखाधड़ी', 
+    punishment: '7 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  kidnapping: { 
+    section: '363', 
+    description: 'अपहरण', 
+    punishment: '7 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  harassment: { 
+    section: '354', 
+    description: 'छेड़छाड़', 
+    punishment: '2 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  },
+  defamation: { 
+    section: '500', 
+    description: 'मानहानि', 
+    punishment: '2 साल तक की सजा',
+    act: 'Indian Penal Code',
+    apiReference: 'IPC'
+  }
+};
+
+// Pension Fund Regulations Database
+const pensionRegulations = {
+  pfrda_pop_2018: {
+    act: 'Pension Fund Regulatory and Development Authority (Point of Presence) Regulations, 2018',
+    section: '5',
+    description: 'Point of Presence requirements and regulations',
+    apiUrl: 'https://www.indiacode.nic.in/handle/123456789/2045'
+  }
+};
+
+// Additional Legal Acts Database
+const legalActsDB = {
+  mgnrega: {
+    act: 'Mahatma Gandhi National Rural Employment Guarantee Act, 2005',
+    key_sections: {
+      '3': 'Entitlement and registration',
+      '4': 'Demand for work',
+      '5': 'Planning process'
+    },
+    website: 'https://nrega.nic.in'
+  },
+  nfsa: {
+    act: 'National Food Security Act, 2013',
+    key_sections: {
+      '3': 'Coverage and entitlement',
+      '5': 'Priority households',
+      '12': 'State responsibility'
+    },
+    website: 'https://nfsa.gov.in'
+  },
+  rte: {
+    act: 'Right to Education Act, 2009',
+    key_sections: {
+      '3': 'Right of children to free and compulsory education',
+      '12': 'Extent of school and duties'
+    },
+    website: 'https://www.education.gov.in'
+  },
+  rti: {
+    act: 'Right to Information Act, 2005',
+    key_sections: {
+      '6': 'Request for information',
+      '7': 'Disposal of request'
+    },
+    website: 'https://rti.gov.in'
+  },
+  pwdv: {
+    act: 'Protection of Women from Domestic Violence Act, 2005',
+    key_sections: {
+      '3': 'Definition of domestic violence',
+      '12': 'Duties of police officers',
+      '18': 'Protection orders'
+    }
+  },
+  pocso: {
+    act: 'Protection of Children from Sexual Offences Act, 2012',
+    key_sections: {
+      '4': 'Penetrative sexual assault',
+      '8': 'Sexual harassment',
+      '19': 'Reporting of offences'
+    }
+  },
+  consumer: {
+    act: 'Consumer Protection Act, 2019',
+    key_sections: {
+      '2': 'Definitions',
+      '35': 'Jurisdiction of District Commission'
+    },
+    website: 'https://consumerhelpline.gov.in'
+  }
 };
 
 // Middleware
@@ -133,6 +285,67 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// API to fetch legal acts and sections
+app.get('/api/legal-acts', (req, res) => {
+  try {
+    const { act } = req.query;
+    
+    if (act) {
+      // Return specific act
+      const actData = legalActsDB[act];
+      if (actData) {
+        res.json({ success: true, act: actData });
+      } else {
+        res.status(404).json({ error: 'Act not found' });
+      }
+    } else {
+      // Return all available acts
+      res.json({ 
+        success: true, 
+        acts: Object.keys(legalActsDB),
+        data: legalActsDB 
+      });
+    }
+  } catch (error) {
+    console.error('Legal Acts API error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// API to search Indian legal sections
+app.post('/api/search-legal-section', async (req, res) => {
+  try {
+    const { actName, sectionNumber, query } = req.body;
+    
+    if (!query && (!actName || !sectionNumber)) {
+      return res.status(400).json({ error: 'Either query or actName+sectionNumber required' });
+    }
+    
+    console.log(`[Legal Section Search] Act: ${actName}, Section: ${sectionNumber}, Query: ${query}`);
+    
+    // Try fetching from Indian Kanoon API
+    let apiData = null;
+    if (actName && sectionNumber) {
+      apiData = await fetchLegalSection(actName, sectionNumber);
+    }
+    
+    // Return combined data
+    res.json({
+      success: true,
+      query: query || `${actName} Section ${sectionNumber}`,
+      apiData,
+      localData: {
+        ipcSections,
+        legalActsDB,
+        pensionRegulations
+      }
+    });
+  } catch (error) {
+    console.error('Legal Section Search error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // AI Legal Advisor API
 app.post('/api/legal-advice', async (req, res) => {
   try {
@@ -174,45 +387,87 @@ function analyzeQuery(query) {
   let ipcSection = null;
   let needsPoliceComplaint = false;
   let relevantPortal = null;
+  let relevantAct = null;
   
   // Check for police complaint scenarios
   if (/(चोरी|theft|stolen)/i.test(lowerQuery)) {
     issueType = 'theft';
     ipcSection = ipcSections.theft;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Indian Penal Code, 1860',
+      section: '379',
+      reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
+    };
   } else if (/(मारपीट|assault|fight|beat)/i.test(lowerQuery)) {
     issueType = 'assault';
     ipcSection = ipcSections.assault;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Indian Penal Code, 1860',
+      section: '323',
+      reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
+    };
   } else if (/(बलात्कार|rape|sexual)/i.test(lowerQuery)) {
     issueType = 'rape';
     ipcSection = ipcSections.rape;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Indian Penal Code, 1860',
+      section: '376',
+      reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
+    };
   } else if (/(धोखाधड़ी|cheating|fraud|scam)/i.test(lowerQuery)) {
     issueType = 'cheating';
     ipcSection = ipcSections.cheating;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Indian Penal Code, 1860',
+      section: '420',
+      reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
+    };
   } else if (/(छेड़छाड़|harassment|molest)/i.test(lowerQuery)) {
     issueType = 'harassment';
     ipcSection = ipcSections.harassment;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Indian Penal Code, 1860',
+      section: '354',
+      reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
+    };
   } else if (/(दहेज|dowry)/i.test(lowerQuery)) {
     issueType = 'dowry';
     ipcSection = ipcSections.dowry;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Indian Penal Code, 1860',
+      section: '498A',
+      reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
+    };
   } else if (/(हिंसा|violence|domestic)/i.test(lowerQuery)) {
     issueType = 'domestic_violence';
     ipcSection = ipcSections.domestic_violence;
     needsPoliceComplaint = true;
+    relevantAct = {
+      name: 'Protection of Women from Domestic Violence Act, 2005',
+      section: '3',
+      reference: 'https://wcd.nic.in/act/protection-women-domestic-violence-act-2005'
+    };
   }
   
-  // Check for government services
+  // Check for government services with legal act references
   if (/(राशन|ration)/i.test(lowerQuery)) {
     issueType = 'ration_card';
     relevantPortal = {
       name: 'National Food Security Portal',
       url: 'https://nfsa.gov.in/',
       description: 'राशन कार्ड के लिए ऑनलाइन आवेदन करें'
+    };
+    relevantAct = {
+      name: 'National Food Security Act, 2013',
+      section: '3',
+      description: 'Right to receive food grains',
+      reference: 'https://www.indiacode.nic.in/handle/123456789/2123'
     };
   } else if (/(पेंशन|pension)/i.test(lowerQuery)) {
     issueType = 'pension';
@@ -240,13 +495,28 @@ function analyzeQuery(query) {
       url: 'https://www.incometax.gov.in/iec/foportal',
       description: 'PAN कार्ड के लिए आवेदन करें'
     };
+  } else if (/(education|शिक्षा|school)/i.test(lowerQuery)) {
+    relevantAct = {
+      name: 'Right to Education Act, 2009',
+      section: '3',
+      description: 'Free and compulsory education',
+      reference: 'https://www.indiacode.nic.in/handle/123456789/2086'
+    };
+  } else if (/(information|जानकारी|rti)/i.test(lowerQuery)) {
+    relevantAct = {
+      name: 'Right to Information Act, 2005',
+      section: '6',
+      description: 'Request for obtaining information',
+      reference: 'https://rti.gov.in'
+    };
   }
   
   return {
     issueType,
     ipcSection,
     needsPoliceComplaint,
-    relevantPortal
+    relevantPortal,
+    relevantAct
   };
 }
 

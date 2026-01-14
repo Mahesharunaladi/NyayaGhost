@@ -698,6 +698,20 @@
                             <p style="font-size: 1.3rem; font-weight: 700; color: #2E3440; margin: 0.5rem 0;">IPC धारा ${data.analysis.ipcSection.section}</p>
                             <p style="color: #6B7280; margin: 0.5rem 0;">${data.analysis.ipcSection.description}</p>
                             <p style="color: #DC2626; font-weight: 600; margin-top: 0.5rem;">सजा: ${data.analysis.ipcSection.punishment}</p>
+                            ${data.analysis.ipcSection.act ? `<p style="font-size: 0.9rem; color: #6B7280; margin-top: 0.5rem;">📖 ${data.analysis.ipcSection.act}</p>` : ''}
+                        </div>
+                    `;
+                }
+                
+                // Show relevant legal act reference if available
+                if (data.analysis.relevantAct) {
+                    adviceHTML += `
+                        <div style="background: #EFF6FF; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #3B82F6;">
+                            <h3 style="color: #3B82F6; margin-bottom: 0.5rem;">⚖️ संबंधित कानून (Applicable Law)</h3>
+                            <p style="font-size: 1.2rem; font-weight: 700; color: #2E3440; margin: 0.5rem 0;">${data.analysis.relevantAct.name}</p>
+                            <p style="font-size: 1.1rem; color: #1E40AF; margin: 0.5rem 0;">धारा ${data.analysis.relevantAct.section}</p>
+                            ${data.analysis.relevantAct.description ? `<p style="color: #6B7280; margin: 0.5rem 0;">${data.analysis.relevantAct.description}</p>` : ''}
+                            ${data.analysis.relevantAct.reference ? `<a href="${data.analysis.relevantAct.reference}" target="_blank" style="display: inline-block; margin-top: 0.5rem; color: #3B82F6; text-decoration: underline;">📄 पूरा कानून पढ़ें →</a>` : ''}
                         </div>
                     `;
                 }
