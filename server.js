@@ -1136,6 +1136,52 @@ function generateHindiChatResponse(query, analysis) {
     response += `• Online renewal: parivahan.gov.in/parivahan\n`;
     response += `• Medical certificate जरूरी (40+ age के लिए)\n\n`;
     
+  } else if (issueType === 'voter_id') {
+    response += `**Voter ID Card (EPIC) के लिए:**\n\n`;
+    response += `1. **नया Voter ID बनवाना:**\n`;
+    response += `   • Online apply: https://voters.eci.gov.in/\n`;
+    response += `   • "Apply for New Voter ID" चुनें\n`;
+    response += `   • Form 6 भरें\n`;
+    response += `   • Age: 18 साल पूरे होने चाहिए\n`;
+    response += `   • Documents: Address proof, Age proof, Photo\n`;
+    response += `   • Booth Level Officer (BLO) verification करेगा\n`;
+    response += `   • 30-45 दिन में Voter ID मिल जाएगा\n\n`;
+    
+    response += `2. **Voter ID में correction/update:**\n`;
+    response += `   • Form 8 भरें (correction के लिए)\n`;
+    response += `   • Name, address, photo change कर सकते हैं\n`;
+    response += `   • Upload proof documents\n\n`;
+    
+    response += `3. **Duplicate Voter ID:**\n`;
+    response += `   • Form 8 भरें\n`;
+    response += `   • Reason for duplicate बताएं (lost/damaged)\n`;
+    response += `   • Free of cost\n\n`;
+    
+    response += `**📋 जरूरी दस्तावेज:**\n`;
+    response += `• Address proof: Aadhaar, Passport, Bank statement, Ration card\n`;
+    response += `• Age proof: Birth certificate, School certificate, Aadhaar\n`;
+    response += `• Recent passport size photo\n\n`;
+    
+    response += `**Helpline:**\n`;
+    response += `• NVSP Helpline: 1950\n`;
+    response += `• Email: feedback@eci.gov.in\n`;
+    response += `• Check status: voters.eci.gov.in/track-application\n\n`;
+    
+  } else if (issueType === 'birth_certificate') {
+    response += `**Birth Certificate के लिए:**\n\n`;
+    response += `1. **नया Birth Certificate:**\n`;
+    response += `   • CRS Portal: https://crsorgi.gov.in/\n`;
+    response += `   • Hospital discharge slip या जन्म के प्रमाण चाहिए\n`;
+    response += `   • 21 दिन के अंदर register करें (free)\n`;
+    response += `   • 21 दिन बाद: Late registration fee लगेगी\n\n`;
+    
+    response += `2. **Correction in Birth Certificate:**\n`;
+    response += `   • नगर निगम/Gram Panchayat में application दें\n`;
+    response += `   • Proof documents attach करें\n`;
+    response += `   • Processing: 15-30 days\n\n`;
+    
+    response += `**Municipal Corporation/Gram Panchayat में apply कर सकते हैं**\n\n`;
+    
   } else if (issueType === 'assault' || issueType === 'harassment' || issueType === 'theft') {
     response += `1. **पहले अपनी सुरक्षा सुनिश्चित करें** - खतरे से दूर रहें\n`;
     response += `2. किसी भरोसेमंद व्यक्ति को तुरंत बताएं\n`;
