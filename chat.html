@@ -572,6 +572,20 @@
             document.getElementById('chat-subtitle').textContent = t.chatSubtitle;
             document.getElementById('chat-input').placeholder = t.placeholder;
             document.getElementById('typing-text').textContent = t.typing;
+            
+            // Update welcome message
+            const welcomeMessage = document.querySelector('.message.bot .message-content');
+            if (welcomeMessage) {
+                let welcomeHTML = `<p>${t.welcomeTitle}</p>`;
+                welcomeHTML += `<p>${t.welcomeText}</p>`;
+                welcomeHTML += '<ul style="margin: 1rem 0; padding-left: 1.5rem;">';
+                t.welcomePoints.forEach(point => {
+                    welcomeHTML += `<li>${point}</li>`;
+                });
+                welcomeHTML += '</ul>';
+                welcomeHTML += `<p>${t.welcomePrompt}</p>`;
+                welcomeMessage.innerHTML = welcomeHTML;
+            }
         }
 
         function loadSuggestions() {
