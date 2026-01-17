@@ -888,21 +888,31 @@
                     <div class="title">${ex.title}</div>
                 `;
                 card.addEventListener('click', () => {
-                    showLegalInfo(topicKeys[index]);
+                    console.log('Card clicked:', topicKeys[index]);
+                    try {
+                        showLegalInfo(topicKeys[index]);
+                    } catch (error) {
+                        console.error('Error showing legal info:', error);
+                        alert('Error: ' + error.message);
+                    }
                 });
                 exampleGrid.appendChild(card);
             });
             
-            console.log(`✅ UI updated to ${lang}`);
+            console.log(`✅ UI updated to ${lang}, ${t.examples.length} cards created`);
         }
 
         // Function to display legal information page
         function showLegalInfo(topic) {
+            console.log('showLegalInfo called with topic:', topic);
+            console.log('Current language:', currentLanguage);
             const voiceOutput = document.getElementById('voice-output');
             const langKey = currentLanguage === 'bhojpuri' ? 'hindi' : 
                            (currentLanguage === 'tamil' || currentLanguage === 'telugu') ? 'english' : 
                            currentLanguage;
+            console.log('Language key:', langKey);
             const info = legalInfoDB[topic][langKey];
+            console.log('Legal info:', info);
             
             let infoHTML = `
                 <div style="padding: 2rem; background: white; border-radius: 12px; max-width: 900px; margin: 0 auto;">
@@ -951,8 +961,12 @@
                 </div>
             `;
             
+            console.log('Inserting HTML into voice-output, length:', infoHTML.length);
             voiceOutput.innerHTML = infoHTML;
-            voiceOutput.scrollIntoView({ behavior: 'smooth' });
+            console.log('HTML inserted, scrolling...');
+            voiceOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.scrollTo({ top: voiceOutput.offsetTop - 100, behavior: 'smooth' });
+            console.log('✅ Legal info displayed successfully');
         }
 
         // Initialize with Hindi
