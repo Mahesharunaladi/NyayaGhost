@@ -263,6 +263,44 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
+        .voice-btn {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 4px 16px rgba(239, 68, 68, 0.6);
+            }
+        }
+
         .send-btn {
             background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
             color: white;
@@ -410,7 +448,8 @@
                         class="chat-input" 
                         placeholder="अपना कानूनी सवाल यहाँ लिखें..."
                         rows="1"></textarea>
-                    <button id="send-btn" class="send-btn">📤</button>
+                    <button id="voice-btn" class="voice-btn" title="अपनी समस्या बोलें">🎤</button>
+                    <button id="send-btn" class="send-btn" title="भेजें">📤</button>
                 </div>
             </div>
         </div>
@@ -419,6 +458,17 @@
     <script>
         let currentLanguage = 'hindi';
         let chatHistory = [];
+        let recognition = null;
+        let isListening = false;
+
+        // Speech recognition language codes
+        const speechLanguages = {
+            hindi: 'hi-IN',
+            english: 'en-US',
+            kannada: 'kn-IN',
+            tamil: 'ta-IN',
+            telugu: 'te-IN'
+        };
 
         const translations = {
             hindi: {
@@ -426,6 +476,10 @@
                 chatSubtitle: 'मैं आपकी मदद के लिए यहाँ हूँ - सभी भारतीय कानून, अधिनियम और संविधान की जानकारी',
                 placeholder: 'अपना कानूनी सवाल यहाँ लिखें...',
                 typing: 'न्याय मित्र टाइप कर रहा है...',
+                voiceBtn: 'अपनी समस्या बोलें',
+                sendBtn: 'भेजें',
+                listening: 'सुन रहा हूँ... बोलें',
+                voiceError: 'माइक्रोफ़ोन एक्सेस नहीं मिला',
                 welcomeTitle: '<strong>नमस्ते! मैं आपका न्याय मित्र हूँ।</strong> 👋',
                 welcomeText: 'मैं आपको निम्नलिखित में मदद कर सकता हूँ:',
                 welcomePoints: [
@@ -448,6 +502,10 @@
                 chatSubtitle: 'I\'m here to help - All Indian laws, acts and constitutional information',
                 placeholder: 'Type your legal question here...',
                 typing: 'Nyaya Mitra is typing...',
+                voiceBtn: 'Speak your problem',
+                sendBtn: 'Send',
+                listening: 'Listening... Please speak',
+                voiceError: 'Microphone access denied',
                 welcomeTitle: '<strong>Hello! I am your Nyaya Mitra.</strong> 👋',
                 welcomeText: 'I can help you with:',
                 welcomePoints: [
@@ -470,6 +528,10 @@
                 chatSubtitle: 'ನಾನು ನಿಮಗೆ ಸಹಾಯ ಮಾಡಲು ಇಲ್ಲಿದ್ದೇನೆ - ಎಲ್ಲಾ ಭಾರತೀಯ ಕಾನೂನುಗಳು, ಕಾಯ್ದೆಗಳು ಮತ್ತು ಸಂವಿಧಾನ ಮಾಹಿತಿ',
                 placeholder: 'ನಿಮ್ಮ ಕಾನೂನು ಪ್ರಶ್ನೆಯನ್ನು ಇಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ...',
                 typing: 'ನ್ಯಾಯ ಮಿತ್ರ ಟೈಪ್ ಮಾಡುತ್ತಿದೆ...',
+                voiceBtn: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ',
+                sendBtn: 'ಕಳುಹಿಸಿ',
+                listening: 'ಆಲಿಸುತ್ತಿದೆ... ದಯವಿಟ್ಟು ಮಾತನಾಡಿ',
+                voiceError: 'ಮೈಕ್ರೊಫೋನ್ ಪ್ರವೇಶ ನಿರಾಕರಿಸಲಾಗಿದೆ',
                 welcomeTitle: '<strong>ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ ನ್ಯಾಯ ಮಿತ್ರ.</strong> 👋',
                 welcomeText: 'ನಾನು ನಿಮಗೆ ಈ ವಿಷಯಗಳಲ್ಲಿ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ:',
                 welcomePoints: [
@@ -492,6 +554,10 @@
                 chatSubtitle: 'நான் உங்களுக்கு உதவ இங்கே இருக்கிறேன் - அனைத்து இந்திய சட்டங்கள், சட்டங்கள் மற்றும் அரசியலமைப்பு தகவல்',
                 placeholder: 'உங்கள் சட்ட கேள்வியை இங்கே தட்டச்சு செய்யவும்...',
                 typing: 'நியாய மித்ரா தட்டச்சு செய்கிறார்...',
+                voiceBtn: 'உங்கள் பிரச்சனையைச் சொல்லுங்கள்',
+                sendBtn: 'அனுப்பு',
+                listening: 'கேட்கிறேன்... தயவுசெய்து பேசுங்கள்',
+                voiceError: 'மைக்ரோஃபோன் அணுகல் மறுக்கப்பட்டது',
                 welcomeTitle: '<strong>வணக்கம்! நான் உங்கள் நியாய மித்ரா.</strong> 👋',
                 welcomeText: 'நான் உங்களுக்கு இவற்றில் உதவ முடியும்:',
                 welcomePoints: [
@@ -514,6 +580,10 @@
                 chatSubtitle: 'నేను మీకు సహాయం చేయడానికి ఇక్కడ ఉన్నాను - అన్ని భారతీయ చట్టాలు, చట్టాలు మరియు రాజ్యాంగ సమాచారం',
                 placeholder: 'మీ చట్టపరమైన ప్రశ్నను ఇక్కడ టైప్ చెయ్యండి...',
                 typing: 'న్యాయ మిత్ర టైప్ చేస్తోంది...',
+                voiceBtn: 'మీ సమస్యను చెప్పండి',
+                sendBtn: 'పంపండి',
+                listening: 'వింటున్నాను... దయచేసి మాట్లాడండి',
+                voiceError: 'మైక్రోఫోన్ యాక్సెస్ నిరాకరించబడింది',
                 welcomeTitle: '<strong>నమస్కారం! నేను మీ న్యాయ మిత్ర.</strong> 👋',
                 welcomeText: 'నేను మీకు ఈ విషయాలలో సహాయం చేయగలను:',
                 welcomePoints: [
@@ -564,6 +634,76 @@
                 textarea.style.height = 'auto';
                 textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
             });
+
+            // Voice button
+            document.getElementById('voice-btn').addEventListener('click', toggleVoiceInput);
+
+            // Initialize speech recognition
+            initSpeechRecognition();
+        }
+
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onstart = () => {
+                    isListening = true;
+                    const voiceBtn = document.getElementById('voice-btn');
+                    voiceBtn.classList.add('listening');
+                    const t = translations[currentLanguage];
+                    document.getElementById('chat-input').placeholder = t.listening;
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('chat-input').value = transcript;
+                    // Auto-send the voice message
+                    setTimeout(() => sendMessage(), 500);
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    isListening = false;
+                    const voiceBtn = document.getElementById('voice-btn');
+                    voiceBtn.classList.remove('listening');
+                    const t = translations[currentLanguage];
+                    document.getElementById('chat-input').placeholder = t.placeholder;
+                    if (event.error === 'not-allowed') {
+                        alert(t.voiceError);
+                    }
+                };
+
+                recognition.onend = () => {
+                    isListening = false;
+                    const voiceBtn = document.getElementById('voice-btn');
+                    voiceBtn.classList.remove('listening');
+                    const t = translations[currentLanguage];
+                    document.getElementById('chat-input').placeholder = t.placeholder;
+                };
+            }
+        }
+
+        function toggleVoiceInput() {
+            if (!recognition) {
+                const t = translations[currentLanguage];
+                alert(t.voiceError || 'Voice input not supported in your browser');
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else {
+                // Set language based on current selection
+                recognition.lang = speechLanguages[currentLanguage];
+                try {
+                    recognition.start();
+                } catch (error) {
+                    console.error('Error starting recognition:', error);
+                }
+            }
         }
 
         function updateUILanguage() {
@@ -572,6 +712,10 @@
             document.getElementById('chat-subtitle').textContent = t.chatSubtitle;
             document.getElementById('chat-input').placeholder = t.placeholder;
             document.getElementById('typing-text').textContent = t.typing;
+            
+            // Update button titles
+            document.getElementById('voice-btn').title = t.voiceBtn;
+            document.getElementById('send-btn').title = t.sendBtn;
             
             // Update welcome message
             const welcomeMessage = document.querySelector('.message.bot .message-content');
