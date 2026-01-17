@@ -511,6 +511,20 @@ function analyzeQuery(query) {
       url: 'https://www.passportindia.gov.in/',
       description: 'Passport आवेदन और सेवाएं'
     };
+  } else if (/(voter|वोटर|मतदाता|epic|election)/i.test(lowerQuery)) {
+    issueType = 'voter_id';
+    relevantPortal = {
+      name: 'National Voters Service Portal',
+      url: 'https://voters.eci.gov.in/',
+      description: 'Voter ID आवेदन और सेवाएं'
+    };
+  } else if (/(birth|जन्म|certificate|प्रमाण)/i.test(lowerQuery)) {
+    issueType = 'birth_certificate';
+    relevantPortal = {
+      name: 'CRS Portal',
+      url: 'https://crsorgi.gov.in/',
+      description: 'Birth/Death Certificate'
+    };
   } else if (/(education|शिक्षा|school)/i.test(lowerQuery)) {
     issueType = 'education';
     relevantAct = {
