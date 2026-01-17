@@ -892,6 +892,227 @@ app.use((err, req, res, next) => {
   });
 });
 
+// NEW: Chat-based Legal AI Endpoint with comprehensive law information
+app.post('/api/chat-legal-advice', async (req, res) => {
+  try {
+    const { query, language, chatHistory } = req.body;
+    
+    console.log(`📝 Chat request: "${query}" in ${language}`);
+    
+    // Analyze the query
+    const analysis = analyzeQuery(query);
+    
+    // Build comprehensive legal response
+    let response = '';
+    let legalInfo = null;
+    let portalLinks = [];
+    
+    // Generate response based on language and issue type
+    if (language === 'hindi' || language === 'bhojpuri') {
+      response = generateHindiChatResponse(query, analysis);
+    } else if (language === 'kannada') {
+      response = generateKannadaChatResponse(query, analysis);
+    } else if (language === 'tamil') {
+      response = generateTamilChatResponse(query, analysis);
+    } else if (language === 'telugu') {
+      response = generateTeluguChatResponse(query, analysis);
+    } else {
+      response = generateEnglishChatResponse(query, analysis);
+    }
+    
+    // Add legal sections information
+    if (analysis.ipcSection) {
+      legalInfo = {
+        actName: language === 'hindi' ? 'भारतीय दंड संहिता (IPC), 1860' : 
+                 language === 'kannada' ? 'ಭಾರತೀಯ ದಂಡ ಸಂಹಿತೆ (IPC), 1860' :
+                 language === 'tamil' ? 'இந்திய தண்டனைச் சட்டம் (IPC), 1860' :
+                 language === 'telugu' ? 'భారత దండ సంహిత (IPC), 1860' :
+                 'Indian Penal Code (IPC), 1860',
+        sections: [
+          `${language === 'hindi' ? 'धारा' : language === 'kannada' ? 'ವಿಭಾಗ' : language === 'tamil' ? 'பிரிவு' : language === 'telugu' ? 'సెక్షన్' : 'Section'} ${analysis.ipcSection.section}: ${analysis.ipcSection.description}`,
+          `${language === 'hindi' ? 'सजा' : language === 'kannada' ? 'ಶಿಕ್ಷೆ' : language === 'tamil' ? 'தண்டனை' : language === 'telugu' ? 'శిక్ష' : 'Punishment'}: ${analysis.ipcSection.punishment}`
+        ],
+        reference: analysis.relevantAct ? analysis.relevantAct.reference : 'https://www.indiacode.nic.in'
+      };
+    }
+    
+    // Add relevant portal links
+    if (analysis.relevantPortal) {
+      portalLinks.push({
+        name: analysis.relevantPortal.name,
+        url: analysis.relevantPortal.url
+      });
+    }
+    
+    // Add general helpful portals
+    portalLinks.push(
+      { name: language === 'hindi' ? 'राष्ट्रीय कानूनी सेवा प्राधिकरण (NALSA)' : 'National Legal Services Authority (NALSA)', url: 'https://nalsa.gov.in' },
+      { name: language === 'hindi' ? 'भारतीय कानून खोज' : 'Indian Laws Search', url: 'https://www.indiacode.nic.in' },
+      { name: language === 'hindi' ? 'ई-कोर्ट्स पोर्टल' : 'e-Courts Portal', url: 'https://ecourts.gov.in' }
+    );
+    
+    res.json({
+      success: true,
+      response,
+      legalInfo,
+      portalLinks,
+      analysis: {
+        issueType: analysis.issueType,
+        needsPoliceComplaint: analysis.needsPoliceComplaint
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Chat error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to process chat request',
+      message: error.message
+    });
+  }
+});
+
+// Response generators for different languages
+function generateHindiChatResponse(query, analysis) {
+  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  
+  let response = `मैं आपकी समस्या समझ गया हूँ। `;
+  
+  if (ipcSection) {
+    response += `यह **${ipcSection.description}** का मामला है जो **IPC धारा ${ipcSection.section}** के अंतर्गत आता है। इसमें ${ipcSection.punishment} हो सकती है।\n\n`;
+  }
+  
+  response += `**आपको क्या करना चाहिए:**\n\n`;
+  
+  if (needsPoliceComplaint) {
+    response += `1. तुरंत नजदीकी पुलिस स्टेशन जाएं और FIR दर्ज करें\n`;
+    response += `2. FIR की कॉपी जरूर लें (यह आपका कानूनी अधिकार है)\n`;
+    response += `3. सभी सबूत और गवाहों की जानकारी रखें\n`;
+    response += `4. अगर गंभीर मामला है तो वकील से सलाह लें\n\n`;
+  }
+  
+  response += `**आपके अधिकार:**\n\n`;
+  response += `• आपको मुफ्त में FIR दर्ज करने का अधिकार है\n`;
+  response += `• आप मुफ्त कानूनी सहायता के लिए NALSA (15100) पर कॉल कर सकते हैं\n`;
+  response += `• पुलिस द्वारा प्रताड़ना के खिलाफ शिकायत कर सकते हैं\n\n`;
+  
+  response += `क्या आपको और कोई जानकारी चाहिए?`;
+  
+  return response;
+}
+
+function generateEnglishChatResponse(query, analysis) {
+  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  
+  let response = `I understand your problem. `;
+  
+  if (ipcSection) {
+    response += `This is a case of **${ipcSection.description}** which falls under **IPC Section ${ipcSection.section}**. The punishment can be ${ipcSection.punishment}.\n\n`;
+  }
+  
+  response += `**What you should do:**\n\n`;
+  
+  if (needsPoliceComplaint) {
+    response += `1. Immediately visit the nearest police station and file an FIR\n`;
+    response += `2. Make sure to get a copy of the FIR (this is your legal right)\n`;
+    response += `3. Keep all evidence and witness information\n`;
+    response += `4. If it's a serious case, consult with a lawyer\n\n`;
+  }
+  
+  response += `**Your Rights:**\n\n`;
+  response += `• You have the right to file FIR for free\n`;
+  response += `• You can call NALSA (15100) for free legal aid\n`;
+  response += `• You can file complaint against police torture\n\n`;
+  
+  response += `Do you need any more information?`;
+  
+  return response;
+}
+
+function generateKannadaChatResponse(query, analysis) {
+  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  
+  let response = `ನಿಮ್ಮ ಸಮಸ್ಯೆ ನನಗೆ ಅರ್ಥವಾಗಿದೆ। `;
+  
+  if (ipcSection) {
+    response += `ಇದು **${ipcSection.description}** ಪ್ರಕರಣವಾಗಿದ್ದು **IPC ವಿಭಾಗ ${ipcSection.section}** ಅಡಿಯಲ್ಲಿ ಬರುತ್ತದೆ। ಇದರಲ್ಲಿ ${ipcSection.punishment} ಆಗಬಹುದು।\n\n`;
+  }
+  
+  response += `**ನೀವು ಏನು ಮಾಡಬೇಕು:**\n\n`;
+  
+  if (needsPoliceComplaint) {
+    response += `1. ತಕ್ಷಣ ಹತ್ತಿರದ ಪೊಲೀಸ್ ಠಾಣೆಗೆ ಹೋಗಿ FIR ದಾಖಲಿಸಿ\n`;
+    response += `2. FIR ನಕಲು ತೆಗೆದುಕೊಳ್ಳುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ (ಇದು ನಿಮ್ಮ ಕಾನೂನು ಹಕ್ಕು)\n`;
+    response += `3. ಎಲ್ಲಾ ಪುರಾವೆಗಳು ಮತ್ತು ಸಾಕ್ಷಿಗಳ ಮಾಹಿತಿಯನ್ನು ಇರಿಸಿಕೊಳ್ಳಿ\n`;
+    response += `4. ಗಂಭೀರ ಪ್ರಕರಣವಾದರೆ ವಕೀಲರನ್ನು ಸಂಪರ್ಕಿಸಿ\n\n`;
+  }
+  
+  response += `**ನಿಮ್ಮ ಹಕ್ಕುಗಳು:**\n\n`;
+  response += `• ನಿಮಗೆ ಉಚಿತವಾಗಿ FIR ದಾಖಲಿಸುವ ಹಕ್ಕಿದೆ\n`;
+  response += `• ಉಚಿತ ಕಾನೂನು ಸಹಾಯಕ್ಕಾಗಿ NALSA (15100) ಗೆ ಕರೆ ಮಾಡಬಹುದು\n`;
+  response += `• ಪೊಲೀಸ್ ದೌರ್ಜನ್ಯದ ವಿರುದ್ಧ ದೂರು ಸಲ್ಲಿಸಬಹುದು\n\n`;
+  
+  response += `ನಿಮಗೆ ಇನ್ನೂ ಯಾವುದಾದರೂ ಮಾಹಿತಿ ಬೇಕೇ?`;
+  
+  return response;
+}
+
+function generateTamilChatResponse(query, analysis) {
+  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  
+  let response = `உங்கள் பிரச்சனை எனக்கு புரிகிறது। `;
+  
+  if (ipcSection) {
+    response += `இது **${ipcSection.description}** வழக்கு **IPC பிரிவு ${ipcSection.section}** கீழ் வரும். இதில் ${ipcSection.punishment} தண்டனை கிடைக்கலாம்।\n\n`;
+  }
+  
+  response += `**நீங்கள் என்ன செய்ய வேண்டும்:**\n\n`;
+  
+  if (needsPoliceComplaint) {
+    response += `1. உடனடியாக அருகிலுள்ள காவல் நிலையத்திற்குச் சென்று FIR பதிவு செய்யவும்\n`;
+    response += `2. FIR நகலை பெறுவதை உறுதிப்படுத்திக்கொள்ளுங்கள் (இது உங்கள் சட்ட உரிமை)\n`;
+    response += `3. அனைத்து ஆதாரங்கள் மற்றும் சாட்சிகளின் தகவல்களை வைத்திருங்கள்\n`;
+    response += `4. தீவிர வழக்கு என்றால் வழக்கறிஞரை தொடர்பு கொள்ளுங்கள்\n\n`;
+  }
+  
+  response += `**உங்கள் உரிமைகள்:**\n\n`;
+  response += `• உங்களுக்கு இலவசமாக FIR பதிவு செய்ய உரிமை உண்டு\n`;
+  response += `• இலவச சட்ட உதவிக்கு NALSA (15100) அழைக்கலாம்\n`;
+  response += `• போலீஸ் சித்திரவதைக்கு எதிராக புகார் அளிக்கலாம்\n\n`;
+  
+  response += `உங்களுக்கு இன்னும் ஏதாவது தகவல் தேவையா?`;
+  
+  return response;
+}
+
+function generateTeluguChatResponse(query, analysis) {
+  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  
+  let response = `మీ సమస్య నాకు అర్థమైంది। `;
+  
+  if (ipcSection) {
+    response += `ఇది **${ipcSection.description}** కేసు **IPC సెక్షన్ ${ipcSection.section}** క్రింద వస్తుంది। ఇందులో ${ipcSection.punishment} శిక్ష విధించవచ్చు।\n\n`;
+  }
+  
+  response += `**మీరు ఏమి చేయాలి:**\n\n`;
+  
+  if (needsPoliceComplaint) {
+    response += `1. వెంటనే సమీప పోలీస్ స్టేషన్‌కు వెళ్లి FIR దాఖలు చేయండి\n`;
+    response += `2. FIR కాపీ తీసుకోవడాన్ని నిర్ధారించుకోండి (ఇది మీ చట్టపరమైన హక్కు)\n`;
+    response += `3. అన్ని సాక్ష్యాలు మరియు సాక్షుల సమాచారాన్ని ఉంచుకోండి\n`;
+    response += `4. తీవ్రమైన కేసు అయితే న్యాయవాదిని సంప్రదించండి\n\n`;
+  }
+  
+  response += `**మీ హక్కులు:**\n\n`;
+  response += `• మీకు ఉచితంగా FIR దాఖలు చేసే హక్కు ఉంది\n`;
+  response += `• ఉచిత న్యాయ సహాయం కోసం NALSA (15100) కు కాల్ చేయవచ్చు\n`;
+  response += `• పోలీసు హింసకు వ్యతిరేకంగా ఫిర్యాదు చేయవచ్చు\n\n`;
+  
+  response += `మీకు ఇంకా ఏదైనా సమాచారం కావాలా?`;
+  
+  return response;
+}
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint not found' });

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>न्याय मित्र - Legal AI Chat | Nyaya Mitra</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FFF9F5 0%, #FFE8D9 100%);
+            color: #2E3440;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .lang-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #FF8C42;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .chat-container {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .chat-header h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: #F9FAFB;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            border: 1px solid #E5E7EB;
+            border-bottom-left-radius: 4px;
+        }
+
+        .legal-section {
+            background: #EFF6FF;
+            border-left: 4px solid #3B82F6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .legal-section h4 {
+            color: #1E40AF;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legal-link {
+            display: inline-block;
+            color: #3B82F6;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .legal-link:hover {
+            color: #2563EB;
+            text-decoration: underline;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            color: #6B7280;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #9CA3AF;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .chat-input-area {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s;
+            resize: none;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .suggestion-chip {
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .suggestion-chip:hover {
+            background: #E5E7EB;
+            transform: translateY(-2px);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .quick-action {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-weight: 600;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .message-content {
+                max-width: 85%;
+            }
+
+            .lang-selector {
+                flex-wrap: wrap;
+            }
+
+            .lang-btn {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⚖️ न्याय मित्र - Legal AI</h1>
+        <div class="lang-selector">
+            <button class="lang-btn active" data-lang="hindi">हिंदी</button>
+            <button class="lang-btn" data-lang="english">English</button>
+            <button class="lang-btn" data-lang="kannada">ಕನ್ನಡ</button>
+            <button class="lang-btn" data-lang="tamil">தமிழ்</button>
+            <button class="lang-btn" data-lang="telugu">తెలుగు</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2 id="chat-title">💬 अपनी कानूनी समस्या बताएं</h2>
+                <p id="chat-subtitle">मैं आपकी मदद के लिए यहाँ हूँ - सभी भारतीय कानून, अधिनियम और संविधान की जानकारी</p>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p id="welcome-message"><strong>नमस्ते! मैं आपका न्याय मित्र हूँ।</strong> 👋</p>
+                        <p>मैं आपको निम्नलिखित में मदद कर सकता हूँ:</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>भारतीय कानून और अधिनियम की जानकारी</li>
+                            <li>IPC, CrPC, भारतीय संविधान की धाराएं</li>
+                            <li>आपके अधिकार और कानूनी उपाय</li>
+                            <li>सरकारी योजनाओं और पोर्टल की जानकारी</li>
+                        </ul>
+                        <p><strong>अपना सवाल टाइप करें या नीचे से चुनें:</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span id="typing-text">न्याय मित्र टाइप कर रहा है...</span>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="suggestions" id="suggestions">
+                    <!-- Suggestions will be added dynamically -->
+                </div>
+                <div class="chat-input-container">
+                    <textarea 
+                        id="chat-input" 
+                        class="chat-input" 
+                        placeholder="अपना कानूनी सवाल यहाँ लिखें..."
+                        rows="1"></textarea>
+                    <button id="send-btn" class="send-btn">📤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'hindi';
+        let chatHistory = [];
+
+        const translations = {
+            hindi: {
+                chatTitle: '💬 अपनी कानूनी समस्या बताएं',
+                chatSubtitle: 'मैं आपकी मदद के लिए यहाँ हूँ - सभी भारतीय कानून, अधिनियम और संविधान की जानकारी',
+                placeholder: 'अपना कानूनी सवाल यहाँ लिखें...',
+                typing: 'न्याय मित्र टाइप कर रहा है...',
+                suggestions: [
+                    'वेतन नहीं मिल रहा है',
+                    'जमीन का विवाद है',
+                    'पुलिस शिकायत कैसे करें',
+                    'राशन कार्ड कैसे बनाएं',
+                    'मुफ्त वकील कैसे मिलेगा'
+                ]
+            },
+            english: {
+                chatTitle: '💬 Tell Us Your Legal Problem',
+                chatSubtitle: 'I\'m here to help - All Indian laws, acts and constitutional information',
+                placeholder: 'Type your legal question here...',
+                typing: 'Nyaya Mitra is typing...',
+                suggestions: [
+                    'Salary not paid',
+                    'Land dispute issue',
+                    'How to file police complaint',
+                    'How to get ration card',
+                    'How to get free lawyer'
+                ]
+            },
+            kannada: {
+                chatTitle: '💬 ನಿಮ್ಮ ಕಾನೂನು ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ',
+                chatSubtitle: 'ನಾನು ನಿಮಗೆ ಸಹಾಯ ಮಾಡಲು ಇಲ್ಲಿದ್ದೇನೆ - ಎಲ್ಲಾ ಭಾರತೀಯ ಕಾನೂನುಗಳು, ಕಾಯ್ದೆಗಳು ಮತ್ತು ಸಂವಿಧಾನ ಮಾಹಿತಿ',
+                placeholder: 'ನಿಮ್ಮ ಕಾನೂನು ಪ್ರಶ್ನೆಯನ್ನು ಇಲ್ಲಿ ಟೈಪ್ ಮಾಡಿ...',
+                typing: 'ನ್ಯಾಯ ಮಿತ್ರ ಟೈಪ್ ಮಾಡುತ್ತಿದೆ...',
+                suggestions: [
+                    'ಸಂಬಳ ಸಿಗುತ್ತಿಲ್ಲ',
+                    'ಭೂ ವಿವಾದ ಸಮಸ್ಯೆ',
+                    'ಪೊಲೀಸ್ ದೂರು ಹೇಗೆ ಸಲ್ಲಿಸುವುದು',
+                    'ಪಡಿತರ ಕಾರ್ಡ್ ಹೇಗೆ ಪಡೆಯುವುದು',
+                    'ಉಚಿತ ವಕೀಲ ಹೇಗೆ ಸಿಗುತ್ತದೆ'
+                ]
+            },
+            tamil: {
+                chatTitle: '💬 உங்கள் சட்ட பிரச்சனையைச் சொல்லுங்கள்',
+                chatSubtitle: 'நான் உங்களுக்கு உதவ இங்கே இருக்கிறேன் - அனைத்து இந்திய சட்டங்கள், சட்டங்கள் மற்றும் அரசியலமைப்பு தகவல்',
+                placeholder: 'உங்கள் சட்ட கேள்வியை இங்கே தட்டச்சு செய்யவும்...',
+                typing: 'நியாய மித்ரா தட்டச்சு செய்கிறார்...',
+                suggestions: [
+                    'சம்பளம் கிடைக்கவில்லை',
+                    'நில தகராறு பிரச்சினை',
+                    'போலீஸ் புகார் எப்படி பதிவு செய்வது',
+                    'ரேஷன் அட்டை எப்படி பெறுவது',
+                    'இலவச வழக்கறிஞர் எப்படி கிடைப்பார்'
+                ]
+            },
+            telugu: {
+                chatTitle: '💬 మీ చట్టపరమైన సమస్యను చెప్పండి',
+                chatSubtitle: 'నేను మీకు సహాయం చేయడానికి ఇక్కడ ఉన్నాను - అన్ని భారతీయ చట్టాలు, చట్టాలు మరియు రాజ్యాంగ సమాచారం',
+                placeholder: 'మీ చట్టపరమైన ప్రశ్నను ఇక్కడ టైప్ చెయ్యండి...',
+                typing: 'న్యాయ మిత్ర టైప్ చేస్తోంది...',
+                suggestions: [
+                    'జీతం రావడం లేదు',
+                    'భూమి వివాదం సమస్య',
+                    'పోలీసు ఫిర్యాదు ఎలా చేయాలి',
+                    'రేషన్ కార్డు ఎలా పొందాలి',
+                    'ఉచిత న్యాయవాది ఎలా దొరుకుతారు'
+                ]
+            }
+        };
+
+        // Initialize
+        function init() {
+            updateUILanguage();
+            loadSuggestions();
+            
+            // Event listeners
+            document.getElementById('send-btn').addEventListener('click', sendMessage);
+            document.getElementById('chat-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentLanguage = btn.dataset.lang;
+                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    updateUILanguage();
+                    loadSuggestions();
+                });
+            });
+
+            // Auto-resize textarea
+            const textarea = document.getElementById('chat-input');
+            textarea.addEventListener('input', () => {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+            });
+        }
+
+        function updateUILanguage() {
+            const t = translations[currentLanguage];
+            document.getElementById('chat-title').textContent = t.chatTitle;
+            document.getElementById('chat-subtitle').textContent = t.chatSubtitle;
+            document.getElementById('chat-input').placeholder = t.placeholder;
+            document.getElementById('typing-text').textContent = t.typing;
+        }
+
+        function loadSuggestions() {
+            const suggestionsContainer = document.getElementById('suggestions');
+            const t = translations[currentLanguage];
+            suggestionsContainer.innerHTML = '';
+            
+            t.suggestions.forEach(suggestion => {
+                const chip = document.createElement('button');
+                chip.className = 'suggestion-chip';
+                chip.textContent = suggestion;
+                chip.addEventListener('click', () => {
+                    document.getElementById('chat-input').value = suggestion;
+                    sendMessage();
+                });
+                suggestionsContainer.appendChild(chip);
+            });
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show typing indicator
+            document.getElementById('typing-indicator').classList.add('active');
+            document.getElementById('send-btn').disabled = true;
+
+            try {
+                // Call backend API
+                const response = await fetch('http://localhost:3000/api/chat-legal-advice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: message,
+                        language: currentLanguage,
+                        chatHistory: chatHistory
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Hide typing indicator
+                document.getElementById('typing-indicator').classList.remove('active');
+                document.getElementById('send-btn').disabled = false;
+
+                // Add bot response
+                if (data.success) {
+                    addBotResponse(data);
+                    chatHistory.push({
+                        role: 'user',
+                        content: message
+                    }, {
+                        role: 'assistant',
+                        content: data.response
+                    });
+                } else {
+                    addMessage('❌ माफ करें, कुछ गड़बड़ हो गई। कृपया फिर से कोशिश करें।', 'bot');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('typing-indicator').classList.remove('active');
+                document.getElementById('send-btn').disabled = false;
+                addMessage('❌ सर्वर से कनेक्ट नहीं हो पा रहा। कृपया सर्वर चालू करें।', 'bot');
+            }
+        }
+
+        function addMessage(text, type) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = type === 'user' ? '👤' : '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = `<p>${text}</p>`;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            messagesContainer.appendChild(messageDiv);
+            
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addBotResponse(data) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            let html = `<p>${data.response}</p>`;
+            
+            // Add legal sections if available
+            if (data.legalInfo && data.legalInfo.sections && data.legalInfo.sections.length > 0) {
+                html += `<div class="legal-section">
+                    <h4>⚖️ ${data.legalInfo.actName || 'Applicable Law'}</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">`;
+                data.legalInfo.sections.forEach(section => {
+                    html += `<li>${section}</li>`;
+                });
+                html += `</ul>`;
+                if (data.legalInfo.reference) {
+                    html += `<a href="${data.legalInfo.reference}" target="_blank" class="legal-link">📄 Read Full Act →</a>`;
+                }
+                html += `</div>`;
+            }
+            
+            // Add portal links if available
+            if (data.portalLinks && data.portalLinks.length > 0) {
+                html += `<div class="legal-section">
+                    <h4>🌐 Useful Portals & Links</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">`;
+                data.portalLinks.forEach(link => {
+                    html += `<li><a href="${link.url}" target="_blank" class="legal-link">${link.name}</a></li>`;
+                });
+                html += `</ul></div>`;
+            }
+            
+            content.innerHTML = html;
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            messagesContainer.appendChild(messageDiv);
+            
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
