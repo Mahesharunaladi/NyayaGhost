@@ -484,18 +484,35 @@ function analyzeQuery(query) {
       description: 'मजदूरी शिकायत दर्ज करें'
     };
   } else if (/(आधार|aadhaar|aadhar)/i.test(lowerQuery)) {
+    issueType = 'aadhaar';
     relevantPortal = {
       name: 'UIDAI Portal',
       url: 'https://uidai.gov.in/',
       description: 'आधार कार्ड सेवाएं'
     };
   } else if (/(pan|पैन)/i.test(lowerQuery)) {
+    issueType = 'pan_card';
     relevantPortal = {
       name: 'Income Tax Portal',
       url: 'https://www.incometax.gov.in/iec/foportal',
       description: 'PAN कार्ड के लिए आवेदन करें'
     };
+  } else if (/(driving|license|ड्राइविंग|लाइसेंस)/i.test(lowerQuery)) {
+    issueType = 'driving_license';
+    relevantPortal = {
+      name: 'Parivahan Portal',
+      url: 'https://parivahan.gov.in/',
+      description: 'Driving License सेवाएं'
+    };
+  } else if (/(passport|पासपोर्ट)/i.test(lowerQuery)) {
+    issueType = 'passport';
+    relevantPortal = {
+      name: 'Passport Seva',
+      url: 'https://www.passportindia.gov.in/',
+      description: 'Passport आवेदन और सेवाएं'
+    };
   } else if (/(education|शिक्षा|school)/i.test(lowerQuery)) {
+    issueType = 'education';
     relevantAct = {
       name: 'Right to Education Act, 2009',
       section: '3',
@@ -503,6 +520,7 @@ function analyzeQuery(query) {
       reference: 'https://www.indiacode.nic.in/handle/123456789/2086'
     };
   } else if (/(information|जानकारी|rti)/i.test(lowerQuery)) {
+    issueType = 'rti';
     relevantAct = {
       name: 'Right to Information Act, 2005',
       section: '6',
@@ -1017,6 +1035,93 @@ function generateHindiChatResponse(query, analysis) {
     response += `• विधवा/वृद्धा/दिव्यांग पेंशन योजना के तहत मासिक सहायता का अधिकार\n`;
     response += `• बिना कारण पेंशन बंद नहीं कर सकते\n\n`;
     
+  } else if (issueType === 'aadhaar') {
+    if (/update|अपडेट|expired|expire|change/.test(query.toLowerCase())) {
+      response += `**आधार कार्ड अपडेट करने के तरीके:**\n\n`;
+      response += `1. **ऑनलाइन अपडेट (घर बैठे):**\n`;
+      response += `   • UIDAI Portal पर जाएं: https://myaadhaar.uidai.gov.in/\n`;
+      response += `   • "Update Your Aadhaar" पर क्लिक करें\n`;
+      response += `   • Mobile number, Email, Address ऑनलाइन अपडेट करें\n`;
+      response += `   • Document अपलोड करें और pay करें (₹50 लगते हैं)\n\n`;
+      
+      response += `2. **Aadhaar Seva Kendra जाकर:**\n`;
+      response += `   • नजदीकी Aadhaar Center ढूंढें: https://appointments.uidai.gov.in/\n`;
+      response += `   • Appointment बुक करें (online या जाकर)\n`;
+      response += `   • जरूरी दस्तावेज ले जाएं\n`;
+      response += `   • Biometric update के लिए ₹100 fees\n\n`;
+      
+      response += `**📋 जरूरी दस्तावेज:**\n`;
+      response += `• Address proof: Passport, Voter ID, Bank statement, Ration card\n`;
+      response += `• Identity proof: PAN card, Driving license, Passport\n`;
+      response += `• Date of Birth proof: Birth certificate, School certificate\n\n`;
+      
+      response += `**⏰ समय सीमा:**\n`;
+      response += `• Online update: 7-10 दिन में e-Aadhaar मिल जाएगा\n`;
+      response += `• Aadhaar center: Same day acknowledgment slip मिलेगा, 10-15 दिन में updated card\n\n`;
+      
+      response += `**💡 Important:**\n`;
+      response += `• आधार की validity expire नहीं होती! कार्ड पर कोई expiry date नहीं होती\n`;
+      response += `• अगर 10 साल से ज्यादा पुराना है तो biometric update जरूरी है\n`;
+      response += `• Update के बाद e-Aadhaar download कर सकते हैं (same validity)\n\n`;
+      
+    } else {
+      response += `**नया आधार कार्ड बनवाने के लिए:**\n\n`;
+      response += `1. नजदीकी Aadhaar Enrolment Center जाएं\n`;
+      response += `2. Appointment book करें: https://appointments.uidai.gov.in/\n`;
+      response += `3. POI, POA, DOB proof documents ले जाएं\n`;
+      response += `4. Biometric capture होगा (photo, fingerprint, iris)\n`;
+      response += `5. Enrolment ID मिलेगी - इसे संभाल कर रखें\n`;
+      response += `6. 60-90 दिन में घर पर Aadhaar card आएगा\n\n`;
+      
+      response += `**Helpline:**\n`;
+      response += `• UIDAI Toll-Free: 1947\n`;
+      response += `• Email: help@uidai.gov.in\n`;
+      response += `• Status check: https://myaadhaar.uidai.gov.in/CheckAadhaarStatus\n\n`;
+    }
+    
+  } else if (issueType === 'pan_card') {
+    response += `**PAN Card के लिए:**\n\n`;
+    response += `1. **नया PAN बनवाना है:**\n`;
+    response += `   • Online apply: https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html\n`;
+    response += `   • Form 49A भरें (Indian citizens के लिए)\n`;
+    response += `   • Documents upload करें (DOB proof, Address proof, Photo)\n`;
+    response += `   • Fee pay करें (₹107 online, ₹93 offline)\n`;
+    response += `   • 15-20 दिन में PAN card आ जाएगा\n\n`;
+    
+    response += `2. **PAN update/correction:**\n`;
+    response += `   • Form 49A fill करें (changes के साथ)\n`;
+    response += `   • Updated documents submit करें\n`;
+    response += `   • Processing time: 15-20 days\n\n`;
+    
+    response += `**Helpline:**\n`;
+    response += `• NSDL: 020-27218080\n`;
+    response += `• Status check: tin.tin.nsdl.com/pantan/StatusTrack.html\n\n`;
+    
+  } else if (issueType === 'passport') {
+    response += `**Passport के लिए:**\n\n`;
+    response += `1. Passport Seva website पर register करें: passportindia.gov.in\n`;
+    response += `2. Online application form भरें\n`;
+    response += `3. Fee payment करें (₹1500 normal, ₹3500 tatkal)\n`;
+    response += `4. Appointment book करें nearest PSK/POPSK\n`;
+    response += `5. Documents original + photocopy ले जाएं\n`;
+    response += `6. Police verification होगा\n`;
+    response += `7. 30-45 दिन में passport मिलेगा\n\n`;
+    
+    response += `**Helpline:** 1800-258-1800\n\n`;
+    
+  } else if (issueType === 'driving_license') {
+    response += `**Driving License के लिए:**\n\n`;
+    response += `1. Parivahan portal पर apply: parivahan.gov.in\n`;
+    response += `2. पहले Learning License लें (test देना होगा)\n`;
+    response += `3. 30 दिन बाद Permanent DL के लिए apply करें\n`;
+    response += `4. Driving test pass करें\n`;
+    response += `5. 7-10 दिन में DL मिल जाएगा\n\n`;
+    
+    response += `**DL Renewal:**\n`;
+    response += `• Expire होने से पहले या बाद में renew कर सकते हैं\n`;
+    response += `• Online renewal: parivahan.gov.in/parivahan\n`;
+    response += `• Medical certificate जरूरी (40+ age के लिए)\n\n`;
+    
   } else if (issueType === 'assault' || issueType === 'harassment' || issueType === 'theft') {
     response += `1. **पहले अपनी सुरक्षा सुनिश्चित करें** - खतरे से दूर रहें\n`;
     response += `2. किसी भरोसेमंद व्यक्ति को तुरंत बताएं\n`;
@@ -1092,27 +1197,139 @@ function generateHindiChatResponse(query, analysis) {
 }
 
 function generateEnglishChatResponse(query, analysis) {
-  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  const { issueType, ipcSection, needsPoliceComplaint, relevantPortal, relevantAct } = analysis;
   
   let response = `I understand your problem. `;
   
-  if (ipcSection) {
-    response += `This is a case of **${ipcSection.description}** which falls under **IPC Section ${ipcSection.section}**. The punishment can be ${ipcSection.punishment}.\n\n`;
+  // Provide practical solutions first
+  response += `\n\n**💡 What you should do:**\n\n`;
+  
+  if (issueType === 'aadhaar') {
+    if (/update|expired|expire|change/.test(query.toLowerCase())) {
+      response += `**How to Update Aadhaar Card:**\n\n`;
+      response += `1. **Online Update (from home):**\n`;
+      response += `   • Visit UIDAI Portal: https://myaadhaar.uidai.gov.in/\n`;
+      response += `   • Click on "Update Your Aadhaar"\n`;
+      response += `   • Update Mobile, Email, Address online\n`;
+      response += `   • Upload documents and pay (₹50 fee)\n\n`;
+      
+      response += `2. **Visit Aadhaar Seva Kendra:**\n`;
+      response += `   • Find nearest center: https://appointments.uidai.gov.in/\n`;
+      response += `   • Book appointment (online or walk-in)\n`;
+      response += `   • Take required documents\n`;
+      response += `   • Biometric update fee: ₹100\n\n`;
+      
+      response += `**📋 Required Documents:**\n`;
+      response += `• Address proof: Passport, Voter ID, Bank statement, Ration card\n`;
+      response += `• Identity proof: PAN card, Driving license, Passport\n`;
+      response += `• DOB proof: Birth certificate, School certificate\n\n`;
+      
+      response += `**⏰ Processing Time:**\n`;
+      response += `• Online: 7-10 days for e-Aadhaar\n`;
+      response += `• Aadhaar center: Same day acknowledgment, 10-15 days for updated card\n\n`;
+      
+      response += `**💡 Important:**\n`;
+      response += `• Aadhaar never expires! There's no expiry date on the card\n`;
+      response += `• If it's 10+ years old, biometric update is recommended\n`;
+      response += `• e-Aadhaar has same validity as physical card\n\n`;
+      
+    } else {
+      response += `**For New Aadhaar Card:**\n\n`;
+      response += `1. Visit nearest Aadhaar Enrolment Center\n`;
+      response += `2. Book appointment: https://appointments.uidai.gov.in/\n`;
+      response += `3. Take POI, POA, DOB proof documents\n`;
+      response += `4. Biometric capture (photo, fingerprint, iris)\n`;
+      response += `5. You'll get Enrolment ID - keep it safe\n`;
+      response += `6. Aadhaar card will arrive in 60-90 days\n\n`;
+      
+      response += `**Helpline:**\n`;
+      response += `• UIDAI Toll-Free: 1947\n`;
+      response += `• Email: help@uidai.gov.in\n`;
+      response += `• Status check: https://myaadhaar.uidai.gov.in/CheckAadhaarStatus\n\n`;
+    }
+    
+  } else if (issueType === 'pan_card') {
+    response += `**For PAN Card:**\n\n`;
+    response += `1. **New PAN Application:**\n`;
+    response += `   • Apply online: https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html\n`;
+    response += `   • Fill Form 49A (for Indian citizens)\n`;
+    response += `   • Upload documents (DOB, Address, Photo)\n`;
+    response += `   • Pay fee (₹107 online, ₹93 offline)\n`;
+    response += `   • PAN card arrives in 15-20 days\n\n`;
+    
+    response += `2. **PAN Update/Correction:**\n`;
+    response += `   • Fill Form 49A with changes\n`;
+    response += `   • Submit updated documents\n`;
+    response += `   • Processing: 15-20 days\n\n`;
+    
+    response += `**Helpline:**\n`;
+    response += `• NSDL: 020-27218080\n`;
+    response += `• Track status: tin.tin.nsdl.com/pantan/StatusTrack.html\n\n`;
+    
+  } else if (issueType === 'passport') {
+    response += `**For Passport:**\n\n`;
+    response += `1. Register on Passport Seva: passportindia.gov.in\n`;
+    response += `2. Fill online application form\n`;
+    response += `3. Pay fee (₹1500 normal, ₹3500 tatkal)\n`;
+    response += `4. Book appointment at nearest PSK/POPSK\n`;
+    response += `5. Take original + photocopy documents\n`;
+    response += `6. Police verification will be done\n`;
+    response += `7. Passport arrives in 30-45 days\n\n`;
+    
+    response += `**Helpline:** 1800-258-1800\n\n`;
+    
+  } else if (issueType === 'driving_license') {
+    response += `**For Driving License:**\n\n`;
+    response += `1. Apply on Parivahan portal: parivahan.gov.in\n`;
+    response += `2. First get Learning License (need to pass test)\n`;
+    response += `3. After 30 days, apply for Permanent DL\n`;
+    response += `4. Pass driving test\n`;
+    response += `5. DL will be issued in 7-10 days\n\n`;
+    
+    response += `**DL Renewal:**\n`;
+    response += `• Can renew before or after expiry\n`;
+    response += `• Online renewal: parivahan.gov.in/parivahan\n`;
+    response += `• Medical certificate required (for 40+ age)\n\n`;
+    
+  } else if (needsPoliceComplaint) {
+    response += `1. **First ensure your safety** - stay away from danger\n`;
+    response += `2. Tell a trusted person immediately\n`;
+    response += `3. Call 100/112 if serious emergency\n`;
+    response += `4. Get medical certificate if injured\n`;
+    response += `5. Collect evidence - photos, videos, witnesses\n\n`;
+    
+    if (ipcSection) {
+      response += `**⚖️ Legal Action:**\n\n`;
+      response += `This is a case of **${ipcSection.description}** under **IPC Section ${ipcSection.section}**.\n\n`;
+      response += `**Punishment:** ${ipcSection.punishment}\n\n`;
+    }
+    
+    response += `**Next Steps:**\n`;
+    response += `1. File FIR at nearest police station within 72 hours\n`;
+    response += `2. Get FIR number and copy (your legal right)\n`;
+    response += `3. If police refuses FIR:\n`;
+    response += `   • Write complaint to SP/Commissioner\n`;
+    response += `   • File online FIR on state police website\n`;
+    response += `   • Directly approach Magistrate court\n\n`;
+    
+  } else {
+    response += `1. Gather complete information about your problem\n`;
+    response += `2. File written complaint with relevant department\n`;
+    response += `3. If no response in 30 days, file RTI\n`;
+    response += `4. File online grievance on portal\n`;
+    response += `5. Consult lawyer if necessary\n\n`;
   }
   
-  response += `**What you should do:**\n\n`;
+  response += `**🆘 Free Legal Aid:**\n\n`;
+  response += `• NALSA Helpline: **15100**\n`;
+  response += `• Visit District Legal Services Authority\n`;
+  response += `• Online: nalsa.gov.in\n`;
+  response += `• Free lawyer if income < ₹3 lakh\n\n`;
   
-  if (needsPoliceComplaint) {
-    response += `1. Immediately visit the nearest police station and file an FIR\n`;
-    response += `2. Make sure to get a copy of the FIR (this is your legal right)\n`;
-    response += `3. Keep all evidence and witness information\n`;
-    response += `4. If it's a serious case, consult with a lawyer\n\n`;
+  if (relevantPortal) {
+    response += `**🌐 Relevant Portal:**\n`;
+    response += `${relevantPortal.name}: ${relevantPortal.url}\n\n`;
   }
-  
-  response += `**Your Rights:**\n\n`;
-  response += `• You have the right to file FIR for free\n`;
-  response += `• You can call NALSA (15100) for free legal aid\n`;
-  response += `• You can file complaint against police torture\n\n`;
   
   response += `Do you need any more information?`;
   
@@ -1120,27 +1337,117 @@ function generateEnglishChatResponse(query, analysis) {
 }
 
 function generateKannadaChatResponse(query, analysis) {
-  const { issueType, ipcSection, needsPoliceComplaint } = analysis;
+  const { issueType, ipcSection, needsPoliceComplaint, relevantPortal, relevantAct } = analysis;
   
   let response = `ನಿಮ್ಮ ಸಮಸ್ಯೆ ನನಗೆ ಅರ್ಥವಾಗಿದೆ। `;
   
-  if (ipcSection) {
-    response += `ಇದು **${ipcSection.description}** ಪ್ರಕರಣವಾಗಿದ್ದು **IPC ವಿಭಾಗ ${ipcSection.section}** ಅಡಿಯಲ್ಲಿ ಬರುತ್ತದೆ। ಇದರಲ್ಲಿ ${ipcSection.punishment} ಆಗಬಹುದು।\n\n`;
+  // First provide practical solutions
+  response += `\n\n**💡 ಮೊದಲು ಇದನ್ನು ಪ್ರಯತ್ನಿಸಿ:**\n\n`;
+  
+  if (issueType === 'ration_card') {
+    response += `1. ನಿಮ್ಮ ಹತ್ತಿರದ ಪಡಿತರ ಅಂಗಡಿ ಅಥವಾ PDS ಕೇಂದ್ರವನ್ನು ಸಂಪರ್ಕಿಸಿ\n`;
+    response += `2. ನಿಮ್ಮ ಪ್ರದೇಶದ Block Development Officer (BDO) ಅವರನ್ನು ಭೇಟಿಯಾಗಿ\n`;
+    response += `3. ಆನ್‌ಲೈನ್ ಅರ್ಜಿ ಸಲ್ಲಿಸಿ: ${relevantPortal ? relevantPortal.url : 'nfsa.gov.in'}\n`;
+    response += `4. 15 ದಿನದಲ್ಲಿ ಯಾವುದೇ ಉತ್ತರವಿಲ್ಲದಿದ್ದರೆ Grievance Portal ನಲ್ಲಿ ದೂರು ನೀಡಿ\n\n`;
+    
+    response += `**📋 ಅಗತ್ಯ ದಾಖಲೆಗಳು:**\n`;
+    response += `• ಆಧಾರ್ ಕಾರ್ಡ್, ವಿಳಾಸ ಪುರಾವೆ, ಆದಾಯ ಪ್ರಮಾಣಪತ್ರ\n\n`;
+    
+    response += `**⚖️ ಕಾನೂನು ಹಕ್ಕುಗಳು:**\n`;
+    response += `• National Food Security Act, 2013 ಅಡಿಯಲ್ಲಿ ಅಗ್ಗಿ ಧಾನ್ಯ ಪಡೆಯುವ ಹಕ್ಕು\n`;
+    response += `• ಕಾರಣವಿಲ್ಲದೆ ಅರ್ಜಿ ತಿರಸ್ಕರಿಸಿದರೆ RTI ಸಲ್ಲಿಸಬಹುದು\n\n`;
+    
+  } else if (issueType === 'mgnrega' || /ಸಂಬಳ|salary|wage|payment/.test(query.toLowerCase())) {
+    response += `1. ನಿಮ್ಮ Job Card ನ ಫೋಟೋ ಕಾಪಿ ಇರಿಸಿಕೊಳ್ಳಿ\n`;
+    response += `2. Gram Panchayat ಅಥವಾ Block office ನಲ್ಲಿ ಲಿಖಿತ ದೂರು ನೀಡಿ\n`;
+    response += `3. 15 ದಿನದಲ್ಲಿ ಪಾವತಿ ಬರದಿದ್ದರೆ ಪರಿಹಾರ ಸಿಗುತ್ತದೆ\n`;
+    response += `4. MGNREGA Helpline: 1800-345-22-44 ಗೆ ಕರೆ ಮಾಡಿ\n`;
+    response += `5. ಆನ್‌ಲೈನ್ ದೂರು: nrega.nic.in/netnrega/homestciti.aspx ನಲ್ಲಿ\n\n`;
+    
+    response += `**⚖️ ಕಾನೂನು ಹಕ್ಕುಗಳು:**\n`;
+    response += `• MGNREGA Act 2005 ಅಡಿಯಲ್ಲಿ 15 ದಿನದಲ್ಲಿ ಪಾವತಿ ಕಡ್ಡಾಯ\n`;
+    response += `• ವಿಳಂಬವಾದರೆ ದಿನಕ್ಕೆ 0.05% ಪರಿಹಾರ ಸಿಗುತ್ತದೆ\n`;
+    response += `• ಯಾವುದೇ ಕಾರಣಕ್ಕೂ ಕೆಲಸ ನಿರಾಕರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ\n\n`;
+    
+  } else if (issueType === 'pension') {
+    response += `1. ನಿಮ್ಮ Bank/Post Office ನಿಂದ ಪಿಂಚಣಿ ಸ್ಥಿತಿ ಪರಿಶೀಲಿಸಿ\n`;
+    response += `2. Tehsil/Block office ನಲ್ಲಿ Application Update ಮಾಡಿಸಿ\n`;
+    response += `3. ಪಿಂಚಣಿ ನಿಂತಿದ್ದರೆ ಕಾರಣ ಕೇಳಿ (ಲಿಖಿತವಾಗಿ)\n`;
+    response += `4. NSAP Portal: nsap.nic.in ನಲ್ಲಿ ಆನ್‌ಲೈನ್ track ಮಾಡಿ\n`;
+    response += `5. State Social Welfare Department ನಲ್ಲಿ ದೂರು ನೀಡಿ\n\n`;
+    
+    response += `**⚖️ ಕಾನೂನು ಹಕ್ಕುಗಳು:**\n`;
+    response += `• ವಿಧವೆ/ವೃದ್ಧರ/ದಿವ್ಯಾಂಗರ ಪಿಂಚಣಿ ಯೋಜನೆಯಡಿ ಮಾಸಿಕ ಸಹಾಯದ ಹಕ್ಕು\n`;
+    response += `• ಕಾರಣವಿಲ್ಲದೆ ಪಿಂಚಣಿ ನಿಲ್ಲಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ\n\n`;
+    
+  } else if (issueType === 'assault' || issueType === 'harassment' || issueType === 'theft') {
+    response += `1. **ಮೊದಲು ನಿಮ್ಮ ಸುರಕ್ಷತೆಯನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ** - ಅಪಾಯದಿಂದ ದೂರವಿರಿ\n`;
+    response += `2. ವಿಶ್ವಾಸಾರ್ಹ ವ್ಯಕ್ತಿಗೆ ತಕ್ಷಣ ತಿಳಿಸಿ\n`;
+    response += `3. ಗಂಭೀರವಾಗಿದ್ದರೆ 100/112 ಡಯಲ್ ಮಾಡಿ (Emergency)\n`;
+    response += `4. ಗಾಯವಿದ್ದರೆ Medical certificate ತೆಗೆದುಕೊಳ್ಳಿ\n`;
+    response += `5. ಪುರಾವೆಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ - ಫೋಟೋ, ವೀಡಿಯೋ, ಸಾಕ್ಷಿಗಳು\n\n`;
+    
+    response += `**⚖️ ಕಾನೂನು ಕ್ರಮ:**\n\n`;
+    if (ipcSection) {
+      response += `ಇದು **${ipcSection.description}** ಪ್ರಕರಣವಾಗಿದ್ದು **IPC ವಿಭಾಗ ${ipcSection.section}** ಅಡಿಯಲ್ಲಿ ಬರುತ್ತದೆ।\n\n`;
+      response += `**ಶಿಕ್ಷೆ:** ${ipcSection.punishment}\n\n`;
+    }
+    
+    response += `**ಮುಂದಿನ ಹಂತಗಳು:**\n`;
+    response += `1. 72 ಗಂಟೆಯೊಳಗೆ ಹತ್ತಿರದ ಪೊಲೀಸ್ ಠಾಣೆಯಲ್ಲಿ FIR ದಾಖಲಿಸಿ\n`;
+    response += `2. FIR ಸಂಖ್ಯೆ ಮತ್ತು ಕಾಪಿ ತೆಗೆದುಕೊಳ್ಳಿ (ಇದು ನಿಮ್ಮ ಕಾನೂನು ಹಕ್ಕು)\n`;
+    response += `3. ಪೊಲೀಸರು FIR ಬರೆಯದಿದ್ದರೆ:\n`;
+    response += `   • SP/Commissioner ಗೆ ಲಿಖಿತ ದೂರು ನೀಡಿ\n`;
+    response += `   • ಆನ್‌ಲೈನ್ FIR: ನಿಮ್ಮ ರಾಜ್ಯದ police website ನಲ್ಲಿ\n`;
+    response += `   • Magistrate court ನಲ್ಲಿ ನೇರವಾಗಿ ದೂರು ನೀಡಬಹುದು\n\n`;
+    
+  } else if (issueType === 'cheating' || issueType === 'fraud') {
+    response += `1. ತಕ್ಷಣ ಎಲ್ಲಾ ದಾಖಲೆಗಳನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಇರಿಸಿ (SMS, emails, receipts)\n`;
+    response += `2. Bank/Payment gateway ಗೆ ತಿಳಿಸಿ ಮತ್ತು transaction block ಮಾಡಿಸಿ\n`;
+    response += `3. Cyber Crime Portal ನಲ್ಲಿ ಆನ್‌ಲೈನ್ ದೂರು ನೀಡಿ: cybercrime.gov.in\n`;
+    response += `4. National Cyber Crime Helpline: 1930 ಗೆ ಕರೆ ಮಾಡಿ\n`;
+    response += `5. ಆನ್‌ಲೈನ್ fraud ಆಗಿದ್ದರೆ ನಿಮ್ಮ bank ನಲ್ಲಿ dispute raise ಮಾಡಿ\n\n`;
+    
+    response += `**⚖️ ಕಾನೂನು ಕ್ರಮ:**\n\n`;
+    if (ipcSection) {
+      response += `ಇದು **IPC ವಿಭಾಗ ${ipcSection.section} - ${ipcSection.description}** ಅಡಿಯಲ್ಲಿ ಬರುತ್ತದೆ।\n`;
+      response += `**ಶಿಕ್ಷೆ:** ${ipcSection.punishment}\n\n`;
+    }
+    
+    response += `**FIR ಗಾಗಿ:**\n`;
+    response += `• ಪೊಲೀಸ್ ಠಾಣೆ ಅಥವಾ Cyber Crime Police Station ಗೆ ಹೋಗಿ\n`;
+    response += `• ಎಲ್ಲಾ ಪುರಾವೆಗಳನ್ನು ತೆಗೆದುಕೊಂಡು ಹೋಗಿ (screenshots, bank statements)\n\n`;
+    
+  } else if (/ಜಮೀನು|land|property|dispute/.test(query.toLowerCase())) {
+    response += `1. ನಿಮ್ಮ Property Documents ನ ಸಂಪೂರ್ಣ ಪರಿಶೀಲನೆ ಮಾಡಿ\n`;
+    response += `2. Tehsildar/Revenue Office ನಿಂದ Land Records ತೆಗೆದುಕೊಳ್ಳಿ\n`;
+    response += `3. Boundary dispute ಇದ್ದರೆ Survey ಮಾಡಿಸಿ\n`;
+    response += `4. ಮೊದಲು Panchayat/Local Authority ನಲ್ಲಿ ದೂರು ನೀಡಿ\n`;
+    response += `5. ಪರಿಹಾರವಾಗದಿದ್ದರೆ Civil Court ನಲ್ಲಿ case file ಮಾಡಿ\n\n`;
+    
+    response += `**⚖️ ಕಾನೂನು ಆಯ್ಕೆಗಳು:**\n`;
+    response += `• Mediation/Conciliation ಮೊದಲು ಪ್ರಯತ್ನಿಸಿ (ಕಡಿಮೆ ಖರ್ಚು, ವೇಗವಾದ ಪರಿಹಾರ)\n`;
+    response += `• Legal Aid Services ನಿಂದ ಉಚಿತ ವಕೀಲ ಸಿಗಬಹುದು\n`;
+    response += `• Lok Adalat ನಲ್ಲಿ case ತೆಗೆದುಕೊಳ್ಳಬಹುದು\n\n`;
+    
+  } else {
+    response += `1. ನಿಮ್ಮ ಸಮಸ್ಯೆಯ ಬಗ್ಗೆ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ಸಂಗ್ರಹಿಸಿ\n`;
+    response += `2. ಸಂಬಂಧಿತ ಇಲಾಖೆಯಲ್ಲಿ ಲಿಖಿತ ದೂರು ನೀಡಿ\n`;
+    response += `3. 30 ದಿನದಲ್ಲಿ ಉತ್ತರವಿಲ್ಲದಿದ್ದರೆ RTI ಸಲ್ಲಿಸಿ\n`;
+    response += `4. Grievance Portal ನಲ್ಲಿ ಆನ್‌ಲೈನ್ ದೂರು ನೀಡಿ\n`;
+    response += `5. ಅಗತ್ಯವಿದ್ದರೆ ವಕೀಲರನ್ನು ಸಂಪರ್ಕಿಸಿ\n\n`;
   }
   
-  response += `**ನೀವು ಏನು ಮಾಡಬೇಕು:**\n\n`;
+  response += `**🆘 ಉಚಿತ ಕಾನೂನು ಸಹಾಯ:**\n\n`;
+  response += `• NALSA Helpline: **15100** (ರಾಷ್ಟ್ರೀಯ ಕಾನೂನು ಸೇವಾ ಪ್ರಾಧಿಕಾರ)\n`;
+  response += `• District Legal Services Authority ಗೆ ಹೋಗಿ\n`;
+  response += `• ಆನ್‌ಲೈನ್: nalsa.gov.in\n`;
+  response += `• ನಿಮ್ಮ ಆದಾಯ ₹3 ಲಕ್ಷಕ್ಕಿಂತ ಕಡಿಮೆಯಿದ್ದರೆ ಉಚಿತ ವಕೀಲ ಸಿಗುತ್ತದೆ\n\n`;
   
-  if (needsPoliceComplaint) {
-    response += `1. ತಕ್ಷಣ ಹತ್ತಿರದ ಪೊಲೀಸ್ ಠಾಣೆಗೆ ಹೋಗಿ FIR ದಾಖಲಿಸಿ\n`;
-    response += `2. FIR ನಕಲು ತೆಗೆದುಕೊಳ್ಳುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ (ಇದು ನಿಮ್ಮ ಕಾನೂನು ಹಕ್ಕು)\n`;
-    response += `3. ಎಲ್ಲಾ ಪುರಾವೆಗಳು ಮತ್ತು ಸಾಕ್ಷಿಗಳ ಮಾಹಿತಿಯನ್ನು ಇರಿಸಿಕೊಳ್ಳಿ\n`;
-    response += `4. ಗಂಭೀರ ಪ್ರಕರಣವಾದರೆ ವಕೀಲರನ್ನು ಸಂಪರ್ಕಿಸಿ\n\n`;
+  if (relevantPortal) {
+    response += `**🌐 ಸಂಬಂಧಿತ Portal:**\n`;
+    response += `${relevantPortal.name}: ${relevantPortal.url}\n\n`;
   }
-  
-  response += `**ನಿಮ್ಮ ಹಕ್ಕುಗಳು:**\n\n`;
-  response += `• ನಿಮಗೆ ಉಚಿತವಾಗಿ FIR ದಾಖಲಿಸುವ ಹಕ್ಕಿದೆ\n`;
-  response += `• ಉಚಿತ ಕಾನೂನು ಸಹಾಯಕ್ಕಾಗಿ NALSA (15100) ಗೆ ಕರೆ ಮಾಡಬಹುದು\n`;
-  response += `• ಪೊಲೀಸ್ ದೌರ್ಜನ್ಯದ ವಿರುದ್ಧ ದೂರು ಸಲ್ಲಿಸಬಹುದು\n\n`;
   
   response += `ನಿಮಗೆ ಇನ್ನೂ ಯಾವುದಾದರೂ ಮಾಹಿತಿ ಬೇಕೇ?`;
   
