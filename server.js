@@ -1023,48 +1023,17 @@ function generateHindiChatResponse(query, analysis) {
   response += `\n\n**💡 पहले ये कोशिश करें:**\n\n`;
   
   if (issueType === 'ration_card') {
-    response += `**राशन कार्ड बनवाने के तरीके:**\n\n`;
-    
-    response += `**1. ऑनलाइन आवेदन (सबसे आसान):**\n`;
-    response += `   • अपने राज्य के Food & Supply Department की website खोलें\n`;
-    response += `   • "Apply for New Ration Card" option चुनें\n`;
-    response += `   • Form भरें (परिवार के सभी members की जानकारी)\n`;
-    response += `   • Documents upload करें (Aadhaar, address proof, income certificate)\n`;
-    response += `   • Application number मिलेगा - इसे save करें\n`;
-    response += `   • 30-45 दिन में verification होगा\n\n`;
-    
-    response += `**2. ऑफलाइन आवेदन:**\n`;
-    response += `   • Tehsil office या Food Supply Office जाएं\n`;
-    response += `   • Application form लें और भरें\n`;
-    response += `   • सभी documents की xerox attach करें\n`;
-    response += `   • Receipt/Acknowledgement जरूर लें\n`;
-    response += `   • 30-60 दिन में inspection होगी\n\n`;
+    response += `1. अपने नजदीकी राशन दुकान या PDS केंद्र से संपर्क करें\n`;
+    response += `2. अपने क्षेत्र के Block Development Officer (BDO) से मिलें\n`;
+    response += `3. ऑनलाइन आवेदन करें: ${relevantPortal ? relevantPortal.url : 'nfsa.gov.in'}\n`;
+    response += `4. अगर 15 दिन में कोई जवाब नहीं तो Grievance Portal पर शिकायत करें\n\n`;
     
     response += `**📋 जरूरी दस्तावेज:**\n`;
-    response += `• परिवार के सभी members का Aadhaar card (अनिवार्य)\n`;
-    response += `• Address proof: Voter ID, Electricity bill, Rent agreement\n`;
-    response += `• Income certificate (Tehsildar से बनवाएं)\n`;
-    response += `• Family photo (passport size)\n`;
-    response += `• Bank passbook (कुछ राज्यों में)\n\n`;
-    
-    response += `**🎯 राशन कार्ड के प्रकार:**\n`;
-    response += `• **APL (Above Poverty Line)**: आय ₹1-3 lakh\n`;
-    response += `• **BPL (Below Poverty Line)**: आय < ₹1 lakh\n`;
-    response += `• **Antyodaya**: बहुत गरीब परिवार (priority)\n\n`;
+    response += `• आधार कार्ड, पते का प्रमाण, आय प्रमाण पत्र\n\n`;
     
     response += `**⚖️ कानूनी अधिकार:**\n`;
-    response += `• National Food Security Act, 2013 के तहत सस्ता अनाज का अधिकार\n`;
-    response += `• बिना कारण application reject नहीं कर सकते\n`;
-    response += `• 60 दिन में decision लेना जरूरी है\n\n`;
-    
-    response += `**💡 Important Tips:**\n`;
-    response += `• अगर 60 दिन में कोई response नहीं तो Grievance Portal पर complaint करें\n`;
-    response += `• Status check: अपने state की PDS portal पर application number से\n`;
-    response += `• RTI file कर सकते हैं अगर unfair rejection हो\n\n`;
-    
-    response += `**Helpline:**\n`;
-    response += `• National Food Security Helpline: 1800-11-0066\n`;
-    response += `• अपने राज्य के Food & Supply Department का toll-free number\n\n`;
+    response += `• National Food Security Act, 2013 के तहत आपको सस्ता अनाज पाने का अधिकार है\n`;
+    response += `• अगर बिना कारण आवेदन खारिज हो जाए तो RTI दाखिल कर सकते हैं\n\n`;
     
   } else if (issueType === 'mgnrega' || /वेतन|salary|wage|payment/.test(query.toLowerCase())) {
     response += `1. अपने Job Card की फोटो कॉपी रखें\n`;
@@ -1322,51 +1291,7 @@ function generateEnglishChatResponse(query, analysis) {
   // Provide practical solutions first
   response += `\n\n**💡 What you should do:**\n\n`;
   
-  if (issueType === 'ration_card') {
-    response += `**How to Get Ration Card:**\n\n`;
-    
-    response += `**1. Online Application (Easiest):**\n`;
-    response += `   • Visit your state's Food & Supply Department website\n`;
-    response += `   • Select "Apply for New Ration Card"\n`;
-    response += `   • Fill form (all family members' details)\n`;
-    response += `   • Upload documents (Aadhaar, address proof, income certificate)\n`;
-    response += `   • Get application number - save it\n`;
-    response += `   • Verification in 30-45 days\n\n`;
-    
-    response += `**2. Offline Application:**\n`;
-    response += `   • Visit Tehsil office or Food Supply Office\n`;
-    response += `   • Get application form and fill it\n`;
-    response += `   • Attach xerox of all documents\n`;
-    response += `   • Must take Receipt/Acknowledgement\n`;
-    response += `   • Inspection in 30-60 days\n\n`;
-    
-    response += `**📋 Required Documents:**\n`;
-    response += `• Aadhaar card of all family members (mandatory)\n`;
-    response += `• Address proof: Voter ID, Electricity bill, Rent agreement\n`;
-    response += `• Income certificate (from Tehsildar)\n`;
-    response += `• Family photo (passport size)\n`;
-    response += `• Bank passbook (in some states)\n\n`;
-    
-    response += `**🎯 Types of Ration Card:**\n`;
-    response += `• **APL (Above Poverty Line)**: Income ₹1-3 lakh\n`;
-    response += `• **BPL (Below Poverty Line)**: Income < ₹1 lakh\n`;
-    response += `• **Antyodaya**: Very poor families (priority)\n\n`;
-    
-    response += `**⚖️ Legal Rights:**\n`;
-    response += `• Under National Food Security Act, 2013, right to subsidized food grains\n`;
-    response += `• Cannot reject application without reason\n`;
-    response += `• Must decide within 60 days\n\n`;
-    
-    response += `**💡 Important Tips:**\n`;
-    response += `• If no response in 60 days, file complaint on Grievance Portal\n`;
-    response += `• Check status: On your state's PDS portal with application number\n`;
-    response += `• Can file RTI if unfair rejection\n\n`;
-    
-    response += `**Helpline:**\n`;
-    response += `• National Food Security: 1800-11-0066\n`;
-    response += `• Your state's Food & Supply Department toll-free number\n\n`;
-    
-  } else if (issueType === 'aadhaar') {
+  if (issueType === 'aadhaar') {
     if (/update|expired|expire|change/.test(query.toLowerCase())) {
       response += `**How to Update Aadhaar Card:**\n\n`;
       response += `1. **Online Update (from home):**\n`;
