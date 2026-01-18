@@ -1351,6 +1351,52 @@ function generateEnglishChatResponse(query, analysis) {
     response += `• Online renewal: parivahan.gov.in/parivahan\n`;
     response += `• Medical certificate required (for 40+ age)\n\n`;
     
+  } else if (issueType === 'voter_id') {
+    response += `**For Voter ID Card (EPIC):**\n\n`;
+    response += `1. **New Voter ID Application:**\n`;
+    response += `   • Apply online: https://voters.eci.gov.in/\n`;
+    response += `   • Select "Apply for New Voter ID"\n`;
+    response += `   • Fill Form 6\n`;
+    response += `   • Age requirement: Must be 18 years\n`;
+    response += `   • Documents: Address proof, Age proof, Photo\n`;
+    response += `   • Booth Level Officer (BLO) will verify\n`;
+    response += `   • Voter ID arrives in 30-45 days\n\n`;
+    
+    response += `2. **Correction/Update in Voter ID:**\n`;
+    response += `   • Fill Form 8 (for corrections)\n`;
+    response += `   • Can change name, address, photo\n`;
+    response += `   • Upload proof documents\n\n`;
+    
+    response += `3. **Duplicate Voter ID:**\n`;
+    response += `   • Fill Form 8\n`;
+    response += `   • State reason (lost/damaged)\n`;
+    response += `   • Free of cost\n\n`;
+    
+    response += `**📋 Required Documents:**\n`;
+    response += `• Address proof: Aadhaar, Passport, Bank statement, Ration card\n`;
+    response += `• Age proof: Birth certificate, School certificate, Aadhaar\n`;
+    response += `• Recent passport size photo\n\n`;
+    
+    response += `**Helpline:**\n`;
+    response += `• NVSP Helpline: 1950\n`;
+    response += `• Email: feedback@eci.gov.in\n`;
+    response += `• Track application: voters.eci.gov.in/track-application\n\n`;
+    
+  } else if (issueType === 'birth_certificate') {
+    response += `**For Birth Certificate:**\n\n`;
+    response += `1. **New Birth Certificate:**\n`;
+    response += `   • CRS Portal: https://crsorgi.gov.in/\n`;
+    response += `   • Need hospital discharge slip or birth proof\n`;
+    response += `   • Register within 21 days (free)\n`;
+    response += `   • After 21 days: Late registration fee applicable\n\n`;
+    
+    response += `2. **Correction in Birth Certificate:**\n`;
+    response += `   • Apply at Municipal Corporation/Gram Panchayat\n`;
+    response += `   • Attach proof documents\n`;
+    response += `   • Processing: 15-30 days\n\n`;
+    
+    response += `**Can apply at Municipal Corporation or Gram Panchayat**\n\n`;
+    
   } else if (needsPoliceComplaint) {
     response += `1. **First ensure your safety** - stay away from danger\n`;
     response += `2. Tell a trusted person immediately\n`;
