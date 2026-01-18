@@ -141,6 +141,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto;
+            position: relative;
         }
 
         #mic-button:hover {
@@ -150,6 +151,46 @@
 
         #mic-button:active {
             transform: scale(0.95);
+        }
+
+        #mic-button.listening {
+            animation: pulse 1.5s ease-in-out infinite;
+            background: linear-gradient(135deg, #DC2626, #EF4444);
+        }
+
+        #mic-button.listening::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #DC2626;
+            animation: ripple 1.5s ease-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        #mic-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .instructions {
@@ -1005,10 +1046,22 @@
             recognition.onstart = () => {
                 console.log('🎤 Started listening');
                 isListening = true;
+                const micButton = document.getElementById('mic-button');
                 const voiceOutput = document.getElementById('voice-output');
                 const t = translations[currentLanguage];
+                
+                // Update button visual state
+                micButton.classList.add('listening');
+                micButton.innerHTML = '🔴';
+                
                 voiceOutput.classList.add('active');
-                voiceOutput.innerHTML = `<p style="font-size: 1.5rem; color: #FF8C42;">${t.listening}</p>`;
+                voiceOutput.innerHTML = `
+                    <div style="padding: 2rem; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem; animation: pulse 1.5s ease-in-out infinite;">🎤</div>
+                        <p style="font-size: 1.5rem; color: #DC2626; font-weight: 600;">${t.listening}</p>
+                        <p style="color: #6B7280; margin-top: 0.5rem;">${t.speakNow || 'Speak now...'}</p>
+                    </div>
+                `;
             };
 
             recognition.onresult = (event) => {
@@ -1072,6 +1125,9 @@
             recognition.onend = () => {
                 console.log('🛑 Stopped listening');
                 isListening = false;
+                const micButton = document.getElementById('mic-button');
+                micButton.classList.remove('listening');
+                micButton.innerHTML = '🎤';
             };
 
             
