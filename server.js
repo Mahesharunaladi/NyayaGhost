@@ -416,7 +416,7 @@ function analyzeQuery(query) {
   let relevantAct = null;
   
   // First, check if query is actually about legal/government matters
-  const isLegalQuery = /(कानून|law|rights|अधिकार|police|पुलिस|scheme|योजना|card|कार्ड|license|लाइसेंस|pension|पेंशन|help|मदद|complaint|शिकायत|case|मामला|court|अदालत|advocate|वकील|fir|धारा|section|act|अधिनियम|सरकार|government|ministry|मंत्रालय|helpline|हेल्पलाइन|portal|पोर्टल|certificate|प्रमाण|चोरी|theft|assault|मारपीट|harassment|छेड़छाड़|fraud|धोखा|मजदूरी|wage|राशन|ration)/i.test(lowerQuery);
+  const isLegalQuery = /(कानून|law|rights|अधिकार|police|पुलिस|scheme|योजना|card|कार्ड|license|लाइसेंस|pension|पेंशन|help|मदद|complaint|शिकायत|case|मामला|court|अदालत|advocate|वकील|fir|धारा|section|act|अधिनियम|सरकार|government|ministry|मंत्रालय|helpline|हेल्पलाइन|portal|पोर्टल|certificate|प्रमाण|प्रमाणपत्र|चोरी|theft|assault|मारपीट|harassment|छेड़छाड़|fraud|धोखा|scam|मजदूरी|wage|राशन|ration|आधार|aadhaar|pan|passport|voter|मतदाता|driving|ड्राइविंग|birth|जन्म|death|मृत्यु|land|ज़मीन|property|संपत्ति|education|शिक्षा|nrega|mgnrega|nalsa|legal aid|कानूनी सहायता|victim|पीड़ित|justice|न्याय|compensation|मुआवज़ा|salary|वेतन|भुगतान|payment|benefit|लाभ|subsidy|सब्सिडी|welfare|कल्याण)/i.test(lowerQuery);
   
   if (!isLegalQuery) {
     // Mark as non-legal query
