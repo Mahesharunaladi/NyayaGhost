@@ -987,7 +987,9 @@
                     { icon: '🍚', title: 'Need ration card' },
                     { icon: '🧓', title: 'Need pension' },
                     { icon: '👩‍⚖️', title: 'Need free lawyer' }
-                ]
+                ],
+                logicTitle: 'How It Works',
+                logicIntro: 'Nyaya Mitra is an AI-powered legal assistant that provides legal advice to rural Indians in their native language.'
             },
             kannada: {
                 headerTitle: '🧡 ನ್ಯಾಯ ಮಿತ್ರ - ನಿಮ್ಮ ಕಾನೂನು ಸ್ನೇಹಿತ',
@@ -1024,7 +1026,9 @@
                     { icon: '🍚', title: 'ಪಡಿತರ ಕಾರ್ಡ್ ಬೇಕು' },
                     { icon: '🧓', title: 'ಪಿಂಚಣಿ ಬೇಕು' },
                     { icon: '👩‍⚖️', title: 'ಉಚಿತ ವಕೀಲ ಬೇಕು' }
-                ]
+                ],
+                logicTitle: 'ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ',
+                logicIntro: 'ನ್ಯಾಯ ಮಿತ್ರ ಒಂದು AI-ಚಾಲಿತ ಕಾನೂನು ಸಹಾಯಕವಾಗಿದ್ದು, ಗ್ರಾಮೀಣ ಭಾರತೀಯರಿಗೆ ಅವರ ಭಾಷೆಯಲ್ಲಿ ಕಾನೂನು ಸಲಹೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.'
             },
             bhojpuri: {
                 headerTitle: '🧡 न्याय मित्र - राउर कानूनी साथी',
@@ -1662,6 +1666,217 @@
                 alert('Error finding police stations. Please try again.');
             }
         }
+
+        // Logic Modal Functionality
+        const infoButton = document.getElementById('info-button');
+        const logicModal = document.getElementById('logic-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+
+        function getLogicContent(language) {
+            const content = {
+                hindi: {
+                    title: 'कैसे काम करता है?',
+                    intro: 'न्याय मित्र एक AI-पावर्ड कानूनी सहायक है जो ग्रामीण भारत के लोगों को उनकी भाषा में कानूनी सलाह देता है।',
+                    steps: [
+                        {
+                            title: 'भाषा चुनें',
+                            desc: 'अपनी पसंदीदा भाषा चुनें - हिंदी, अंग्रेजी, कन्नड़, भोजपुरी, तमिल, या तेलुगु।',
+                            emoji: '🗣️'
+                        },
+                        {
+                            title: 'माइक पर क्लिक करें',
+                            desc: 'बड़े माइक्रोफ़ोन बटन पर क्लिक करें। बटन लाल हो जाएगा और आपकी आवाज़ सुनना शुरू करेगा।',
+                            emoji: '🎤'
+                        },
+                        {
+                            title: 'अपनी समस्या बोलें',
+                            desc: 'अपनी कानूनी समस्या को स्पष्ट रूप से बोलें। सिस्टम आपकी बात को समझ लेगा।',
+                            emoji: '💬'
+                        },
+                        {
+                            title: 'AI विश्लेषण',
+                            desc: 'हमारा AI सिस्टम आपकी समस्या को समझता है और भारतीय कानून के आधार पर विश्लेषण करता है।',
+                            emoji: '🤖'
+                        },
+                        {
+                            title: 'कानूनी सलाह प्राप्त करें',
+                            desc: 'आपको लागू IPC धारा, आपके अधिकार, क्या करना है, और हेल्पलाइन नंबर मिलते हैं।',
+                            emoji: '⚖️'
+                        }
+                    ],
+                    tech: 'तकनीकी स्टैक',
+                    techList: ['Google Gemini AI', 'Web Speech API', 'Indian Laws Database', 'Multi-language Support'],
+                    features: 'मुख्य विशेषताएं',
+                    featureList: [
+                        '✅ 6+ भाषाओं में उपलब्ध',
+                        '✅ वॉइस-टू-टेक्स्ट',
+                        '✅ भारतीय कानून पर आधारित',
+                        '✅ तुरंत सलाह',
+                        '✅ मुफ़्त उपयोग'
+                    ]
+                },
+                english: {
+                    title: 'How It Works',
+                    intro: 'Nyaya Mitra is an AI-powered legal assistant that provides legal advice to rural Indians in their native language.',
+                    steps: [
+                        {
+                            title: 'Choose Language',
+                            desc: 'Select your preferred language - Hindi, English, Kannada, Bhojpuri, Tamil, or Telugu.',
+                            emoji: '🗣️'
+                        },
+                        {
+                            title: 'Click Microphone',
+                            desc: 'Click the large microphone button. It will turn red and start listening to your voice.',
+                            emoji: '🎤'
+                        },
+                        {
+                            title: 'Speak Your Problem',
+                            desc: 'Clearly speak your legal problem. The system will understand and transcribe your speech.',
+                            emoji: '💬'
+                        },
+                        {
+                            title: 'AI Analysis',
+                            desc: 'Our AI system understands your problem and analyzes it based on Indian law.',
+                            emoji: '🤖'
+                        },
+                        {
+                            title: 'Get Legal Advice',
+                            desc: 'You receive applicable IPC sections, your rights, what to do, and helpline numbers.',
+                            emoji: '⚖️'
+                        }
+                    ],
+                    tech: 'Technology Stack',
+                    techList: ['Google Gemini AI', 'Web Speech API', 'Indian Laws Database', 'Multi-language Support'],
+                    features: 'Key Features',
+                    featureList: [
+                        '✅ Available in 6+ languages',
+                        '✅ Voice-to-text',
+                        '✅ Based on Indian law',
+                        '✅ Instant advice',
+                        '✅ Free to use'
+                    ]
+                },
+                kannada: {
+                    title: 'ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ',
+                    intro: 'ನ್ಯಾಯ ಮಿತ್ರ ಒಂದು AI-ಚಾಲಿತ ಕಾನೂನು ಸಹಾಯಕವಾಗಿದ್ದು, ಗ್ರಾಮೀಣ ಭಾರತೀಯರಿಗೆ ಅವರ ಭಾಷೆಯಲ್ಲಿ ಕಾನೂನು ಸಲಹೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.',
+                    steps: [
+                        {
+                            title: 'ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ',
+                            desc: 'ನಿಮ್ಮ ಆದ್ಯತೆಯ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ - ಹಿಂದಿ, ಇಂಗ್ಲಿಷ್, ಕನ್ನಡ, ಭೋಜ್ಪುರಿ, ತಮಿಳು, ಅಥವಾ ತೆಲುಗು.',
+                            emoji: '🗣️'
+                        },
+                        {
+                            title: 'ಮೈಕ್ರೊಫೋನ್ ಕ್ಲಿಕ್ ಮಾಡಿ',
+                            desc: 'ದೊಡ್ಡ ಮೈಕ್ರೊಫೋನ್ ಗುಂಡಿಯನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ. ಅದು ಕೆಂಪು ಬಣ್ಣಕ್ಕೆ ತಿರುಗುತ್ತದೆ ಮತ್ತು ನಿಮ್ಮ ಧ್ವನಿಯನ್ನು ಕೇಳಲು ಪ್ರಾರಂಭಿಸುತ್ತದೆ.',
+                            emoji: '🎤'
+                        },
+                        {
+                            title: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ',
+                            desc: 'ನಿಮ್ಮ ಕಾನೂನು ಸಮಸ್ಯೆಯನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಹೇಳಿ. ಸಿಸ್ಟಂ ಅರ್ಥಮಾಡಿಕೊಳ್ಳುತ್ತದೆ.',
+                            emoji: '💬'
+                        },
+                        {
+                            title: 'AI ವಿಶ್ಲೇಷಣೆ',
+                            desc: 'ನಮ್ಮ AI ಸಿಸ್ಟಂ ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳುತ್ತದೆ ಮತ್ತು ಭಾರತೀಯ ಕಾನೂನಿನ ಆಧಾರದ ಮೇಲೆ ವಿಶ್ಲೇಷಿಸುತ್ತದೆ.',
+                            emoji: '🤖'
+                        },
+                        {
+                            title: 'ಕಾನೂನು ಸಲಹೆ ಪಡೆಯಿರಿ',
+                            desc: 'ನೀವು ಅನ್ವಯವಾಗುವ IPC ವಿಭಾಗಗಳು, ನಿಮ್ಮ ಹಕ್ಕುಗಳು, ಏನು ಮಾಡಬೇಕು ಮತ್ತು ಹೆಲ್ಪ್‌ಲೈನ್ ಸಂಖ್ಯೆಗಳನ್ನು ಪಡೆಯುತ್ತೀರಿ.',
+                            emoji: '⚖️'
+                        }
+                    ],
+                    tech: 'ತಂತ್ರಜ್ಞಾನ ಸ್ಟಾಕ್',
+                    techList: ['Google Gemini AI', 'Web Speech API', 'Indian Laws Database', 'Multi-language Support'],
+                    features: 'ಪ್ರಮುಖ ವೈಶಿಷ್ಟ್ಯಗಳು',
+                    featureList: [
+                        '✅ 6+ ಭಾಷೆಗಳಲ್ಲಿ ಲಭ್ಯ',
+                        '✅ ವಾಯ್ಸ್-ಟು-ಟೆಕ್ಸ್ಟ್',
+                        '✅ ಭಾರತೀಯ ಕಾನೂನಿನ ಆಧಾರದ ಮೇಲೆ',
+                        '✅ ತಕ್ಷಣದ ಸಲಹೆ',
+                        '✅ ಉಚಿತ ಬಳಕೆ'
+                    ]
+                }
+            };
+            
+            return content[language] || content.english;
+        }
+
+        function showLogicModal() {
+            const content = getLogicContent(currentLanguage);
+            modalTitle.textContent = content.title;
+            
+            let stepsHTML = '';
+            content.steps.forEach((step, index) => {
+                stepsHTML += `
+                    <div class="logic-step">
+                        <div class="logic-step-number">${index + 1}</div>
+                        <div class="logic-step-content">
+                            <h4>${step.emoji} ${step.title}</h4>
+                            <p>${step.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            let techBadges = '';
+            content.techList.forEach(tech => {
+                techBadges += `<span class="tech-badge">${tech}</span>`;
+            });
+
+            let featuresList = '';
+            content.featureList.forEach(feature => {
+                featuresList += `<p style="margin: 0.5rem 0; font-size: 1.1rem;">${feature}</p>`;
+            });
+
+            modalBody.innerHTML = `
+                <div class="logic-section">
+                    <p style="font-size: 1.2rem; line-height: 1.8;">${content.intro}</p>
+                </div>
+
+                <div class="logic-section">
+                    <h3>🔄 ${content.steps[0].emoji} ${currentLanguage === 'hindi' ? 'प्रक्रिया' : currentLanguage === 'kannada' ? 'ಪ್ರಕ್ರಿಯೆ' : 'Process'}</h3>
+                    ${stepsHTML}
+                </div>
+
+                <div class="logic-section">
+                    <h3>💻 ${content.tech}</h3>
+                    <div style="margin-top: 1rem;">
+                        ${techBadges}
+                    </div>
+                </div>
+
+                <div class="logic-section">
+                    <h3>⭐ ${content.features}</h3>
+                    <div style="margin-top: 1rem;">
+                        ${featuresList}
+                    </div>
+                </div>
+
+                <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #FF8C42, #ff6b35); border-radius: 12px; color: white;">
+                    <h3 style="margin-bottom: 1rem;">🧡 ${currentLanguage === 'hindi' ? 'ग्रामीण भारत के लिए बनाया गया' : currentLanguage === 'kannada' ? 'ಗ್ರಾಮೀಣ ಭಾರತಕ್ಕಾಗಿ ರಚಿಸಲಾಗಿದೆ' : 'Built for Rural India'}</h3>
+                    <p style="font-size: 1.1rem; opacity: 0.9;">${currentLanguage === 'hindi' ? 'न्याय सभी के लिए' : currentLanguage === 'kannada' ? 'ಎಲ್ಲರಿಗೂ ನ್ಯಾಯ' : 'Justice for All'}</p>
+                </div>
+            `;
+
+            logicModal.classList.add('active');
+        }
+
+        function hideLogicModal() {
+            logicModal.classList.remove('active');
+        }
+
+        infoButton.addEventListener('click', showLogicModal);
+        modalClose.addEventListener('click', hideLogicModal);
+        logicModal.addEventListener('click', (e) => {
+            if (e.target === logicModal) {
+                hideLogicModal();
+            }
+        });
+
+        console.log('✅ Logic modal initialized');
     </script>
 </body>
 </html>

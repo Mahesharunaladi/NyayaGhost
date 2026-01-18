@@ -66,31 +66,42 @@ Migrant worker wrongfully denied wages, unaware NALSA provides free legal aid fo
 ## 🏗️ Technical Architecture
 
 ### Frontend Stack
-- **Voice Recognition**: Web Speech API with dialect support
-- **UI Framework**: Vanilla JS (Progressive Enhancement)
-- **Animations**: Lottie (Ghost mascot)
+- **Voice Recognition**: Web Speech API with multi-language support
+- **UI Framework**: Vanilla JS with CSS animations (Progressive Enhancement)
+- **AI Integration**: Google Gemini API for legal advice generation
 - **PWA**: Offline-first, installable
-- **Languages**: Bhojpuri, Hindi, English (expandable)
+- **Languages**: Hindi, English, Kannada, Bhojpuri, Tamil, Telugu (expandable)
+- **Visual Feedback**: CSS animations (pulse, ripple, fade effects)
 
 ### Backend Services
 - **Runtime**: Node.js + Express
-- **AI Engine**: (Ready for integration)
-  - RightFinder: Legal rights matching
-  - SchemeMapper: Welfare eligibility
-  - FilingAutomation: Document generation
-- **Databases**: 
-  - Legal rights corpus
-  - Government schemes API integration
-  - User consent & privacy layer
+- **AI Engine**: Google Gemini AI (Integrated)
+  - Query Analysis: Legal vs non-legal classification
+  - Rights Matching: Applicable IPC sections and laws
+  - Response Generation: Context-aware legal advice
+  - Multi-language: Native language responses
+- **APIs Integration**: 
+  - Indian Laws Database
+  - IPC Sections corpus
+  - Government schemes data
+- **Security**: 
+  - CORS enabled
+  - Environment variables for API keys
+  - Input validation and sanitization
 
 ### Key Features Implemented
 
-✅ Multilingual voice input (Hindi, English, Bhojpuri fallback)  
-✅ Animated Ghost mascot for trust-building  
-✅ Aadhaar scanning for rapid identity verification  
-✅ Case filing simulation with SMS preview  
-✅ Timeline tracker for status updates  
-✅ PWA-ready for offline access  
+✅ **Multilingual Voice Input** - Hindi, English, Kannada, Bhojpuri, Tamil, Telugu  
+✅ **Enhanced Microphone UI** - Animated button with visual feedback (pulse, ripple effects)  
+✅ **AI-Powered Legal Advice** - Google Gemini AI integration for intelligent responses  
+✅ **Relevance Filtering** - Smart detection of legal vs non-legal queries  
+✅ **Speech-to-Text** - Real-time voice recognition with interim results  
+✅ **IPC Section Matching** - Automatic identification of applicable laws  
+✅ **Multi-language Responses** - Legal advice in user's native language  
+✅ **Error Handling** - Context-specific error messages with retry options  
+✅ **How It Works Modal** - Interactive guide explaining the system  
+✅ **PWA-Ready** - Offline-first for areas with poor connectivity  
+✅ **Mobile Optimized** - Responsive design for smartphones  
 
 ---
 
@@ -117,8 +128,10 @@ npm install
 
 3. **Set up environment variables**
 ```bash
-cp .env.example .env
-# Add your API keys for AI services, database, etc.
+# Create .env file with your API keys
+GEMINI_API_KEY=your_google_gemini_api_key_here
+PORT=3000
+NODE_ENV=development
 ```
 
 4. **Start the backend**
@@ -128,20 +141,21 @@ node server.js
 
 5. **Open the frontend**
 ```bash
-# Simply open index.html in a browser
-# Or use a local server:
-npx http-server -p 8080
+# Open index.html in a browser at http://localhost:3000
+# Or visit http://localhost:3000 after starting the server
 ```
 
 ### Usage
 
-1. **Choose your language** (Bhojpuri/Hindi/English)
-2. **Tap the mic button** 🎤
+1. **Choose your language** (Hindi/English/Kannada/Bhojpuri/Tamil/Telugu)
+2. **Tap the mic button** 🎤 (it will pulse and turn red when listening)
 3. **Speak your problem** in natural language
    - "मेरी मजदूरी नहीं मिली" (My wages weren't paid)
    - "Ration card kaise banaye?" (How to make ration card?)
-4. **Receive AI diagnosis** of rights + entitlements
-5. **Get auto-generated filing assistance**
+   - "ಪೊಲೀಸ್ ದೂರು ಹೇಗೆ ಸಲ್ಲಿಸಬೇಕು?" (How to file police complaint?)
+4. **Receive AI-powered legal advice** with IPC sections and your rights
+5. **Get actionable steps** and helpline numbers
+6. **Click ℹ️ button** (bottom-right) to learn how the system works
 
 ---
 
@@ -149,17 +163,26 @@ npx http-server -p 8080
 
 ```
 NyayaGhost/
-├── index.html           # Main PWA interface
-├── script.js            # Frontend logic + Speech API
-├── style.css            # UI styling
-├── server.js            # Backend API (RightFinder, Ghost Filing)
-├── manifest.json        # PWA configuration
-├── package.json         # Dependencies
+├── index.html              # Main PWA interface with voice input
+├── script.js               # Frontend logic + Speech API (deprecated - merged into index.html)
+├── style.css               # UI styling (deprecated - merged into index.html)
+├── server.js               # Backend API with Gemini AI integration
+├── manifest.json           # PWA configuration
+├── package.json            # Dependencies (express, cors, dotenv, @google/generative-ai)
+├── .env                    # Environment variables (API keys)
+├── test-simple.js          # Quick relevance testing
+├── test-relevance.js       # Comprehensive test suite
 ├── assets/
-│   ├── ghost.json       # Lottie animation
-│   └── hindi.ttf        # Vernacular font
-└── images/
-    └── icons/           # PWA icons
+│   ├── ghost.json          # Lottie animation
+│   └── hinid.ttf           # Vernacular font
+├── images/
+│   └── icons/              # PWA icons (192x192, 512x512)
+└── docs/
+    ├── TECH.md             # Technical documentation
+    ├── USER_GUIDE.md       # User manual
+    ├── DATABASE_SCHEMA.md  # Data structure
+    ├── DEPLOYMENT.md       # Deployment guide
+    └── PITCH_DECK.md       # Project pitch
 ```
 
 ---
