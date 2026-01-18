@@ -708,10 +708,14 @@
                 subtitle: 'अपनी समस्या बताएं',
                 examplesHeading: '💬 आप क्या बोल सकते हैं?',
                 listening: '🎤 सुन रहा हूँ... बोलिए...',
+                speakNow: 'अभी बोलें...',
                 youSaid: '📝 आपने कहा:',
                 recognized: '✅ आपकी आवाज़ पहचान ली गई!',
                 tryAgain: '🔄 फिर से कोशिश करें',
                 loading: '⚖️ कानूनी सलाह तैयार कर रहे हैं...',
+                micPermissionError: '🚫 माइक्रोफ़ोन की अनुमति नहीं मिली। कृपया अपने ब्राउज़र की सेटिंग में माइक्रोफ़ोन को अनुमति दें।',
+                noSpeechError: '🔇 कोई आवाज़ नहीं सुनाई दी। कृपया फिर से कोशिश करें और साफ़ बोलें।',
+                networkError: '🌐 नेटवर्क में समस्या है। कृपया अपना इंटरनेट कनेक्शन जांचें।',
                 errorTitle: '❌ सर्वर से कनेक्ट नहीं हो पा रहा',
                 errorMessage: 'कृपया सुनिश्चित करें कि सर्वर चल रहा है।',
                 errorFallback: 'अभी के लिए इन हेल्पलाइन नंबरों पर संपर्क करें:',
@@ -741,10 +745,14 @@
                 subtitle: 'Tell us your problem',
                 examplesHeading: '💬 What can you say?',
                 listening: '🎤 Listening... Speak now...',
+                speakNow: 'Speak now...',
                 youSaid: '📝 You said:',
                 recognized: '✅ Speech recognized successfully!',
                 tryAgain: '🔄 Try Again',
                 loading: '⚖️ Preparing legal advice...',
+                micPermissionError: '🚫 Microphone permission denied. Please enable microphone access in your browser settings.',
+                noSpeechError: '🔇 No speech detected. Please try again and speak clearly.',
+                networkError: '🌐 Network error. Please check your internet connection.',
                 errorTitle: '❌ Cannot connect to server',
                 errorMessage: 'Please ensure the server is running.',
                 errorFallback: 'For now, please contact these helplines:',
@@ -774,10 +782,14 @@
                 subtitle: 'ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ',
                 examplesHeading: '💬 ನೀವು ಏನು ಹೇಳಬಹುದು?',
                 listening: '🎤 ಕೇಳುತ್ತಿದ್ದೇನೆ... ಈಗ ಮಾತನಾಡಿ...',
+                speakNow: 'ಈಗ ಮಾತನಾಡಿ...',
                 youSaid: '📝 ನೀವು ಹೇಳಿದ್ದು:',
                 recognized: '✅ ಧ್ವನಿ ಗುರುತಿಸಲಾಗಿದೆ!',
                 tryAgain: '🔄 ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ',
                 loading: '⚖️ ಕಾನೂನು ಸಲಹೆಯನ್ನು ತಯಾರಿಸಲಾಗುತ್ತಿದೆ...',
+                micPermissionError: '🚫 ಮೈಕ್ರೊಫೋನ್ ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಬ್ರೌಸರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ಮೈಕ್ರೊಫೋನ್ ಪ್ರವೇಶವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.',
+                noSpeechError: '🔇 ಯಾವುದೇ ಧ್ವನಿ ಪತ್ತೆಯಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ ಮತ್ತು ಸ್ಪಷ್ಟವಾಗಿ ಮಾತನಾಡಿ.',
+                networkError: '🌐 ನೆಟ್‌ವರ್ಕ್ ದೋಷ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ.',
                 errorTitle: '❌ ಸರ್ವರ್‌ಗೆ ಸಂಪರ್ಕಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ',
                 errorMessage: 'ಸರ್ವರ್ ರನ್ ಆಗುತ್ತಿದೆಯೇ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.',
                 errorFallback: 'ಈಗ ಈ ಹೆಲ್ಪ್‌ಲೈನ್ ಸಂಖ್ಯೆಗಳನ್ನು ಸಂಪರ್ಕಿಸಿ:',
@@ -1111,13 +1123,31 @@
             recognition.onerror = (event) => {
                 console.error('❌ Error:', event.error);
                 isListening = false;
+                const micButton = document.getElementById('mic-button');
                 const voiceOutput = document.getElementById('voice-output');
                 const t = translations[currentLanguage];
+                
+                // Reset button state
+                micButton.classList.remove('listening');
+                micButton.innerHTML = '🎤';
+                
                 voiceOutput.classList.add('active');
+                
+                // Provide helpful error messages
+                let errorMessage = event.error;
+                if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+                    errorMessage = t.micPermissionError || '🚫 Microphone permission denied. Please enable microphone access in your browser settings.';
+                } else if (event.error === 'no-speech') {
+                    errorMessage = t.noSpeechError || '🔇 No speech detected. Please try again and speak clearly.';
+                } else if (event.error === 'network') {
+                    errorMessage = t.networkError || '🌐 Network error. Please check your internet connection.';
+                }
+                
                 voiceOutput.innerHTML = `
-                    <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px;">
-                        <p style="color: #DC2626; font-weight: 600;">❌ Error: ${event.error}</p>
-                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #DC2626; color: white; border: none; border-radius: 8px; cursor: pointer;">${t.tryAgain}</button>
+                    <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                        <p style="color: #DC2626; font-weight: 600; margin-bottom: 1rem;">${errorMessage}</p>
+                        <button onclick="document.getElementById('mic-button').click()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">${t.tryAgain}</button>
                     </div>
                 `;
             };
@@ -1135,23 +1165,34 @@
                 console.log('🎤 Mic button clicked');
                 
                 if (isListening) {
-                    console.log('⚠️ Already listening, stopping first...');
+                    console.log('⚠️ Already listening, stopping...');
                     recognition.stop();
                     return;
                 }
                 
+                // Clear previous output
+                const voiceOutput = document.getElementById('voice-output');
+                voiceOutput.classList.remove('active');
+                voiceOutput.innerHTML = '';
+                
                 try {
+                    console.log('▶️ Starting speech recognition...');
                     recognition.start();
                 } catch (error) {
-                    console.error('Error starting recognition:', error);
+                    console.error('❌ Error starting recognition:', error);
                     isListening = false;
+                    const micButton = document.getElementById('mic-button');
                     const t = translations[currentLanguage];
-                    const voiceOutput = document.getElementById('voice-output');
+                    
+                    micButton.classList.remove('listening');
+                    micButton.innerHTML = '🎤';
+                    
                     voiceOutput.classList.add('active');
                     voiceOutput.innerHTML = `
-                        <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px;">
-                            <p style="color: #DC2626; font-weight: 600;">❌ ${error.message}</p>
-                            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #DC2626; color: white; border: none; border-radius: 8px; cursor: pointer;">${t.tryAgain}</button>
+                        <div style="padding: 2rem; background: #FEE2E2; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                            <p style="color: #DC2626; font-weight: 600; margin-bottom: 1rem;">${error.message}</p>
+                            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">${t.tryAgain}</button>
                         </div>
                     `;
                 }
