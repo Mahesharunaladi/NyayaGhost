@@ -1157,8 +1157,16 @@
                     { icon: '🧓', title: 'पेंशन चाहिए' },
                     { icon: '👩‍⚖️', title: 'मुफ्त वकील चाहिए' }
                 ],
-                logicTitle: 'कैसे काम करता है? (How It Works)',
-                logicIntro: 'न्याय मित्र एक AI-पावर्ड कानूनी सहायक है जो ग्रामीण भारत के लोगों को उनकी भाषा में कानूनी सलाह देता है।'
+                logicTitle: 'कैसे काम करता है?',
+                logicIntro: 'न्याय मित्र एक AI-पावर्ड कानूनी सहायक है जो ग्रामीण भारत के लोगों को उनकी भाषा में कानूनी सलाह देता है।',
+                loginText: 'लॉगिन',
+                loginHeading: 'लॉगिन करें',
+                loginSubtitle: 'अपने खाते में प्रवेश करें',
+                emailLabel: 'ईमेल / मोबाइल',
+                passwordLabel: 'पासवर्ड',
+                loginSubmit: 'लॉगिन करें',
+                signupText: 'खाता नहीं है?',
+                signupLink: 'साइन अप करें'
             },
             english: {
                 headerTitle: '🧡 Nyaya Mitra - Your Legal Friend',
@@ -1197,7 +1205,15 @@
                     { icon: '👩‍⚖️', title: 'Need free lawyer' }
                 ],
                 logicTitle: 'How It Works',
-                logicIntro: 'Nyaya Mitra is an AI-powered legal assistant that provides legal advice to rural Indians in their native language.'
+                logicIntro: 'Nyaya Mitra is an AI-powered legal assistant that provides legal advice to rural Indians in their native language.',
+                loginText: 'Login',
+                loginHeading: 'Login',
+                loginSubtitle: 'Access your account',
+                emailLabel: 'Email / Mobile',
+                passwordLabel: 'Password',
+                loginSubmit: 'Login',
+                signupText: "Don't have an account?",
+                signupLink: 'Sign Up'
             },
             kannada: {
                 headerTitle: '🧡 ನ್ಯಾಯ ಮಿತ್ರ - ನಿಮ್ಮ ಕಾನೂನು ಸ್ನೇಹಿತ',
@@ -1236,7 +1252,15 @@
                     { icon: '👩‍⚖️', title: 'ಉಚಿತ ವಕೀಲ ಬೇಕು' }
                 ],
                 logicTitle: 'ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ',
-                logicIntro: 'ನ್ಯಾಯ ಮಿತ್ರ ಒಂದು AI-ಚಾಲಿತ ಕಾನೂನು ಸಹಾಯಕವಾಗಿದ್ದು, ಗ್ರಾಮೀಣ ಭಾರತೀಯರಿಗೆ ಅವರ ಭಾಷೆಯಲ್ಲಿ ಕಾನೂನು ಸಲಹೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.'
+                logicIntro: 'ನ್ಯಾಯ ಮಿತ್ರ ಒಂದು AI-ಚಾಲಿತ ಕಾನೂನು ಸಹಾಯಕವಾಗಿದ್ದು, ಗ್ರಾಮೀಣ ಭಾರತೀಯರಿಗೆ ಅವರ ಭಾಷೆಯಲ್ಲಿ ಕಾನೂನು ಸಲಹೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ.',
+                loginText: 'ಲಾಗಿನ್',
+                loginHeading: 'ಲಾಗಿನ್',
+                loginSubtitle: 'ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಪ್ರವೇಶಿಸಿ',
+                emailLabel: 'ಇಮೇಲ್ / ಮೊಬೈಲ್',
+                passwordLabel: 'ಪಾಸ್‌ವರ್ಡ್',
+                loginSubmit: 'ಲಾಗಿನ್',
+                signupText: 'ಖಾತೆ ಇಲ್ಲವೇ?',
+                signupLink: 'ಸೈನ್ ಅಪ್'
             },
             bhojpuri: {
                 headerTitle: '🧡 न्याय मित्र - राउर कानूनी साथी',
@@ -2085,6 +2109,73 @@
         });
 
         console.log('✅ Logic modal initialized');
+
+        // Login Modal Functionality
+        const loginButton = document.getElementById('login-button');
+        const loginModal = document.getElementById('login-modal');
+        const loginClose = document.getElementById('login-close');
+        const loginForm = document.getElementById('login-form');
+        const loginText = document.getElementById('login-text');
+        const loginHeading = document.getElementById('login-heading');
+        const loginSubtitle = document.getElementById('login-subtitle');
+        const emailLabel = document.getElementById('email-label');
+        const passwordLabel = document.getElementById('password-label');
+        const loginSubmitText = document.getElementById('login-submit-text');
+        const signupText = document.getElementById('signup-text');
+        const signupLink = document.getElementById('signup-link');
+
+        function updateLoginText() {
+            const t = translations[currentLanguage];
+            loginText.textContent = t.loginText || 'Login';
+            loginHeading.textContent = t.loginHeading || 'Login';
+            loginSubtitle.textContent = t.loginSubtitle || 'Access your account';
+            emailLabel.textContent = t.emailLabel || 'Email / Mobile';
+            passwordLabel.textContent = t.passwordLabel || 'Password';
+            loginSubmitText.textContent = t.loginSubmit || 'Login';
+            signupText.textContent = t.signupText || "Don't have an account?";
+            signupLink.textContent = t.signupLink || 'Sign Up';
+        }
+
+        function showLoginModal() {
+            updateLoginText();
+            loginModal.classList.add('active');
+        }
+
+        function hideLoginModal() {
+            loginModal.classList.remove('active');
+        }
+
+        loginButton.addEventListener('click', showLoginModal);
+        loginClose.addEventListener('click', hideLoginModal);
+        
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                hideLoginModal();
+            }
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // For now, just show an alert (implement actual authentication later)
+            const t = translations[currentLanguage];
+            alert(`${t.loginHeading || 'Login'} feature coming soon!\n${t.emailLabel || 'Email'}: ${email}`);
+            hideLoginModal();
+            
+            // Clear form
+            loginForm.reset();
+        });
+
+        // Update login text when language changes
+        document.querySelectorAll('.lang-button').forEach(button => {
+            button.addEventListener('click', () => {
+                setTimeout(updateLoginText, 100);
+            });
+        });
+
+        console.log('✅ Login modal initialized');
     </script>
 </body>
 </html>
