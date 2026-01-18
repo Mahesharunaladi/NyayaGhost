@@ -68,7 +68,6 @@ Migrant worker wrongfully denied wages, unaware NALSA provides free legal aid fo
 ### Frontend Stack
 - **Voice Recognition**: Web Speech API with dialect support
 - **UI Framework**: Vanilla JS (Progressive Enhancement)
-- **Animations**: Lottie (Ghost mascot)
 - **PWA**: Offline-first, installable
 - **Languages**: Bhojpuri, Hindi, English (expandable)
 
