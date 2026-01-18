@@ -1322,7 +1322,51 @@ function generateEnglishChatResponse(query, analysis) {
   // Provide practical solutions first
   response += `\n\n**💡 What you should do:**\n\n`;
   
-  if (issueType === 'aadhaar') {
+  if (issueType === 'ration_card') {
+    response += `**How to Get Ration Card:**\n\n`;
+    
+    response += `**1. Online Application (Easiest):**\n`;
+    response += `   • Visit your state's Food & Supply Department website\n`;
+    response += `   • Select "Apply for New Ration Card"\n`;
+    response += `   • Fill form (all family members' details)\n`;
+    response += `   • Upload documents (Aadhaar, address proof, income certificate)\n`;
+    response += `   • Get application number - save it\n`;
+    response += `   • Verification in 30-45 days\n\n`;
+    
+    response += `**2. Offline Application:**\n`;
+    response += `   • Visit Tehsil office or Food Supply Office\n`;
+    response += `   • Get application form and fill it\n`;
+    response += `   • Attach xerox of all documents\n`;
+    response += `   • Must take Receipt/Acknowledgement\n`;
+    response += `   • Inspection in 30-60 days\n\n`;
+    
+    response += `**📋 Required Documents:**\n`;
+    response += `• Aadhaar card of all family members (mandatory)\n`;
+    response += `• Address proof: Voter ID, Electricity bill, Rent agreement\n`;
+    response += `• Income certificate (from Tehsildar)\n`;
+    response += `• Family photo (passport size)\n`;
+    response += `• Bank passbook (in some states)\n\n`;
+    
+    response += `**🎯 Types of Ration Card:**\n`;
+    response += `• **APL (Above Poverty Line)**: Income ₹1-3 lakh\n`;
+    response += `• **BPL (Below Poverty Line)**: Income < ₹1 lakh\n`;
+    response += `• **Antyodaya**: Very poor families (priority)\n\n`;
+    
+    response += `**⚖️ Legal Rights:**\n`;
+    response += `• Under National Food Security Act, 2013, right to subsidized food grains\n`;
+    response += `• Cannot reject application without reason\n`;
+    response += `• Must decide within 60 days\n\n`;
+    
+    response += `**💡 Important Tips:**\n`;
+    response += `• If no response in 60 days, file complaint on Grievance Portal\n`;
+    response += `• Check status: On your state's PDS portal with application number\n`;
+    response += `• Can file RTI if unfair rejection\n\n`;
+    
+    response += `**Helpline:**\n`;
+    response += `• National Food Security: 1800-11-0066\n`;
+    response += `• Your state's Food & Supply Department toll-free number\n\n`;
+    
+  } else if (issueType === 'aadhaar') {
     if (/update|expired|expire|change/.test(query.toLowerCase())) {
       response += `**How to Update Aadhaar Card:**\n\n`;
       response += `1. **Online Update (from home):**\n`;
