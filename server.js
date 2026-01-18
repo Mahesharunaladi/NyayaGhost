@@ -389,8 +389,10 @@ function analyzeQuery(query) {
   let relevantPortal = null;
   let relevantAct = null;
   
-  // Check for police complaint scenarios
-  if (/(चोरी|theft|stolen)/i.test(lowerQuery)) {
+  // Enhanced pattern matching with more variations
+  
+  // Criminal offenses - prioritize first
+  if (/(चोरी|theft|stolen|लूट|robbery|chor|चुरा)/i.test(lowerQuery)) {
     issueType = 'theft';
     ipcSection = ipcSections.theft;
     needsPoliceComplaint = true;
@@ -399,7 +401,7 @@ function analyzeQuery(query) {
       section: '379',
       reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
     };
-  } else if (/(मारपीट|assault|fight|beat)/i.test(lowerQuery)) {
+  } else if (/(मारपीट|assault|fight|beat|मार|गाली|गुस्सा|हमला|attack)/i.test(lowerQuery)) {
     issueType = 'assault';
     ipcSection = ipcSections.assault;
     needsPoliceComplaint = true;
@@ -408,7 +410,7 @@ function analyzeQuery(query) {
       section: '323',
       reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
     };
-  } else if (/(बलात्कार|rape|sexual)/i.test(lowerQuery)) {
+  } else if (/(बलात्कार|rape|sexual|यौन)/i.test(lowerQuery)) {
     issueType = 'rape';
     ipcSection = ipcSections.rape;
     needsPoliceComplaint = true;
@@ -417,7 +419,7 @@ function analyzeQuery(query) {
       section: '376',
       reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
     };
-  } else if (/(धोखाधड़ी|cheating|fraud|scam)/i.test(lowerQuery)) {
+  } else if (/(धोखाधड़ी|cheating|fraud|scam|धोखा|ठग|fake|फर्जी)/i.test(lowerQuery)) {
     issueType = 'cheating';
     ipcSection = ipcSections.cheating;
     needsPoliceComplaint = true;
@@ -426,7 +428,7 @@ function analyzeQuery(query) {
       section: '420',
       reference: 'https://www.indiacode.nic.in/show-data?actid=AC_CEN_5_23_00037_186045_1523266765688'
     };
-  } else if (/(छेड़छाड़|harassment|molest)/i.test(lowerQuery)) {
+  } else if (/(छेड़छाड़|harassment|molest|छेड़|तंग|परेशान)/i.test(lowerQuery)) {
     issueType = 'harassment';
     ipcSection = ipcSections.harassment;
     needsPoliceComplaint = true;
@@ -455,8 +457,8 @@ function analyzeQuery(query) {
     };
   }
   
-  // Check for government services with legal act references
-  if (/(राशन|ration)/i.test(lowerQuery)) {
+  // Check for government services with enhanced patterns
+  if (/(राशन|ration|खाद्य|food|card|कार्ड)/i.test(lowerQuery)) {
     issueType = 'ration_card';
     relevantPortal = {
       name: 'National Food Security Portal',
@@ -469,63 +471,70 @@ function analyzeQuery(query) {
       description: 'Right to receive food grains',
       reference: 'https://www.indiacode.nic.in/handle/123456789/2123'
     };
-  } else if (/(पेंशन|pension)/i.test(lowerQuery)) {
+  } else if (/(पेंशन|pension|विधवा|widow|वृद्ध|old|age|दिव्यांग|disable)/i.test(lowerQuery)) {
     issueType = 'pension';
     relevantPortal = {
       name: 'NSAP Portal',
       url: 'https://nsap.nic.in/',
       description: 'पेंशन योजना के लिए आवेदन करें'
     };
-  } else if (/(मजदूरी|wage|mgnrega|नरेगा)/i.test(lowerQuery)) {
+  } else if (/(मजदूरी|wage|mgnrega|नरेगा|mazduri|payment|भुगतान|salary|वेतन|काम|work)/i.test(lowerQuery) && /(नहीं|not|pending|due|delay|late)/i.test(lowerQuery)) {
     issueType = 'mgnrega';
     relevantPortal = {
       name: 'MGNREGA Portal',
       url: 'https://nrega.nic.in/',
       description: 'मजदूरी शिकायत दर्ज करें'
     };
-  } else if (/(आधार|aadhaar|aadhar)/i.test(lowerQuery)) {
+  } else if (/(आधार|aadhaar|aadhar|uid|update|expired|expire|biometric)/i.test(lowerQuery)) {
     issueType = 'aadhaar';
     relevantPortal = {
       name: 'UIDAI Portal',
       url: 'https://uidai.gov.in/',
       description: 'आधार कार्ड सेवाएं'
     };
-  } else if (/(pan|पैन)/i.test(lowerQuery)) {
+  } else if (/(pan|पैन|permanent|account|number)/i.test(lowerQuery)) {
     issueType = 'pan_card';
     relevantPortal = {
       name: 'Income Tax Portal',
       url: 'https://www.incometax.gov.in/iec/foportal',
       description: 'PAN कार्ड के लिए आवेदन करें'
     };
-  } else if (/(driving|license|ड्राइविंग|लाइसेंस)/i.test(lowerQuery)) {
+  } else if (/(driving|license|ड्राइविंग|लाइसेंस|dl|learner)/i.test(lowerQuery)) {
     issueType = 'driving_license';
     relevantPortal = {
       name: 'Parivahan Portal',
       url: 'https://parivahan.gov.in/',
       description: 'Driving License सेवाएं'
     };
-  } else if (/(passport|पासपोर्ट)/i.test(lowerQuery)) {
+  } else if (/(passport|पासपोर्ट|travel|विदेश)/i.test(lowerQuery)) {
     issueType = 'passport';
     relevantPortal = {
       name: 'Passport Seva',
       url: 'https://www.passportindia.gov.in/',
       description: 'Passport आवेदन और सेवाएं'
     };
-  } else if (/(voter|वोटर|मतदाता|epic|election)/i.test(lowerQuery)) {
+  } else if (/(voter|वोटर|मतदाता|epic|election|चुनाव|vote|मत)/i.test(lowerQuery)) {
     issueType = 'voter_id';
     relevantPortal = {
       name: 'National Voters Service Portal',
       url: 'https://voters.eci.gov.in/',
       description: 'Voter ID आवेदन और सेवाएं'
     };
-  } else if (/(birth|जन्म|certificate|प्रमाण)/i.test(lowerQuery)) {
+  } else if (/(birth|जन्म|certificate|प्रमाण|death|मृत्यु)/i.test(lowerQuery)) {
     issueType = 'birth_certificate';
     relevantPortal = {
       name: 'CRS Portal',
       url: 'https://crsorgi.gov.in/',
       description: 'Birth/Death Certificate'
     };
-  } else if (/(education|शिक्षा|school)/i.test(lowerQuery)) {
+  } else if (/(ज़मीन|land|property|संपत्ति|dispute|विवाद|खेत|plot)/i.test(lowerQuery)) {
+    issueType = 'land_dispute';
+    relevantPortal = {
+      name: 'Land Records',
+      url: 'https://landrecords.gov.in/',
+      description: 'भूमि रिकॉर्ड और विवाद'
+    };
+  } else if (/(education|शिक्षा|school|स्कूल|admission|प्रवेश)/i.test(lowerQuery)) {
     issueType = 'education';
     relevantAct = {
       name: 'Right to Education Act, 2009',
@@ -1220,6 +1229,24 @@ function generateHindiChatResponse(query, analysis) {
     response += `• पुलिस स्टेशन या Cyber Crime Police Station जाएं\n`;
     response += `• सभी सबूत साथ ले जाएं (screenshots, bank statements)\n\n`;
     
+  } else if (issueType === 'land_dispute') {
+    response += `1. अपने Property Documents की पूरी जांच करें\n`;
+    response += `2. Tehsildar/Revenue Office से Land Records निकालें\n`;
+    response += `3. अगर boundary dispute है तो Survey करवाएं\n`;
+    response += `4. पहले Panchayat/Local Authority में शिकायत करें\n`;
+    response += `5. अगर समाधान नहीं तो Civil Court में case file करें\n\n`;
+    
+    response += `**⚖️ कानूनी विकल्प:**\n`;
+    response += `• Mediation/Conciliation पहले try करें (कम खर्च, जल्दी समाधान)\n`;
+    response += `• Legal Aid Services से मुफ्त वकील मिल सकता है\n`;
+    response += `• Lok Adalat में केस ले जा सकते हैं\n\n`;
+    
+    response += `**📋 जरूरी दस्तावेज:**\n`;
+    response += `• Sale deed, Registry papers\n`;
+    response += `• 7/12 extract या Khasra/Khatauni\n`;
+    response += `• Property tax receipts\n`;
+    response += `• Survey documents\n\n`;
+    
   } else if (/ज़मीन|land|property|dispute/.test(query.toLowerCase())) {
     response += `1. अपने Property Documents की पूरी जांच करें\n`;
     response += `2. Tehsildar/Revenue Office से Land Records निकालें\n`;
@@ -1396,6 +1423,24 @@ function generateEnglishChatResponse(query, analysis) {
     response += `   • Processing: 15-30 days\n\n`;
     
     response += `**Can apply at Municipal Corporation or Gram Panchayat**\n\n`;
+    
+  } else if (issueType === 'land_dispute') {
+    response += `1. Check all your Property Documents thoroughly\n`;
+    response += `2. Get Land Records from Tehsildar/Revenue Office\n`;
+    response += `3. If boundary dispute, get Survey done\n`;
+    response += `4. First file complaint with Panchayat/Local Authority\n`;
+    response += `5. If no resolution, file case in Civil Court\n\n`;
+    
+    response += `**⚖️ Legal Options:**\n`;
+    response += `• Try Mediation/Conciliation first (cheaper, faster)\n`;
+    response += `• Legal Aid Services can provide free lawyer\n`;
+    response += `• Take case to Lok Adalat for quick settlement\n\n`;
+    
+    response += `**📋 Required Documents:**\n`;
+    response += `• Sale deed, Registry papers\n`;
+    response += `• 7/12 extract or Khasra/Khatauni\n`;
+    response += `• Property tax receipts\n`;
+    response += `• Survey documents\n\n`;
     
   } else if (needsPoliceComplaint) {
     response += `1. **First ensure your safety** - stay away from danger\n`;
