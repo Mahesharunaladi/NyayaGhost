@@ -115,7 +115,21 @@ function validateLegalResponse(response, query, language) {
 3. Test with irrelevant queries (should politely refuse)
 4. Verify in multiple languages
 
+### Test Results (January 18, 2026)
+```
+🧪 Testing Relevance Fix...
+
+✅ "मेरी मजदूरी नहीं मिली..." => LEGAL (expected LEGAL)
+✅ "राशन कार्ड कैसे बनाएं..." => LEGAL (expected LEGAL)
+✅ "What is the weather today?..." => NON-LEGAL (expected NON-LEGAL)
+✅ "मुझे एक जोक सुनाओ..." => NON-LEGAL (expected NON-LEGAL)
+
+✅ Test complete! All 4/4 tests passed.
+```
+
+**Test Command:** `node test-simple.js`
+
 ---
-**Status:** ✅ **FIXED**
+**Status:** ✅ **FIXED AND TESTED**
 **Date:** January 18, 2026
 **Impact:** High - Core functionality improvement
