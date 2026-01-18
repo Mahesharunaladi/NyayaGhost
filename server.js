@@ -360,6 +360,32 @@ app.post('/api/legal-advice', async (req, res) => {
     // Analyze query for complaint type
     const analysis = analyzeQuery(query);
     
+    // Check if this is actually a legal query
+    if (analysis.isLegalQuery === false) {
+      const redirectMessage = language === 'english' 
+        ? 'I can only help with Indian law and government schemes. Please ask questions related to legal rights, laws, or government services.'
+        : language === 'kannada'
+        ? 'ನಾನು ಭಾರತೀಯ ಕಾನೂನು ಮತ್ತು ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಬಗ್ಗೆ ಮಾತ್ರ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ। ದಯವಿಟ್ಟು ಕಾನೂನು ಹಕ್ಕುಗಳು, ಕಾನೂನುಗಳು ಅಥವಾ ಸರ್ಕಾರಿ ಸೇವೆಗಳಿಗೆ ಸಂಬಂಧಿಸಿದ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಿ।'
+        : 'मुझे खेद है, मैं केवल भारतीय कानून और सरकारी योजनाओं के बारे में मदद कर सकता हूं। कृपया कानूनी अधिकारों, कानूनों या सरकारी सेवाओं से संबंधित प्रश्न पूछें।';
+      
+      return res.json({
+        query,
+        language,
+        analysis,
+        advice: {
+          text: redirectMessage,
+          source: 'system',
+          confidence: 1.0,
+          steps: [],
+          rights: [],
+          helpResources: [
+            { name: 'NALSA Helpline', contact: '15100', description: language === 'english' ? 'Free Legal Aid' : 'मुफ्त कानूनी सहायता' }
+          ]
+        },
+        timestamp: new Date().toISOString()
+      });
+    }
+    
     // Generate AI advice
     const advice = await generateLegalAdvice(query, language, analysis);
     
@@ -388,6 +414,22 @@ function analyzeQuery(query) {
   let needsPoliceComplaint = false;
   let relevantPortal = null;
   let relevantAct = null;
+  
+  // First, check if query is actually about legal/government matters
+  const isLegalQuery = /(कानून|law|rights|अधिकार|police|पुलिस|scheme|योजना|card|कार्ड|license|लाइसेंस|pension|पेंशन|help|मदद|complaint|शिकायत|case|मामला|court|अदालत|advocate|वकील|fir|धारा|section|act|अधिनियम|सरकार|government|ministry|मंत्रालय|helpline|हेल्पलाइन|portal|पोर्टल|certificate|प्रमाण|चोरी|theft|assault|मारपीट|harassment|छेड़छाड़|fraud|धोखा|मजदूरी|wage|राशन|ration)/i.test(lowerQuery);
+  
+  if (!isLegalQuery) {
+    // Mark as non-legal query
+    issueType = 'non_legal';
+    return {
+      issueType,
+      ipcSection,
+      needsPoliceComplaint,
+      relevantPortal,
+      relevantAct,
+      isLegalQuery: false
+    };
+  }
   
   // Enhanced pattern matching with more variations
   
@@ -557,7 +599,8 @@ function analyzeQuery(query) {
     ipcSection,
     needsPoliceComplaint,
     relevantPortal,
-    relevantAct
+    relevantAct,
+    isLegalQuery: true
   };
 }
 
@@ -632,11 +675,21 @@ Remember: ONLY answer if this is about Indian law/rights. Otherwise, politely re
       
       const data = await response.json();
       if (data.candidates && data.candidates[0]) {
-        return {
-          text: data.candidates[0].content.parts[0].text,
-          source: 'ai',
-          confidence: 0.9
-        };
+        const aiResponse = data.candidates[0].content.parts[0].text;
+        
+        // Validate that response is relevant to Indian law
+        const isRelevant = validateLegalResponse(aiResponse, query, language);
+        
+        if (isRelevant) {
+          return {
+            text: aiResponse,
+            source: 'ai',
+            confidence: 0.9
+          };
+        } else {
+          console.log('AI response deemed irrelevant, using fallback');
+          return getFallbackAdvice(query, analysis, language);
+        }
       }
     } catch (error) {
       console.error('Gemini API error:', error);
@@ -645,6 +698,38 @@ Remember: ONLY answer if this is about Indian law/rights. Otherwise, politely re
   
   // Fallback to rule-based advice
   return getFallbackAdvice(query, analysis, language);
+}
+
+// Validate that AI response is relevant to Indian law and the query
+function validateLegalResponse(response, query, language) {
+  const lowerResponse = response.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  
+  // Check if response contains Indian legal keywords
+  const indianLegalKeywords = [
+    'ipc', 'धारा', 'section', 'act', 'कानून', 'अधिनियम',
+    'fir', 'police', 'पुलिस', 'court', 'अदालत', 'nyaya',
+    'nalsa', 'nrega', 'mgnrega', 'aadhaar', 'आधार',
+    'scheme', 'योजना', 'helpline', 'हेल्पलाइन',
+    'rights', 'अधिकार', 'भारतीय', 'indian', 'सरकार', 'government'
+  ];
+  
+  const hasLegalKeywords = indianLegalKeywords.some(keyword => 
+    lowerResponse.includes(keyword)
+  );
+  
+  // Check if response is not a refusal/irrelevant message
+  const refusalPhrases = [
+    'i cannot', 'i can\'t', 'not able to', 'मैं नहीं कर सकता',
+    'खेद है', 'sorry', 'मुझे खेद', 'केवल भारतीय कानून'
+  ];
+  
+  const isRefusal = refusalPhrases.some(phrase => 
+    lowerResponse.includes(phrase)
+  );
+  
+  // Response should have legal keywords and not be a refusal
+  return hasLegalKeywords && !isRefusal;
 }
 
 // Fallback advice when AI is not available
