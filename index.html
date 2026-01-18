@@ -782,6 +782,45 @@
         </div>
     </div>
 
+    <!-- Sign Up Modal -->
+    <div class="login-modal" id="signup-modal">
+        <div class="login-form-container">
+            <button class="login-close" id="signup-close">×</button>
+            <div class="login-header">
+                <h2>📝 <span id="signup-heading">Sign Up</span></h2>
+                <p id="signup-subtitle">Create your account</p>
+            </div>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name" id="name-label">Full Name</label>
+                    <input type="text" id="signup-name" name="name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email" id="signup-email-label">Email</label>
+                    <input type="email" id="signup-email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-mobile" id="mobile-label">Mobile Number</label>
+                    <input type="tel" id="signup-mobile" name="mobile" placeholder="Enter your mobile number" required pattern="[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password" id="signup-password-label">Password</label>
+                    <input type="password" id="signup-password" name="password" placeholder="Create a password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password" id="confirm-password-label">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" name="confirm-password" placeholder="Re-enter password" required minlength="6">
+                </div>
+                <button type="submit" class="login-submit" id="signup-submit-btn">
+                    <span id="signup-submit-text">Sign Up</span>
+                </button>
+            </form>
+            <div class="signup-link">
+                <span id="already-account-text">Already have an account?</span> <a href="#" id="back-to-login-link">Login</a>
+            </div>
+        </div>
+    </div>
+
     <script>
         console.log('🚀 Nyaya Mitra - Multilingual Version Loaded');
 
@@ -1166,7 +1205,19 @@
                 passwordLabel: 'पासवर्ड',
                 loginSubmit: 'लॉगिन करें',
                 signupText: 'खाता नहीं है?',
-                signupLink: 'साइन अप करें'
+                signupLink: 'साइन अप करें',
+                signupHeading: 'साइन अप करें',
+                signupSubtitle: 'अपना खाता बनाएं',
+                nameLabel: 'पूरा नाम',
+                signupEmailLabel: 'ईमेल',
+                mobileLabel: 'मोबाइल नंबर',
+                signupPasswordLabel: 'पासवर्ड',
+                confirmPasswordLabel: 'पासवर्ड की पुष्टि करें',
+                signupSubmit: 'साइन अप करें',
+                alreadyAccountText: 'पहले से खाता है?',
+                backToLoginLink: 'लॉगिन करें',
+                passwordMismatch: 'पासवर्ड मेल नहीं खाते!',
+                invalidMobile: 'कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें!'
             },
             english: {
                 headerTitle: '🧡 Nyaya Mitra - Your Legal Friend',
@@ -1213,7 +1264,19 @@
                 passwordLabel: 'Password',
                 loginSubmit: 'Login',
                 signupText: "Don't have an account?",
-                signupLink: 'Sign Up'
+                signupLink: 'Sign Up',
+                signupHeading: 'Sign Up',
+                signupSubtitle: 'Create your account',
+                nameLabel: 'Full Name',
+                signupEmailLabel: 'Email',
+                mobileLabel: 'Mobile Number',
+                signupPasswordLabel: 'Password',
+                confirmPasswordLabel: 'Confirm Password',
+                signupSubmit: 'Sign Up',
+                alreadyAccountText: 'Already have an account?',
+                backToLoginLink: 'Login',
+                passwordMismatch: 'Passwords do not match!',
+                invalidMobile: 'Please enter a valid 10-digit mobile number!'
             },
             kannada: {
                 headerTitle: '🧡 ನ್ಯಾಯ ಮಿತ್ರ - ನಿಮ್ಮ ಕಾನೂನು ಸ್ನೇಹಿತ',
@@ -1260,7 +1323,17 @@
                 passwordLabel: 'ಪಾಸ್‌ವರ್ಡ್',
                 loginSubmit: 'ಲಾಗಿನ್',
                 signupText: 'ಖಾತೆ ಇಲ್ಲವೇ?',
-                signupLink: 'ಸೈನ್ ಅಪ್'
+                signupLink: 'ಸೈನ್ ಅಪ್',
+                signupHeading: 'ಸೈನ್ ಅಪ್',
+                signupSubtitle: 'ನಿಮ್ಮ ಖಾತೆಯನ್ನು ರಚಿಸಿ',
+                nameLabel: 'ಪೂರ್ಣ ಹೆಸರು',
+                signupEmailLabel: 'ಇಮೇಲ್',
+                mobileLabel: 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ',
+                signupPasswordLabel: 'ಪಾಸ್‌ವರ್ಡ್',
+                confirmPasswordLabel: 'ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಿಸಿ',
+                signupSubmit: 'ಸೈನ್ ಅಪ್',
+                alreadyAccountText: 'ಈಗಾಗಲೇ ಖಾತೆ ಇದೆಯೇ?',
+                backToLoginLink: 'ಲಾಗಿನ್'
             },
             bhojpuri: {
                 headerTitle: '🧡 न्याय मित्र - राउर कानूनी साथी',
@@ -2176,6 +2249,112 @@
         });
 
         console.log('✅ Login modal initialized');
+
+        // Sign Up Modal Functionality
+        const signupModal = document.getElementById('signup-modal');
+        const signupClose = document.getElementById('signup-close');
+        const signupForm = document.getElementById('signup-form');
+        const signupLinkBtn = document.getElementById('signup-link');
+        const backToLoginLink = document.getElementById('back-to-login-link');
+        
+        // Sign up form elements
+        const signupHeading = document.getElementById('signup-heading');
+        const signupSubtitle = document.getElementById('signup-subtitle');
+        const nameLabel = document.getElementById('name-label');
+        const signupEmailLabel = document.getElementById('signup-email-label');
+        const mobileLabel = document.getElementById('mobile-label');
+        const signupPasswordLabel = document.getElementById('signup-password-label');
+        const confirmPasswordLabel = document.getElementById('confirm-password-label');
+        const signupSubmitText = document.getElementById('signup-submit-text');
+        const alreadyAccountText = document.getElementById('already-account-text');
+        const backToLoginLinkText = document.getElementById('back-to-login-link');
+
+        function updateSignupText() {
+            const t = translations[currentLanguage];
+            signupHeading.textContent = t.signupHeading || 'Sign Up';
+            signupSubtitle.textContent = t.signupSubtitle || 'Create your account';
+            nameLabel.textContent = t.nameLabel || 'Full Name';
+            signupEmailLabel.textContent = t.signupEmailLabel || 'Email';
+            mobileLabel.textContent = t.mobileLabel || 'Mobile Number';
+            signupPasswordLabel.textContent = t.signupPasswordLabel || 'Password';
+            confirmPasswordLabel.textContent = t.confirmPasswordLabel || 'Confirm Password';
+            signupSubmitText.textContent = t.signupSubmit || 'Sign Up';
+            alreadyAccountText.textContent = t.alreadyAccountText || 'Already have an account?';
+            backToLoginLinkText.textContent = t.backToLoginLink || 'Login';
+        }
+
+        function showSignupModal() {
+            updateSignupText();
+            hideLoginModal(); // Close login modal if open
+            signupModal.classList.add('active');
+        }
+
+        function hideSignupModal() {
+            signupModal.classList.remove('active');
+        }
+
+        function switchToLogin() {
+            hideSignupModal();
+            showLoginModal();
+        }
+
+        signupLinkBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSignupModal();
+        });
+
+        backToLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchToLogin();
+        });
+
+        signupClose.addEventListener('click', hideSignupModal);
+        
+        signupModal.addEventListener('click', (e) => {
+            if (e.target === signupModal) {
+                hideSignupModal();
+            }
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const mobile = document.getElementById('signup-mobile').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            const t = translations[currentLanguage];
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert(t.passwordMismatch || 'Passwords do not match!');
+                return;
+            }
+            
+            // Validate mobile number (10 digits)
+            if (!/^[0-9]{10}$/.test(mobile)) {
+                alert(t.invalidMobile || 'Please enter a valid 10-digit mobile number!');
+                return;
+            }
+            
+            // For now, just show an alert (implement actual registration later)
+            alert(`${t.signupHeading || 'Sign Up'} successful!\n${t.nameLabel || 'Name'}: ${name}\n${t.signupEmailLabel || 'Email'}: ${email}\n${t.mobileLabel || 'Mobile'}: ${mobile}`);
+            hideSignupModal();
+            
+            // Clear form
+            signupForm.reset();
+        });
+
+        // Update signup text when language changes
+        document.querySelectorAll('.lang-button').forEach(button => {
+            button.addEventListener('click', () => {
+                setTimeout(updateSignupText, 100);
+            });
+        });
+
+        console.log('✅ Sign up modal initialized');
     </script>
 </body>
 </html>
