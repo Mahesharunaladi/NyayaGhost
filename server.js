@@ -1777,12 +1777,12 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`
-╔═══════════════════════════════════════╗
-║     NyayaGhost Backend Server         ║
-║                                       ║
-║  Port: ${PORT}                           ║
-║  Environment: ${process.env.NODE_ENV || 'development'}      ║
-║  Status: ✓ Running                    ║
-╚═══════════════════════════════════════╝
+
+      NyayaGhost Backend Server         
+                                       
+   Port: ${PORT}                           
+   Environment: ${process.env.NODE_ENV || 'development'}      
+   Status: ✓ Running                    
+
   `);
 });
